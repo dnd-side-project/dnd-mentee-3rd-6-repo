@@ -1,1 +1,1 @@
-# dnd-mentee-3rd-6-frontend
+# DND 6조
