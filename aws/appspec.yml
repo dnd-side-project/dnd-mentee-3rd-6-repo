@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /root/repository/neighbor_cats/
+hooks:
+  BeforeInstall:
+    - location: clean.sh
+      timeout: 150
+      runas: root
+  ApplicationStart:
+    - location: start_server.sh
+      timeout: 150
+      runas: root
+  ApplicationStop:
+    - location: stop_server.sh
+      timeout: 150
+      runas: root
