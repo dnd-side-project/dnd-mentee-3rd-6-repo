@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  install:
+    runtime-versions:
+      nodejs: 10
+  build:
+    commands:
+      - echo Build completed on `date`
+      - chmod u+x back-end/neighbor_cats/gradlew
+      - back-end/neighbor_cats/gradlew bootJar -p back-end/neighbor_cats/ 
+artifacts:
+  files:
+    - back-end/neighbor_cats/build/libs/neighbor_cats-*.jar
+    - aws/appspec.yml
+    - aws/scripts/*
+  name: neighbor_cats
+  discard-paths: yes
