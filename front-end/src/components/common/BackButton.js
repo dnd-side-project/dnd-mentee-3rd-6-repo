@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { LeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import PropTypes from 'prop-types';
+
 import { pallete } from '../../lib/style/pallete';
 
 const GoBackButton = styled(Button)`
@@ -27,6 +29,10 @@ const BackButton = ({ history }) => {
       </GoBackButton>
     </>
   );
+};
+
+BackButton.prototype = {
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(BackButton);

@@ -2,19 +2,15 @@ import React from 'react';
 import { Button } from 'antd';
 import styled from 'styled-components';
 import { darken, lighten } from 'polished';
+import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
 
 const ButtonWarrper = styled(Button)`
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  right: 0;
   width: 100%;
   height: 50px;
-  margin: 0 auto;
   background: ${pallete.orange};
-  border: 1px solid #fc8210;
+  border: none;
 
   &:hover {
     background: ${pallete.orange};
@@ -32,12 +28,22 @@ const ButtonWarrper = styled(Button)`
   }
 `;
 
-const BottomButton = ({ text, buttonType }) => {
+const BottomButton = ({ text, buttonType, loading }) => {
   return (
-    <ButtonWarrper type="primary" size="block" htmlType={buttonType}>
+    <ButtonWarrper
+      type="primary"
+      size="large"
+      htmlType={buttonType}
+      loading={loading}
+    >
       {text}
     </ButtonWarrper>
   );
+};
+
+BottomButton.prototype = {
+  text: PropTypes.string.isRequired,
+  buttonType: PropTypes.string.isRequired,
 };
 
 export default BottomButton;

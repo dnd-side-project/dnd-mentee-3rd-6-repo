@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Form } from 'antd';
 
-export const FormWrapper = styled(Form)`
+const FormWrapper = styled(Form)`
   .input-wrapper {
     margin-top: 20px;
   }
@@ -18,3 +18,5 @@ export const FormWrapper = styled(Form)`
     border-radius: 15px;
   }
 `;
+
+export default FormWrapper;
