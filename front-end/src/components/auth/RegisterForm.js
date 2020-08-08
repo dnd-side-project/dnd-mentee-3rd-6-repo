@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Input } from 'antd';
 
-import { FormWrapper } from '../common/FormWrapper';
+import FormWrapper from '../common/FormWrapper';
 import useInput from '../../hooks/useInput';
 import AuthTemplate from './AuthTemplate';
 

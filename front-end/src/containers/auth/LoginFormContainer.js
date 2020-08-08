@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import LoginForm from '../../components/auth/LoginForm';
+import useInput from '../../hooks/useInput';
+import { loginRequestAction, GO_TO_PHEED } from '../../reducers/user';
 
 const LoginFormContainer = () => {
-  /* 
-    고앙이 인증 (집사)
-    - 품종, 냥이름, 성별, 생일, 특징, 중성화, 질병
-  */
-  /* 
-    인증 (랜선 집사, 집사)
-    - 닉네임, 지역, 본인인증
-  */
+  const dispatch = useDispatch();
+  const { logInLoading, logInDone } = useSelector((state) => state.userReducer);
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
 
-  return <LoginForm />;
+  const onSubmitLogin = useCallback(() => {
+    dispatch(
+      loginRequestAction({
+        email,
+        password,
+      }),
+    );
+  }, [dispatch, email, password]);
+
+  useEffect(() => {
+    if (logInDone) {
+      dispatch({
+        type: GO_TO_PHEED,
+      });
+    }
+  }, [dispatch, logInDone]);
+
+  return (
+    <LoginForm
+      onSubmitLogin={onSubmitLogin}
+      email={email}
+      password={password}
+      onChangeEmail={onChangeEmail}
+      onChangePassword={onChangePassword}
+      logInLoading={logInLoading}
+    />
+  );
 };
 
 export default LoginFormContainer;

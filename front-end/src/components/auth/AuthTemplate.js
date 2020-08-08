@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'antd';
+import PropTypes from 'prop-types';
+
 import BackButton from '../common/BackButton';
 import BottomButton from '../common/BottomButton';
 
@@ -22,31 +24,64 @@ const TopCol = styled(Col)`
   }
 `;
 
+const BottomCol = styled(Col)`
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`;
+
+const MiddleCol = styled(Col)`
+  margin-top: 20px;
+`;
+
 const AuthTemplate = ({
   children,
   subTitle,
   title,
   bottomText,
   buttonType,
+  loading,
 }) => {
+  console.log(loading);
   return (
     <div>
-      <Row gutter={[0, 40]}>
+      <Row gutter={[0, 0]}>
         {/* xs: 모바일, sm: 태블릿, md: 작은 데스크탑  -> n/24라고 생각, 한 Row의 합은 24가 되어야 함 */}
         <TopCol xs={24} md={6}>
           <BackButton />
           <h2>{title}</h2>
           <p>{subTitle}</p>
         </TopCol>
-        <Col xs={24} md={12}>
+        <MiddleCol xs={24} md={12}>
           {children}
-        </Col>
-        <Col xs={24} md={6}>
-          <BottomButton text={bottomText} buttonType={buttonType} />
-        </Col>
+        </MiddleCol>
+        <BottomCol xs={24} md={6}>
+          <BottomButton
+            text={bottomText}
+            buttonType={buttonType}
+            loading={loading}
+          />
+        </BottomCol>
       </Row>
     </div>
   );
+};
+
+AuthTemplate.prototype = {
+  children: PropTypes.element.isRequired,
+  subTitle: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  bottomText: PropTypes.string.isRequired,
+  buttonType: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default AuthTemplate;
