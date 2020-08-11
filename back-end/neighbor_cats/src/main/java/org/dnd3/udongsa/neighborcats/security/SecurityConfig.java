@@ -26,6 +26,8 @@ public class SecurityConfig {
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
             http
+                .csrf().disable()
+                .cors().disable()
                 .antMatcher("/api/**")
                 .authorizeRequests(authorize -> authorize
                     .anyRequest().permitAll()
