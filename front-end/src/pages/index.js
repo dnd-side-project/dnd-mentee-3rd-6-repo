@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Button } from 'antd';
 import { darken } from 'polished';
 
+import logo from '../logo.svg';
 import { pallete } from '../lib/style/pallete';
 
 const HomeLayout = styled.div`
@@ -12,13 +13,34 @@ const HomeLayout = styled.div`
   justify-content: space-around;
   height: 100%;
 
-  img {
-    width: 100%;
-  }
-
   div {
     display: flex;
     flex-direction: column;
+  }
+`;
+
+const HomeHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 28px;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -45,10 +67,11 @@ const AuthButton = styled(Button)`
 const Home = () => {
   return (
     <HomeLayout>
-      <img
-        src="https://t1.daumcdn.net/liveboard/catlab/df4476dc4598433bb29710242487ed4c.JPG"
-        alt="우동집 로고"
-      />
+      <HomeHeader>
+        <h1>우리 동네 집사 커뮤니티</h1>
+        <img src={logo} alt="우동집 로고" />
+        <h2>우동집</h2>
+      </HomeHeader>
       <div>
         <AuthButton type="primary" shape="round" size="large">
           <Link to="/login">로그인</Link>
