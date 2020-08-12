@@ -1,3 +1,4 @@
+import { delay, put, takeLatest, getContext, all, fork } from 'redux-saga/effects';
 import produce from 'immer';
 
 /* 초기 상태 */
@@ -17,19 +18,19 @@ export const initialSate = {
 
 /* 액션 */
 
-export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
-export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
-export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+export const LOG_IN_REQUEST = 'user/LOG_IN_REQUEST';
+export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
+export const LOG_IN_FAILURE = 'user/LOG_IN_FAILURE';
 
-export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
-export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
-export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
+export const LOG_OUT_REQUEST = 'user/LOG_OUT_REQUEST';
+export const LOG_OUT_SUCCESS = 'user/LOG_OUT_SUCCESS';
+export const LOG_OUT_FAILURE = 'user/LOG_OUT_FAILURE';
 
-export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
-export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
-export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
+export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
-export const GO_TO_PHEED = 'GO_TO_PHEED';
+export const GO_TO = 'GO_TO';
 
 /* 액션 생성함수 */
 
@@ -46,9 +47,80 @@ export const logoutRequestAction = () => {
   };
 };
 
+/* 사가 */
+
+function* logIn(action) {
+  try {
+    yield delay(1000);
+    yield put({
+      type: LOG_IN_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOG_IN_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* logOut() {
+  try {
+    yield delay(1000);
+    yield put({
+      type: LOG_OUT_SUCCESS,
+    });
+  } catch (error) {
+    yield put({
+      type: LOG_OUT_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* signUp() {
+  try {
+    // const result = yield call(signUpAPI)
+    yield delay(1000);
+    yield put({
+      type: SIGN_UP_SUCCESS,
+      data: null,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* goTo() {
+  const history = yield getContext('history');
+  history.push('/pheed');
+}
+
+function* watchLogIn() {
+  yield takeLatest(LOG_IN_REQUEST, logIn);
+}
+
+function* watchLogOut() {
+  yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
+}
+function* watchGoTo() {
+  yield takeLatest(GO_TO, goTo);
+}
+
+export function* userSaga() {
+  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp), fork(watchGoTo)]);
+}
+
 /* 리듀서 */
 
-const userReducer = (state = initialSate, action) => {
+const user = (state = initialSate, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
       /* 로그인 */
@@ -101,4 +173,4 @@ const userReducer = (state = initialSate, action) => {
   });
 };
 
-export default userReducer;
+export default user;

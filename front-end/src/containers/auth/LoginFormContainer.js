@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from '../../components/auth/LoginForm';
 import useInput from '../../hooks/useInput';
-import { loginRequestAction, GO_TO_PHEED } from '../../reducers/user';
+import { GO_TO, loginRequestAction } from '../../modules/user';
 
 const LoginFormContainer = () => {
   const dispatch = useDispatch();
-  const { logInLoading, logInDone } = useSelector((state) => state.userReducer);
+  const { logInLoading, logInDone } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  const onSubmitLogin = useCallback(() => {
+  const onSubmitLogIn = useCallback(() => {
     dispatch(
       loginRequestAction({
         email,
@@ -23,14 +23,14 @@ const LoginFormContainer = () => {
   useEffect(() => {
     if (logInDone) {
       dispatch({
-        type: GO_TO_PHEED,
+        type: GO_TO,
       });
     }
   }, [dispatch, logInDone]);
 
   return (
     <LoginForm
-      onSubmitLogin={onSubmitLogin}
+      onSubmitLogIn={onSubmitLogIn}
       email={email}
       password={password}
       onChangeEmail={onChangeEmail}

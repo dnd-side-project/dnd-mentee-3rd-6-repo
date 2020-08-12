@@ -40,7 +40,9 @@
       "react/jsx-one-expression-per-line": "off",
       "react/prop-types": "off",
       "jsx-a11y/label-has-associated-control": "off",
-      "no-param-reassign": "off"
+      "no-param-reassign": "off",
+      "no-unused-expressions": "off",
+      "consistent-return": "off"
     },
     "env": {
       "browser": true

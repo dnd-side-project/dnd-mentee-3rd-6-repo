@@ -1,3 +1,4 @@
 export const pallete = {
-  orange: '#FF6B00',
+  orange: '#FDA328',
+  gray: '#DDDDDD',
 };

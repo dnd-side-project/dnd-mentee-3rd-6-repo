@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <Route path="/" component={Home} exact />
-      <Route path="/pheed" component={Pheed} exact />
+      <Route path="/pheed" component={Pheed} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/login" component={LoginPage} />
     </>
