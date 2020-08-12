@@ -10,7 +10,7 @@ import { pallete } from '../lib/style/pallete';
 const HomeLayout = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 100%;
 
   div {
@@ -23,40 +23,53 @@ const HomeHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-content: center;
+  margin-top: 250px;
 
   h1 {
-    text-align: center;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    strong {
+      color: ${pallete.orange};
+    }
   }
 
   h2 {
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 41px;
     text-align: center;
-    font-weight: bold;
-    font-size: 28px;
   }
 
   img {
-    width: 100px;
-    height: 100px;
+    width: 163px;
+    height: auto;
     margin: 0 auto;
     margin-bottom: 1rem;
   }
 `;
 
 const AuthButton = styled(Button)`
+  width: 100%;
+  height: 50px;
   text-align: center;
-  background: ${pallete.orange};
-  border: 1px solid #fc8210;
+  color: black;
+  background: ${pallete.gray};
+  border: 1px solid ${pallete.gray};
 
   &:hover {
-    background: ${pallete.orange};
-    border: 1px solid ${pallete.orange};
+    background: ${pallete.gray};
+    border: 1px solid ${pallete.gray};
   }
 
   &:active {
-    background: ${darken(0.1, pallete.orange)};
-    border: 1px solid ${pallete.orange};
+    background: ${darken(0.1, pallete.gray)};
+    border: 1px solid ${pallete.gray};
+  }
+
+  &:last-child {
+    margin-bottom: 61px;
   }
 
   & + & {
@@ -68,15 +81,17 @@ const Home = () => {
   return (
     <HomeLayout>
       <HomeHeader>
-        <h1>우리 동네 집사 커뮤니티</h1>
+        <h1>
+          <strong>우</strong>리 <strong>동</strong>네 <strong>집</strong>사 커뮤니티
+        </h1>
         <img src={logo} alt="우동집 로고" />
         <h2>우동집</h2>
       </HomeHeader>
       <div>
-        <AuthButton type="primary" shape="round" size="large">
+        <AuthButton type="primary" shape="round">
           <Link to="/login">로그인</Link>
         </AuthButton>
-        <AuthButton type="primary" shape="round" size="large">
+        <AuthButton type="primary" shape="round">
           <Link to="/register">회원가입</Link>
         </AuthButton>
       </div>

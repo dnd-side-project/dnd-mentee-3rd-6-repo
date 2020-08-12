@@ -1,47 +1,49 @@
 import React from 'react';
-import { Input } from 'antd';
+import PropTypes from 'prop-types';
 
-import AuthTemplate from './AuthTemplate';
 import FormWrapper from '../common/FormWrapper';
+import InputForm from '../common/InputForm';
+import BottomCol from '../common/BottomCol';
 
-const LoginForm = ({ ...rest }) => {
+const LoginForm = ({
+  logInLoading,
+  onSubmitLogIn,
+  onChangeEmail,
+  email,
+  onChangePassword,
+  password,
+}) => {
   return (
-    <FormWrapper onFinish={rest.onSubmitLogin}>
-      <AuthTemplate
-        title="로그인"
-        subTitle="설명글 쓰는 공간"
-        bottomText="로그인"
-        buttonType="submit"
-        loading={rest.logInLoading}
-      >
-        <div className="input-wrapper">
-          <label htmlFor="email">이메일</label>
-          <br />
-          <Input
-            type="email"
-            name="email"
-            placeholder="이메일을 입력하세요."
-            onChange={rest.onChangeEmail}
-            value={rest.email}
-            required
-          />
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="password">패스워드</label>
-          <br />
-          <Input
-            visibilityToggle
-            type="password"
-            name="password"
-            placeholder="패스워드를 입력하세요."
-            onChange={rest.onChangePassword}
-            value={rest.password}
-            required
-          />
-        </div>
-      </AuthTemplate>
+    <FormWrapper onFinish={onSubmitLogIn}>
+      <div className="input-wrapper">
+        <label htmlFor="email">이메일</label>
+        <br />
+        <InputForm type="email" name="email" onChange={onChangeEmail} value={email} required />
+      </div>
+      <div className="input-wrapper">
+        <label htmlFor="password">패스워드</label>
+        <br />
+        <InputForm
+          visibilityToggle
+          type="password"
+          name="password"
+          onChange={onChangePassword}
+          value={password}
+          required
+        />
+      </div>
+      <BottomCol bottomText="로그인" buttonType="submit" loading={logInLoading} />
     </FormWrapper>
   );
+};
+
+LoginForm.prototype = {
+  logInLoading: PropTypes.bool.isRequired,
+  onSubmitLogin: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+  onChangeEmail: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  onChangePassword: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
