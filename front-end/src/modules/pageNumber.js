@@ -3,7 +3,7 @@ import produce from 'immer';
 /* 초기 상태 */
 
 export const initialSate = {
-  page: 3,
+  page: 1,
 };
 
 /* 액션 */

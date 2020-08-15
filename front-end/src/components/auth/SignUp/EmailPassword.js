@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormWrapper from '../common/FormWrapper';
-import InputForm from '../common/InputForm';
-import BottomCol from '../common/BottomCol';
+import FormWrapper from '../../common/FormWrapper';
+import InputForm from '../../common/InputForm';
+import BottomCol from '../../common/BottomCol';
+import ErrorMessage from '../../common/ErrorMessage';
 
 const EmailPassword = ({
   email,
@@ -13,6 +14,8 @@ const EmailPassword = ({
   passwordCheck,
   onChangePasswordCheck,
   passwordError,
+  emailError,
+  onClickCheckEmail,
   onSubmitEmailPassword,
 }) => {
   return (
@@ -22,6 +25,7 @@ const EmailPassword = ({
           <label htmlFor="email">이메일</label>
           <br />
           <InputForm type="email" name="email" value={email} onChange={onChangeEmail} required />
+          {emailError && <ErrorMessage>이미 가입한 이메일 입니다.</ErrorMessage>}
         </div>
         <div className="input-wrapper">
           <label htmlFor="password">비밀번호</label>
@@ -31,6 +35,7 @@ const EmailPassword = ({
             name="password"
             value={password}
             onChange={onChangePassword}
+            onClick={onClickCheckEmail}
             required
           />
         </div>
@@ -38,15 +43,20 @@ const EmailPassword = ({
           <label htmlFor="password-check">비밀번호 확인</label>
           <br />
           <InputForm
+            addonAfter={password && passwordCheck && !passwordError && <p>일치</p>}
             type="password"
             name="password-check"
             value={passwordCheck}
             onChange={onChangePasswordCheck}
+            disabled={!password}
             required
           />
-          {passwordError && '비밀번호가 일치하지 않습니다.'}
         </div>
-        <BottomCol buttonType="submit" />
+        <BottomCol
+          buttonType="submit"
+          buttonText="다음으로"
+          disabled={!(passwordCheck && !emailError && !passwordError)}
+        />
       </FormWrapper>
     </>
   );
@@ -60,7 +70,9 @@ EmailPassword.prototype = {
   passwordCheck: PropTypes.string.isRequired,
   onChangePasswordCheck: PropTypes.func.isRequired,
   passwordError: PropTypes.bool.isRequired,
+  emailError: PropTypes.bool.isRequired,
+  checkEmail: PropTypes.func.isRequired,
   onSubmitEmailPassword: PropTypes.func.isRequired,
 };
 
-export default EmailPassword;
+export default React.memo(EmailPassword);

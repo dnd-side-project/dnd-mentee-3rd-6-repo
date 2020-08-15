@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormWrapper from '../common/FormWrapper';
-import InputForm from '../common/InputForm';
-import BottomCol from '../common/BottomCol';
-import ErrorMessage from '../common/ErrorMessage';
+import FormWrapper from '../../common/FormWrapper';
+import InputForm from '../../common/InputForm';
+import BottomCol from '../../common/BottomCol';
+import ErrorMessage from '../../common/ErrorMessage';
 
 const LoginForm = ({
   logInLoading,
