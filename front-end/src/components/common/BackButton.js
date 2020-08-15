@@ -13,11 +13,9 @@ const GoBackButton = styled(Button)`
   padding: 0;
   margin-top: 10px;
   width: 24px;
-  height: auto;
   font-size: 24px;
   span {
-    width: 24px;
-    color: ${pallete.orange};
+    color: ${pallete.gray[6]};
   }
 `;
 
@@ -36,7 +34,7 @@ const BackButton = ({ history }) => {
   return (
     <>
       <GoBackButton type="link" size="small" onClick={onGoBack}>
-        <LeftOutlined />
+        <LeftOutlined size="large" />
       </GoBackButton>
     </>
   );

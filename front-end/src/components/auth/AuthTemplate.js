@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import BackButton from '../common/BackButton';
+import { pallete } from '../../lib/style/pallete';
 
 const TopCol = styled(Col)`
   min-height: 100px;
@@ -15,36 +16,43 @@ const TopCol = styled(Col)`
     justify-content: flex-start;
   }
 
-  h2 {
-    margin-top: 37px;
-    margin-bottom: 12px;
-    font-size: 18px;
+  h1 {
+    margin-top: 38px;
+
     font-weight: bold;
+    font-size: 20px;
+    line-height: 27px;
   }
 
-  p {
-    font-weight: bold;
+  h2 {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+
+    margin: 15px 0;
+
+    color: ${pallete.orange};
   }
 `;
 
 const MiddleCol = styled(Col)`
   label {
+    font-style: normal;
     font-weight: bold;
-  }
-
-  input {
-    margin-top: 10px;
+    font-size: 14px;
+    line-height: 19px;
   }
 `;
 
-const AuthTemplate = ({ children, title, subTitle }) => {
+const AuthTemplate = ({ children, title, subtitle }) => {
   return (
     <div>
-      <Row gutter={[0, 40]}>
+      <Row gutter={[0, 0]}>
         <TopCol xs={24} md={6}>
           <BackButton />
-          <h2>{title}</h2>
-          <p>{subTitle}</p>
+          <h1>{title}</h1>
+          <h2>{subtitle}</h2>
         </TopCol>
         <MiddleCol xs={24} md={12}>
           {children}
@@ -57,8 +65,8 @@ const AuthTemplate = ({ children, title, subTitle }) => {
 AuthTemplate.prototype = {
   children: PropTypes.element.isRequired,
   BackButton: PropTypes.element.isRequired,
-  subTitle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
 };
 
 export default AuthTemplate;

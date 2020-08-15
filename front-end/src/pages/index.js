@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'antd';
-import { darken } from 'polished';
 
 import logo from '../logo.svg';
 import { pallete } from '../lib/style/pallete';
@@ -55,17 +54,17 @@ const AuthButton = styled(Button)`
   height: 50px;
   text-align: center;
   color: black;
-  background: ${pallete.gray};
-  border: 1px solid ${pallete.gray};
+  background: ${pallete.gray[3]};
+  border: 1px solid ${pallete.gray[3]};
 
   &:hover {
-    background: ${pallete.gray};
-    border: 1px solid ${pallete.gray};
+    background: ${pallete.gray[3]};
+    border: 1px solid ${pallete.gray[3]};
   }
 
   &:active {
-    background: ${darken(0.1, pallete.gray)};
-    border: 1px solid ${pallete.gray};
+    background: ${pallete.gray[3]};
+    border: 1px solid ${pallete.gray[3]};
   }
 
   &:last-child {
