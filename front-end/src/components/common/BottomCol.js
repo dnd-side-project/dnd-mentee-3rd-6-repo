@@ -1,55 +1,64 @@
 import React from 'react';
 import { Button } from 'antd';
 import styled from 'styled-components';
-import { darken, lighten } from 'polished';
+import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
 
-const ButtonWarrper = styled(Button)`
-  width: 100%;
-  height: 100%;
-  color: black;
-  background: ${pallete.orange};
-  border: none;
-
-  &:hover {
-    background: ${pallete.orange};
-    border: 1px solid ${pallete.orange};
-  }
-
-  &:active {
-    background: ${darken(0.1, pallete.orange)};
-    border: 1px solid ${pallete.orange};
-  }
-
-  &:focus {
-    background: ${lighten(0.1, pallete.orange)};
-    border: 1px solid ${pallete.orange};
-  }
-`;
-
 const Bottom = styled.div`
   position: fixed;
-  bottom: 0px;
+  bottom: 50px;
   left: 0;
   right: 0;
-  width: 100%;
-  height: 70px;
-  margin: 0 auto;
 
   display: flex;
   justify-content: center;
   align-content: center;
 `;
 
-const BottomCol = ({ bottomText, buttonType, loading }) => {
+const ButtonWarrper = styled(Button)`
+  width: 310px;
+  height: 54px;
+  color: ${pallete.white};
+  background: ${pallete.orange};
+  border: none;
+  border-radius: 14px;
+  text-shadow: none;
+
+  &:hover {
+    background: ${pallete.orange};
+  }
+
+  &:active {
+    background: ${pallete.orange};
+  }
+
+  &:focus {
+    background: ${pallete.orange};
+  }
+`;
+
+const BottomCol = ({ buttonType, loading, buttonText, disabled }) => {
   return (
     <Bottom>
-      <ButtonWarrper type="primary" size="large" htmlType={buttonType} loading={loading}>
-        {bottomText}
+      <ButtonWarrper
+        type="primary"
+        size="large"
+        htmlType={buttonType}
+        loading={loading}
+        disabled={disabled}
+      >
+        {buttonText}
       </ButtonWarrper>
     </Bottom>
   );
+};
+
+BottomCol.prototype = {
+  buttonType: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  buttonText: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default BottomCol;

@@ -14,7 +14,6 @@ const EmailPassword = ({
   onChangePasswordCheck,
   passwordError,
   onSubmitEmailPassword,
-  bottomText,
 }) => {
   return (
     <>
@@ -47,7 +46,7 @@ const EmailPassword = ({
           />
           {passwordError && '비밀번호가 일치하지 않습니다.'}
         </div>
-        <BottomCol bottomText={bottomText} buttonType="submit" />
+        <BottomCol buttonType="submit" />
       </FormWrapper>
     </>
   );
@@ -62,7 +61,6 @@ EmailPassword.prototype = {
   onChangePasswordCheck: PropTypes.func.isRequired,
   passwordError: PropTypes.bool.isRequired,
   onSubmitEmailPassword: PropTypes.func.isRequired,
-  bottomText: PropTypes.string.isRequired,
 };
 
 export default EmailPassword;

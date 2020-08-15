@@ -17,8 +17,12 @@ body {
 
   padding-top: 44px;
   overflow-y: auto;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.grecaptcha-badge {
+  display: none;
 }
 
 /* 링크에 색상 및 밑줄 없애기 */

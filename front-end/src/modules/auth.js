@@ -9,9 +9,9 @@ export const initialSate = {
     phoneNumber: null,
     email: '',
     password: '',
-    isButler: false,
+    isButler: true,
   },
-  numberVerify: null,
+  confirmationResult: null, // reCAPTCHA 성공 후 데이터(무슨 데이터인지 모르겠음...)
   identifyLoading: false, // 본인인증 시도 중
   identifyDone: false,
   identifyError: null,
@@ -32,27 +32,18 @@ export const NUMBER_VERIFY_FAILURE = 'auth/NUMBER_VERIFY_FAILURE';
 
 /* 2.액션 생성함수 */
 
-// 생략 가능
-
 /* 3.사가 */
-
-// const identifyAPI = (data) => {
-//   return axios.post('api/signup/sms', data);
-// };
 
 function* identify(action) {
   try {
-    // const result = yield call(identifyAPI, action.data);
-    const result = 101010;
-    yield delay(1000);
     yield put({
       type: IDENTIFY_SUCCESS,
-      data: result, // 인증번호
+      data: action.data,
     });
   } catch (error) {
     yield put({
       type: IDENTIFY_FAILURE,
-      error: error.response.data,
+      error,
     });
   }
 }
@@ -62,7 +53,7 @@ function* numberVerify(action) {
     yield delay(1000);
     yield put({
       type: NUMBER_VERIFY_SUCCESS,
-      data: action.data, // 회원가입 객체
+      data: action.data, // 폰번호, 사용자이름
     });
   } catch (error) {
     yield put({
@@ -79,6 +70,7 @@ function* watchIdentify() {
 function* watchNumberVerify() {
   yield takeLatest(NUMBER_VERIFY_REQUEST, numberVerify);
 }
+
 export function* authSaga() {
   yield all([fork(watchIdentify), fork(watchNumberVerify)]);
 }
@@ -95,7 +87,7 @@ const reducer = (state = initialSate, action) => {
         draft.identifyError = null;
         break;
       case IDENTIFY_SUCCESS:
-        draft.numberVerify = action.data; // 인증번호가 들어감
+        draft.confirmationResult = action.data;
         draft.identifyLoading = false;
         draft.identifyDone = true;
         break;
@@ -110,8 +102,8 @@ const reducer = (state = initialSate, action) => {
         draft.numberVerifyError = null;
         break;
       case NUMBER_VERIFY_SUCCESS:
-        draft.userSignUp.phoneNumber = action.data.phoneNumber; // 회원가입에 필요한 form
-        draft.userSignUp.username = action.data.username; // 회원가입에 필요한 form
+        draft.userSignUp.phoneNumber = action.data.phoneNumber;
+        draft.userSignUp.username = action.data.username;
         draft.numberVerifyLoading = false;
         draft.numberVerifyDone = true;
         break;

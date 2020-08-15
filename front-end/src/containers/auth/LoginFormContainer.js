@@ -11,6 +11,9 @@ const LoginFormContainer = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
+  // 나중에 서버에서 받아오는 데이터
+  const isNotMatch = false;
+
   const onSubmitLogIn = useCallback(() => {
     dispatch(
       loginRequestAction({
@@ -36,6 +39,7 @@ const LoginFormContainer = () => {
       onChangeEmail={onChangeEmail}
       onChangePassword={onChangePassword}
       logInLoading={logInLoading}
+      isNotMatch={isNotMatch}
     />
   );
 };

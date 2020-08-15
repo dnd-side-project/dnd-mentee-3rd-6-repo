@@ -5,7 +5,7 @@ import AuthTemplate from '../components/auth/AuthTemplate';
 
 const RegisterPage = () => {
   return (
-    <AuthTemplate title="회원가입" subTitle="인증 절차를 꼼꼼히 하는거에 대한 설명">
+    <AuthTemplate title="회원가입" subtitle="우동집에 오신걸 환영한다냥 >_<">
       <RegisterFormContainer />
     </AuthTemplate>
   );
