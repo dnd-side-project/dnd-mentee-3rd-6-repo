@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
-
 import BackButton from '../common/BackButton';
-import BottomButton from '../common/BottomButton';
+import { pallete } from '../../lib/style/pallete';
 
 const TopCol = styled(Col)`
   min-height: 100px;
@@ -17,59 +16,47 @@ const TopCol = styled(Col)`
     justify-content: flex-start;
   }
 
+  h1 {
+    margin-top: 38px;
+
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 27px;
+  }
+
   h2 {
-    margin-top: 24px;
-    margin-bottom: 12px;
-    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+
+    margin: 15px 0;
+
+    color: ${pallete.orange};
   }
 `;
 
-const BottomCol = styled(Col)`
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 50px;
-  margin: 0 auto;
-
-  display: flex;
-  justify-content: center;
-  align-content: center;
-`;
-
 const MiddleCol = styled(Col)`
-  margin-top: 20px;
+  label {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 19px;
+  }
 `;
 
-const AuthTemplate = ({
-  children,
-  subTitle,
-  title,
-  bottomText,
-  buttonType,
-  loading,
-}) => {
-  console.log(loading);
+const AuthTemplate = ({ children, title, subtitle }) => {
   return (
     <div>
       <Row gutter={[0, 0]}>
-        {/* xs: 모바일, sm: 태블릿, md: 작은 데스크탑  -> n/24라고 생각, 한 Row의 합은 24가 되어야 함 */}
         <TopCol xs={24} md={6}>
           <BackButton />
-          <h2>{title}</h2>
-          <p>{subTitle}</p>
+          <h1>{title}</h1>
+          <h2>{subtitle}</h2>
         </TopCol>
         <MiddleCol xs={24} md={12}>
           {children}
         </MiddleCol>
-        <BottomCol xs={24} md={6}>
-          <BottomButton
-            text={bottomText}
-            buttonType={buttonType}
-            loading={loading}
-          />
-        </BottomCol>
       </Row>
     </div>
   );
@@ -77,11 +64,9 @@ const AuthTemplate = ({
 
 AuthTemplate.prototype = {
   children: PropTypes.element.isRequired,
-  subTitle: PropTypes.string.isRequired,
+  BackButton: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
-  bottomText: PropTypes.string.isRequired,
-  buttonType: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
+  subtitle: PropTypes.string.isRequired,
 };
 
 export default AuthTemplate;
