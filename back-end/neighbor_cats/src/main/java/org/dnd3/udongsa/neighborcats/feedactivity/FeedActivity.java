@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.dnd3.udongsa.neighborcats.feed.Feed;
-import org.dnd3.udongsa.neighborcats.servant.Servant;
+import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
 @Entity
 public class FeedActivity {

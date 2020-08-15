@@ -40,6 +40,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.twilio.sdk:twilio:7.54.2'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:2.6.2'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 }
 
