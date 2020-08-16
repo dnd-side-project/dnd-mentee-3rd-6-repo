@@ -1,24 +1,23 @@
 package org.dnd3.udongsa.neighborcats.servant.controller;
 
-import java.security.Principal;
-import java.util.List;
-
-import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.dnd3.udongsa.neighborcats.servant.repository.ServantRepository;
+import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/servants")
 public class ServantController {
 
-  private final ServantRepository repo;
+  private final ServantService service;
 
-  @GetMapping("/api/servants")
-  public List<Servant> getAll(Principal principal){
-    return repo.findAll();
+  @GetMapping("/isExist")
+  public Boolean isExistEmail(@RequestParam("email") String email){
+    return service.isExistEmail(email);
   }
   
 }

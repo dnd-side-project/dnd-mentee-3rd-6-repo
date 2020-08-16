@@ -7,8 +7,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ServantServiceDefault implements ServantService{
-	
+public class ServantServiceDefault implements ServantService {
+
 	final private ServantRepository repo;
-	
+
+	@Override
+	public Boolean isExistEmail(String email) {
+		return repo.existsByEmail(email);
+	}
+
+
 }
