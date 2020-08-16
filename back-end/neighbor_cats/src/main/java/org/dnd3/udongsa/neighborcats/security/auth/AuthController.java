@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auths")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -32,4 +32,5 @@ public class AuthController {
 	public SignInResDto signIn(@Valid @RequestBody SignInReqDto reqDto){
 		return service.signIn(reqDto);
 	}
+
 }
