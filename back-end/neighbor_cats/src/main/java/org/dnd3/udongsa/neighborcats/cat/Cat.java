@@ -11,7 +11,11 @@ import javax.persistence.ManyToOne;
 
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
-@Entity
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity @Getter
+@NoArgsConstructor
 public class Cat {
 
     @Id
@@ -36,5 +40,10 @@ public class Cat {
     @ManyToOne
     @JoinColumn
     private Servant servant;
+
+    public Cat adoptServant(Servant servant){
+        this.servant = servant;
+        return this;
+    }
     
 }
