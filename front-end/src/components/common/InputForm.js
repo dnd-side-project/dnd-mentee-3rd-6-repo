@@ -46,7 +46,7 @@ const InputForm = styled(Input)`
     }
 
     & input {
-      flex: 0.74;
+      flex: 0.75;
       padding: 0;
       border: none;
       &:focus {
@@ -59,6 +59,10 @@ const InputForm = styled(Input)`
       padding: 0;
       background: none;
       border: none;
+
+      p {
+        margin-left: 30px;
+      }
 
       color: ${pallete.orange};
 

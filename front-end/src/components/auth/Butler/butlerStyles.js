@@ -3,12 +3,9 @@ import { pallete } from '../../../lib/style/pallete';
 
 export const Wrapper = styled.div`
   position: fixed;
-  z-index: 999;
   top: 168px;
   left: 0;
   right: 0;
-  width: 218px;
-  height: 270px;
 
   margin: 0 auto;
 
@@ -22,21 +19,11 @@ export const ImageBox = styled.div`
   width: 218px;
   height: 270px;
 
-  /* img {
-    width: auto;
-    height: 100%;
-    margin: 0 auto;
-    background: ${pallete.white};
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
-    border-radius: 14px;
-  } */
-
   ${({ choice }) => {
-    return choice === 0
+    return choice
       ? css`
           .dot1-img {
-            transform: scale(1.1);
-            transition: all 0.25s;
+            transition: all 0.2s;
 
             width: auto;
             height: 100%;
@@ -46,8 +33,9 @@ export const ImageBox = styled.div`
             border-radius: 14px;
           }
           .dot2-img {
-            transform: scale(0.9);
-            transition: all 0.25s;
+            transform: scale(0.7);
+            transition: all 0.2s;
+            opacity: 0.8;
 
             width: auto;
             height: 100%;
@@ -59,8 +47,9 @@ export const ImageBox = styled.div`
         `
       : css`
           .dot1-img {
-            transform: scale(0.9);
-            transition: all 0.25s;
+            transform: scale(0.7);
+            transition: all 0.2s;
+            opacity: 0.8;
 
             width: auto;
             height: 100%;
@@ -70,8 +59,7 @@ export const ImageBox = styled.div`
             border-radius: 14px;
           }
           .dot2-img {
-            transform: scale(1.1);
-            transition: all 0.25s;
+            transition: all 0.2s;
 
             width: auto;
             height: 100%;
@@ -126,11 +114,11 @@ export const DotsIndicator = styled.div`
   }
 
   ${({ choice }) =>
-    choice === 0
+    choice
       ? css`
           .dot1 {
-            transform: scale(1.3);
-            transition: all 0.25s;
+            transform: scale(1.4);
+            transition: all 0.2s;
 
             background: ${pallete.orange};
           }
@@ -141,12 +129,12 @@ export const DotsIndicator = styled.div`
         `
       : css`
           .dot1 {
-            transition: all 0.25s;
+            transition: all 0.2s;
 
             background: ${pallete.gray[3]};
           }
           .dot2 {
-            transform: scale(1.3);
+            transform: scale(1.4);
             transition: all 0.25s;
 
             background: ${pallete.orange};
