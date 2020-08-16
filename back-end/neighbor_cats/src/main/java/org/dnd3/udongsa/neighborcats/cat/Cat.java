@@ -1,17 +1,24 @@
 package org.dnd3.udongsa.neighborcats.cat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.dnd3.udongsa.neighborcats.catkind.CatKind;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
-@Entity
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity @Getter
+@NoArgsConstructor
 public class Cat {
 
     @Id
@@ -24,17 +31,31 @@ public class Cat {
     private String features;
 
     // 품종
-    private String kind;
+    @ManyToOne
+    @JoinColumn
+    private CatKind kind;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private EGender gender;
     
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     
-    // 프로필 이미지 파일 URL
-    private String profileImgUrl;
-
     @ManyToOne
     @JoinColumn
     private Servant servant;
+
+    public Cat adoptServant(Servant servant){
+        this.servant = servant;
+        return this;
+    }
+
+    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday){
+        this.name = name;
+        this.features = features;
+        this.kind = catKind;
+        this.gender = gender;
+        this.birthday = birthday;
+        return this;
+    }
     
 }

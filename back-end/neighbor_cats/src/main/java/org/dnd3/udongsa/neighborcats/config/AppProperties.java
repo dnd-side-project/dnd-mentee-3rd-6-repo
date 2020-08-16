@@ -25,4 +25,5 @@ public class AppProperties {
 
     @Value("${expireTime}")
     private String expireTime;
+
 }
