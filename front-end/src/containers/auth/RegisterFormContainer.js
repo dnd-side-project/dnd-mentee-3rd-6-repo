@@ -34,7 +34,7 @@ const RegisterFormContainer = () => {
   const [time, setTime] = useState(179);
   const [timeString, setTimeString] = useState('');
 
-  const [isServant, setIsServant] = useState(0);
+  const [isServant, setIsServant] = useState(true);
 
   const dispatch = useDispatch();
   const { identifyLoading, identifyDone, numberVerifyLoading, numberVerifyDone } = useSelector(

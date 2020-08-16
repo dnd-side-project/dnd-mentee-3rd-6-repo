@@ -12,7 +12,7 @@ export const initialSate = {
     phoneNumber: null,
     email: '',
     password: '',
-    isServant: 0,
+    isServant: true,
   },
   // accessToken= '',
   identifyLoading: false, // 본인인증(리캡챠) 시도 중
