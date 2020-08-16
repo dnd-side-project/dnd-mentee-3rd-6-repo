@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
 
-const Bottom = styled.div`
+const BottomWarrper = styled.div`
+  z-index: 999;
+
   position: fixed;
   bottom: 50px;
   left: 0;
@@ -16,7 +18,7 @@ const Bottom = styled.div`
   align-content: center;
 `;
 
-const ButtonWarrper = styled(Button)`
+const Btn = styled(Button)`
   width: 310px;
   height: 54px;
   color: ${pallete.white};
@@ -39,18 +41,13 @@ const ButtonWarrper = styled(Button)`
 `;
 
 const BottomCol = ({ buttonType, loading, buttonText, disabled }) => {
+  console.log('aaa');
   return (
-    <Bottom>
-      <ButtonWarrper
-        type="primary"
-        size="large"
-        htmlType={buttonType}
-        loading={loading}
-        disabled={disabled}
-      >
+    <BottomWarrper>
+      <Btn type="primary" size="large" htmlType={buttonType} loading={loading} disabled={disabled}>
         {buttonText}
-      </ButtonWarrper>
-    </Bottom>
+      </Btn>
+    </BottomWarrper>
   );
 };
 
