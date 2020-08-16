@@ -10,10 +10,11 @@ import javax.persistence.ManyToOne;
 import org.dnd3.udongsa.neighborcats.cat.Cat;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor @Getter
 public class CatProfileImg {
     
     @Id

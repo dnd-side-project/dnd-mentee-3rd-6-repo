@@ -15,6 +15,7 @@ import javax.imageio.stream.IIOByteBuffer;
 import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.ImgFileRepository;
@@ -59,9 +60,9 @@ public class ImgFileServiceImpl implements ImgFileService {
     return filePath.toString();
   }
 
-  private String generateRandomFileName(){
+  private String generateRandomFileName() {
     long timestamp = System.currentTimeMillis();
-    int randomNumber = (int)(Math.random()*1000000);
+    int randomNumber = (int) (Math.random() * 1000000);
     String fileName = "" + timestamp + "_" + randomNumber;
     return fileName;
   }
@@ -77,6 +78,11 @@ public class ImgFileServiceImpl implements ImgFileService {
     }
     ImgFileDto dto = new ImgFileDto(imgFile.getFileName(), bytes);
     return dto;
+  }
+
+  @Override
+  public void delete(CatProfileImg img) {
+    FileUtils.deleteQuietly(new File(img.getImgFile().getFilePath()));
   }
 
 
