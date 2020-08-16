@@ -29,7 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	// developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -38,6 +38,11 @@ dependencies {
 	}
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'com.twilio.sdk:twilio:7.54.2'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:2.6.2'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }
 
 test {

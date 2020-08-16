@@ -10,5 +10,5 @@ public class RouteController {
     public String redirect() {
         return "forward:/";
     }
-    
+
 }
