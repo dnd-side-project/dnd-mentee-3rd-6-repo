@@ -1,5 +1,8 @@
-import { delay, put, takeLatest, all, fork } from 'redux-saga/effects';
+import { delay, put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import produce from 'immer';
+import axios from 'axios';
+
+import { NEXT_PAGE } from './pageNumber';
 
 /* 0.초기 상태 */
 
@@ -9,15 +12,18 @@ export const initialSate = {
     phoneNumber: null,
     email: '',
     password: '',
-    isButler: true,
+    isServant: 0,
   },
-  confirmationResult: null, // reCAPTCHA 성공 후 데이터(무슨 데이터인지 모르겠음...)
-  identifyLoading: false, // 본인인증 시도 중
+  // accessToken= '',
+  identifyLoading: false, // 본인인증(리캡챠) 시도 중
   identifyDone: false,
   identifyError: null,
   numberVerifyLoading: false, // 인증번호 시도 중
   numberVerifyDone: false,
   numberVerifyError: null,
+  nextRegisterPageLoading: false, // 회원가입 3페이지
+  nextRegisterPageDone: false,
+  nextRegisterPageError: null,
 };
 
 /* 1.액션 */
@@ -30,49 +36,61 @@ export const NUMBER_VERIFY_REQUEST = 'auth/NUMBER_VERIFY_REQUEST';
 export const NUMBER_VERIFY_SUCCESS = 'auth/NUMBER_VERIFY_SUCCESS';
 export const NUMBER_VERIFY_FAILURE = 'auth/NUMBER_VERIFY_FAILURE';
 
+export const NEXT_REGISTER_PAGE_REQUEST = 'auth/NEXT_REGISTER_PAGE_REQUEST';
+export const NEXT_REGISTER_PAGE_SUCCESS = 'auth/NEXT_REGISTER_PAGE_SUCCESS';
+export const NEXT_REGISTER_PAGE_FAILURE = 'auth/NEXT_REGISTER_PAGE_FAILURE';
+
+export const PROFILE_IMAGE_REQUEST = 'auth/PROFILE_IMAGE_REQUEST';
+export const PROFILE_IMAGE_SUCCESS = 'auth/PROFILE_IMAGE_SUCCESS';
+export const PROFILE_IMAGE_FAILURE = 'auth/PROFILE_IMAGE_FAILURE';
+
 /* 2.액션 생성함수 */
 
 /* 3.사가 */
 
-function* identify(action) {
-  try {
-    yield put({
-      type: IDENTIFY_SUCCESS,
-      data: action.data,
-    });
-  } catch (error) {
-    yield put({
-      type: IDENTIFY_FAILURE,
-      error,
-    });
-  }
-}
+const postSignUp = (data) => {
+  return axios({
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    url: '/api/auth/signup',
+    data: JSON.stringify(data),
+  });
+};
 
-function* numberVerify(action) {
+function* nextRegisterPage(action) {
   try {
+    const result = call(postSignUp, action.data);
     yield delay(1000);
     yield put({
-      type: NUMBER_VERIFY_SUCCESS,
-      data: action.data, // 폰번호, 사용자이름
+      type: NEXT_REGISTER_PAGE_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
     });
   } catch (error) {
     yield put({
-      type: NUMBER_VERIFY_FAILURE,
+      type: NEXT_REGISTER_PAGE_FAILURE,
       error: error.response.data,
     });
   }
 }
 
-function* watchIdentify() {
-  yield takeLatest(IDENTIFY_REQUEST, identify);
-}
+const profileImage = (data) => {
+  return axios({
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    url: '/api/signup/cats/profileimg',
+    data: JSON.stringify(data),
+  });
+};
 
-function* watchNumberVerify() {
-  yield takeLatest(NUMBER_VERIFY_REQUEST, numberVerify);
+function* watchNextRegisterPage() {
+  yield takeLatest(NEXT_REGISTER_PAGE_REQUEST, nextRegisterPage);
 }
 
 export function* authSaga() {
-  yield all([fork(watchIdentify), fork(watchNumberVerify)]);
+  yield all([fork(watchNextRegisterPage)]);
 }
 
 /* 4.리듀서 */
@@ -87,7 +105,6 @@ const reducer = (state = initialSate, action) => {
         draft.identifyError = null;
         break;
       case IDENTIFY_SUCCESS:
-        draft.confirmationResult = action.data;
         draft.identifyLoading = false;
         draft.identifyDone = true;
         break;
@@ -102,14 +119,28 @@ const reducer = (state = initialSate, action) => {
         draft.numberVerifyError = null;
         break;
       case NUMBER_VERIFY_SUCCESS:
-        draft.userSignUp.phoneNumber = action.data.phoneNumber;
-        draft.userSignUp.username = action.data.username;
         draft.numberVerifyLoading = false;
         draft.numberVerifyDone = true;
         break;
       case NUMBER_VERIFY_FAILURE:
         draft.numberVerifyLoading = false;
         draft.numberVerifyError = action.error;
+        break;
+      /* 회원가입 3페이지 */
+      case NEXT_REGISTER_PAGE_REQUEST:
+        draft.nextRegisterPageLoading = true;
+        draft.nextRegisterPageDone = false;
+        draft.nextRegisterPageError = null;
+        break;
+      case NEXT_REGISTER_PAGE_SUCCESS:
+        draft.userSignUp = action.data;
+        // draft.accessToken = action.data;
+        draft.nextRegisterPageLoading = false;
+        draft.nextRegisterPageDone = true;
+        break;
+      case NEXT_REGISTER_PAGE_FAILURE:
+        draft.nextRegisterPageLoading = false;
+        draft.nextRegisterPageError = action.error;
         break;
       default:
         break;

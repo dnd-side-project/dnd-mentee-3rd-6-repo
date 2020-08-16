@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import LoginForm from '../../components/auth/LoginForm';
+import LoginForm from '../../components/auth/SignUp/LoginForm';
 import useInput from '../../hooks/useInput';
 import { GO_TO, loginRequestAction } from '../../modules/user';
 

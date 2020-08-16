@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 
-import FormWrapper from '../common/FormWrapper';
-import InputForm from '../common/InputForm';
-import BottomCol from '../common/BottomCol';
+import FormWrapper from '../../common/FormWrapper';
+import InputForm from '../../common/InputForm';
+import BottomCol from '../../common/BottomCol';
 
 const IdentifyForm = ({
   username,
@@ -23,7 +23,6 @@ const IdentifyForm = ({
 }) => {
   return (
     <>
-      <div id="recaptcha-container" />
       <FormWrapper onFinish={identifyDone && onSubmitCheckAuthNumber}>
         <div className="input-wrapper">
           <label htmlFor="username">이름</label>
@@ -55,12 +54,12 @@ const IdentifyForm = ({
             required
           />
         </div>
-        {isSubmitted && (
+        {identifyDone && (
           <div className="input-wrapper">
             <label htmlFor="auth-number">인증번호</label>
             <br />
             <InputForm
-              addonAfter={timeString}
+              addonAfter={<p>{timeString}</p>}
               type="number"
               name="auth-number"
               placeholder="인증번호 6자리 수를 입력해주세요."
@@ -79,6 +78,7 @@ const IdentifyForm = ({
           disabled={!(authNumber.toString().length === 6 && username)}
         />
       </FormWrapper>
+      <div id="recaptcha-container" />
     </>
   );
 };
