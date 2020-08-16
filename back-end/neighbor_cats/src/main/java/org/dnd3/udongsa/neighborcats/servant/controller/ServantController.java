@@ -18,7 +18,6 @@ public class ServantController {
 
   @GetMapping("/api/servants")
   public List<Servant> getAll(Principal principal){
-    System.out.println(principal.getName());
     return repo.findAll();
   }
   
