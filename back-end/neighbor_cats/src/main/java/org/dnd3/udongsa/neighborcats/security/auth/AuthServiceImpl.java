@@ -2,6 +2,7 @@ package org.dnd3.udongsa.neighborcats.security.auth;
 
 import javax.transaction.Transactional;
 
+import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.dnd3.udongsa.neighborcats.role.RoleRepository;
@@ -20,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,12 +42,12 @@ public class AuthServiceImpl implements AuthService {
   @Transactional
   public SignUpResDto signUp(SignUpReqDto reqDto) {
     if(servantRepository.existsByEmail(reqDto.getEmail())){
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이메일 중복입니다");
+      throw new CustomException(HttpStatus.BAD_REQUEST, "이메일 중복입니다");
     }
     reqDto.setPassword(encoder.encode(reqDto.getPassword()));
     Servant servant = new ServantMapper().map(reqDto);
     Role role = roleRepository.findByName(ERole.ROLE_USER)
-                              .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "USER Role이 존재하지 않습니다."));
+                              .orElseThrow(()->new CustomException(HttpStatus.BAD_REQUEST, "USER Role이 존재하지 않습니다."));
     servant.addRole(role);                          
     servantRepository.save(servant);
     String jwt = jwtUtils.generateJwtToken(servant.getEmail());
@@ -58,11 +58,11 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public SignInResDto signIn(SignInReqDto reqDto) {
     Servant servant = servantRepository.findByEmail(reqDto.getEmail()).orElseThrow(
-      ()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email이 존재하지 않습니다.")
+      ()->new CustomException(HttpStatus.BAD_REQUEST, "Email이 존재하지 않습니다.")
     );
 
     if(!encoder.matches(reqDto.getPassword(), servant.getPassword())){
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password가 틀렸습니다.");
+      throw new CustomException(HttpStatus.BAD_REQUEST, "Password가 틀렸습니다.");
     }
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(servant.getEmail());

@@ -2,7 +2,6 @@ package org.dnd3.udongsa.neighborcats.servant.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dnd3.udongsa.neighborcats.cat.Cat;
 import org.dnd3.udongsa.neighborcats.cat.repository.CatRepository;
@@ -10,6 +9,7 @@ import org.dnd3.udongsa.neighborcats.catkind.CatKind;
 import org.dnd3.udongsa.neighborcats.catkind.CatKindRepository;
 import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImgRepository;
+import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.service.ImgFileService;
 import org.dnd3.udongsa.neighborcats.servant.dto.ProfileImgDto;
@@ -21,7 +21,6 @@ import org.dnd3.udongsa.neighborcats.servant.repository.ServantRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,7 +70,7 @@ public class ServantServiceDefault implements ServantService {
 		Servant servant = repo.findByEmail(userEmail).orElseThrow();
 		List<Cat> cats = catRepo.findByServant(servant);
 		if(cats.size() == 0) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "초기 저장된 Cat을 찾을 수 없음");
+			throw new CustomException(HttpStatus.BAD_REQUEST, "초기 저장된 Cat을 찾을 수 없음");
 		}
 		Cat cat = cats.get(0);
 		CatKind catKind = catKindRepo.findById(dto.getKindId()).orElseThrow();
