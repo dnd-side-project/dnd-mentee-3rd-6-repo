@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.dnd3.udongsa.neighborcats.config.AppProperties;
+import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.CheckCodeReqDto;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.CheckCodeResDto;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.SendCodeResDto;
@@ -60,10 +61,10 @@ public class PhnumAuthServiceTest {
     @Test
     public void Given_SendFailed_When_sendCode_Then_Thorw_BadRequest(){
         String phoneNumber = "010999911111";
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> {
+        CustomException ex = assertThrows(CustomException.class, () -> {
             this.service.sendCode(phoneNumber);
           },"Expected ResponseStatusException");
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
 
     @Test
@@ -97,12 +98,12 @@ public class PhnumAuthServiceTest {
         reqDto.setVerificationCode(invalidCode);
 
         // when
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, ()->
+        CustomException ex = assertThrows(CustomException.class, ()->
                                                 this.service.checkCode(reqDto),
                                                 "Expected BadRequest Exception");
 
         // then
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
     @Test
     public void Given_expired_When_CheckCode_Then_Throws_BadRequestException(){
@@ -118,11 +119,11 @@ public class PhnumAuthServiceTest {
         reqDto.setVerificationCode(invalidCode);
 
         // when
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, ()->
+        CustomException ex = assertThrows(CustomException.class, ()->
                                                 this.service.checkCode(reqDto),
                                                 "Expected BadRequest Exception");
 
         // then
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
 }
