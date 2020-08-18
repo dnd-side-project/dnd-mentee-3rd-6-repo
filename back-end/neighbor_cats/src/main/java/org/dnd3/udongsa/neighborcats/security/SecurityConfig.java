@@ -1,5 +1,9 @@
 package org.dnd3.udongsa.neighborcats.security;
 
+import java.util.Arrays;
+
+import com.google.common.collect.ImmutableList;
+
 import org.dnd3.udongsa.neighborcats.security.jwt.AuthEntryPointJwt;
 import org.dnd3.udongsa.neighborcats.security.jwt.AuthTokenFilter;
 import org.dnd3.udongsa.neighborcats.security.service.UserDetailsServiceImpl;
@@ -15,6 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,14 +68,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().disable().csrf().disable()
+		http.cors().and().csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
 				.antMatchers("/api/auth/signup", "/api/auth/signin", "/api/servants/isExist", "/h2-console", "/api/catkinds").permitAll()
 				.antMatchers("/api/auth/**").authenticated()
 				.anyRequest().permitAll();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
+  }
+  
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.setAllowedOrigins(Arrays.asList("*"));
+      configuration.setAllowedMethods(Arrays.asList("HEAD","GET", "POST", "PUT", "DELETE", "PATCH"));
+      configuration.setAllowCredentials(true);
+      configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration);
+      return source;
+  }
 
 
 }
