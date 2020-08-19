@@ -5,7 +5,7 @@ import AuthTemplate from '../components/auth/AuthTemplate';
 
 const LoginPage = () => {
   return (
-    <AuthTemplate title="로그인" subTitle="설명글 쓰는 공간">
+    <AuthTemplate title="로그인">
       <LoginFormContainer />
     </AuthTemplate>
   );

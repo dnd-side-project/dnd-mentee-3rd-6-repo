@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle, css } from 'styled-components';
-import { pallete } from '../../../lib/style/pallete';
+import { pallete } from '../../../../lib/style/pallete';
 
 export const Wrapper = styled.div`
   position: fixed;

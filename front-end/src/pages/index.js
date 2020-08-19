@@ -16,59 +16,79 @@ const HomeLayout = styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    width: 64px;
+    height: 43px;
+    left: 56px;
+    top: 344px;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 19px;
+    text-align: center;
+
+    background: ${pallete.gray[3]};
+    border-radius: 14px;
+  }
 `;
 
 const HomeHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-content: center;
-  margin-top: 250px;
+  margin-top: 148px;
 
   h1 {
-    font-weight: bold;
-    font-size: 15px;
-    line-height: 20px;
-    text-align: center;
-    strong {
-      color: ${pallete.orange};
-    }
-  }
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 155%;
 
-  h2 {
-    font-weight: 800;
-    font-size: 30px;
-    line-height: 41px;
     text-align: center;
+    margin-bottom: 88px;
   }
 
   img {
     width: 163px;
     height: auto;
     margin: 0 auto;
-    margin-bottom: 1rem;
+    margin-bottom: 55px;
   }
 `;
 
 const AuthButton = styled(Button)`
-  width: 100%;
-  height: 50px;
+  width: 315px;
+  height: 55px;
+  margin: 0 auto;
+  border-radius: 14px;
+  color: ${pallete.gray[6]};
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 20px;
   text-align: center;
-  color: black;
+
   background: ${pallete.gray[3]};
-  border: 1px solid ${pallete.gray[3]};
+  border: none;
+
+  transition: all 0.125s;
 
   &:hover {
     background: ${pallete.gray[3]};
-    border: 1px solid ${pallete.gray[3]};
+    border: none;
   }
 
   &:active {
-    background: ${pallete.gray[3]};
-    border: 1px solid ${pallete.gray[3]};
-  }
-
-  &:last-child {
-    margin-bottom: 61px;
+    background: ${pallete.orange};
+    border: none;
   }
 
   & + & {
@@ -81,11 +101,11 @@ const Home = () => {
     <HomeLayout>
       <HomeHeader>
         <h1>
-          <strong>우</strong>리 <strong>동</strong>네 <strong>집</strong>사 커뮤니티
+          안녕하세요 집사님! <br /> 우동집에 오신걸 환영합니다 'ᴗ'
         </h1>
         <img src={logo} alt="우동집 로고" />
-        <h2>우동집</h2>
       </HomeHeader>
+      <span>안냥!</span>
       <div>
         <AuthButton type="primary" shape="round">
           <Link to="/login">로그인</Link>

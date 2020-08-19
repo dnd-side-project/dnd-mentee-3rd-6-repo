@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form } from 'antd';
 
-import FormWrapper from '../../common/FormWrapper';
-import InputForm from '../../common/InputForm';
+import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
-import ErrorMessage from '../../common/ErrorMessage';
+import { ErrorMessage } from '../../common/Message';
 
 const LoginForm = ({
   logInLoading,
@@ -13,43 +13,53 @@ const LoginForm = ({
   email,
   onChangePassword,
   password,
-  isNotMatch,
+  logInError,
 }) => {
   return (
-    <FormWrapper onFinish={onSubmitLogIn}>
-      <div className="input-wrapper">
-        <label htmlFor="email">이메일</label>
-        <br />
-        <InputForm
-          type="email"
-          name="email"
-          placeholder="이메일을 입력해 주세요"
-          onChange={onChangeEmail}
-          value={email}
-          required
-        />
-      </div>
-      <div className="input-wrapper">
-        <label htmlFor="password">패스워드</label>
-        <br />
-        <InputForm
-          type="password"
-          name="password"
-          placeholder="비밀번호를 입력해 주세요"
-          onChange={onChangePassword}
-          value={password}
-          required
-        />
-        {!isNotMatch && <ErrorMessage>아이디 혹은 비밀번호를 잘못 입력 하였습니다.</ErrorMessage>}
-      </div>
+    <Form onFinish={onSubmitLogIn}>
+      <InputWrapper>
+        <div>
+          <label htmlFor="email">이메일</label>
+          <br />
+          <InputForm
+            type="email"
+            name="email"
+            placeholder="이메일을 입력해 주세요"
+            onChange={onChangeEmail}
+            value={email}
+            required
+          />
+        </div>
+      </InputWrapper>
+      <InputWrapper>
+        <div>
+          <label htmlFor="password">패스워드</label>
+          <br />
+          <InputForm
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력해 주세요"
+            onChange={onChangePassword}
+            value={password}
+            required
+          />
+          {logInError ? (
+            logInError.message ? (
+              <ErrorMessage>{logInError.message}</ErrorMessage>
+            ) : (
+              <ErrorMessage>네트워크 에러</ErrorMessage>
+            )
+          ) : null}
+        </div>
+      </InputWrapper>
       <BottomCol
         bottomText="로그인"
         buttonType="submit"
         loading={logInLoading}
         buttonText="로그인"
-        disabled={!isNotMatch}
+        disabled={!(email && password)}
       />
-    </FormWrapper>
+    </Form>
   );
 };
 

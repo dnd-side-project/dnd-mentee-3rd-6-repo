@@ -1,42 +1,29 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Row, Col } from 'antd';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import BackButton from '../common/BackButton';
-import { pallete } from '../../lib/style/pallete';
 
 const TopCol = styled(Col)`
-  min-height: 100px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-
-  span {
-    display: flex;
-    justify-content: flex-start;
-  }
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
 
   h1 {
-    margin-top: 38px;
-
     font-weight: bold;
     font-size: 20px;
     line-height: 27px;
   }
 
-  h2 {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 19px;
-
-    margin: 15px 0;
-
-    color: ${pallete.orange};
+  span {
+    width: 25px;
   }
 `;
 
 const MiddleCol = styled(Col)`
+  margin-top: 75px;
   label {
     font-style: normal;
     font-weight: bold;
@@ -45,28 +32,22 @@ const MiddleCol = styled(Col)`
   }
 `;
 
-const AuthTemplate = ({ children, title, subtitle }) => {
+const AuthTemplate = ({ children, title }) => {
   return (
-    <div>
-      <Row gutter={[0, 0]}>
-        <TopCol xs={24} md={6}>
-          <BackButton />
-          <h1>{title}</h1>
-          <h2>{subtitle}</h2>
-        </TopCol>
-        <MiddleCol xs={24} md={12}>
-          {children}
-        </MiddleCol>
-      </Row>
-    </div>
+    <Row gutter={[0, 0]}>
+      <TopCol xs={24}>
+        <BackButton />
+        <h1>{title}</h1>
+        <span className="opacity-block" />
+      </TopCol>
+      <MiddleCol xs={24}>{children}</MiddleCol>
+    </Row>
   );
 };
 
 AuthTemplate.prototype = {
   children: PropTypes.element.isRequired,
-  BackButton: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
 };
 
 export default AuthTemplate;
