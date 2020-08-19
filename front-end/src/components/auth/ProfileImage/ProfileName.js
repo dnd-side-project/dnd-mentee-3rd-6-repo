@@ -1,14 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form } from 'antd';
 
-import InputWrapper, { Textarea, InputForm } from '../../common/InputForm';
+import InputWrapper, { InputForm } from '../../common/InputForm';
+import { PrevImageBox, ProfileHeader } from './ImageStyles';
+import BottomCol from '../../common/BottomCol';
 
-const ProfileName = ({ catName, onChangeCatName, character, onChangeCharacter }) => {
+const ProfileName = ({
+  catName,
+  onChangeCatName,
+  character,
+  onChangeCharacter,
+  onSubmitImage,
+  previewPath,
+  uploadImageDone,
+}) => {
   return (
-    <>
+    <Form onFinish={onSubmitImage} encType="multipart/form-data">
+      <ProfileHeader>
+        <strong>냥이의 이름</strong>이 궁금해요
+      </ProfileHeader>
+      <PrevImageBox>{previewPath && <img src={previewPath} alt="고양이 사진" />}</PrevImageBox>
       <InputWrapper>
         <InputForm
-          addonBefore="1/10"
+          // addonBefore="1/10"
           type="text"
           maxLength={15}
           value={catName}
@@ -18,17 +33,24 @@ const ProfileName = ({ catName, onChangeCatName, character, onChangeCharacter })
         />
       </InputWrapper>
       <InputWrapper>
-        <Textarea
-          addonBefore="1/20"
+        <InputForm
+          // addonBefore="1/20"
+          type="text"
           value={character}
           onChange={onChangeCharacter}
-          placeholder="냥이만의 특징이 있나요? 간단하게 소개 해주세요 :)&#13;&#10;
-        ex) 스트릿 출신이라 냥냥펀치가 매우 아파요"
+          placeholder="냥이만의 특징이 있나요? 간단하게 소개 해주세요 :)"
           bordered={false}
           required
         />
+        <p>ex) 똥꼬발랄 개냥이, 냔냥펀치의 날인</p>
       </InputWrapper>
-    </>
+      <BottomCol
+        buttonType="submit"
+        loading={uploadImageDone}
+        buttonText="다음 단계로"
+        disabled={!(catName && character)}
+      />
+    </Form>
   );
 };
 
@@ -37,6 +59,7 @@ ProfileName.prototype = {
   onChangeCatName: PropTypes.func.isRequired,
   character: PropTypes.string.isRequired,
   onChangeCharacter: PropTypes.func.isRequired,
+  uploadImageDone: PropTypes.bool.isRequired,
 };
 
 export default ProfileName;

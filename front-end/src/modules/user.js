@@ -93,6 +93,7 @@ function* signUp(action) {
       type: NEXT_PAGE,
     });
   } catch (error) {
+    console.error(error);
     yield put({
       type: SIGN_UP_FAILURE,
       error: error.response.data,
@@ -202,7 +203,7 @@ const user = (state = initialSate, action) => {
         draft.signUpError = null;
         break;
       case SIGN_UP_SUCCESS:
-        draft.userInfo.accessToken = action.data.accessToken;
+        draft.userInfo = action.data;
         draft.signUpLoading = false;
         draft.signUpDone = true;
         break;
