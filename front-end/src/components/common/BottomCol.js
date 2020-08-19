@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 import { pallete } from '../../lib/style/pallete';
 
 const BottomWarrper = styled.div`
-  z-index: 999;
-
   position: fixed;
-  bottom: 50px;
+  bottom: 80px;
   left: 0;
   right: 0;
 
@@ -41,7 +39,6 @@ const Btn = styled(Button)`
 `;
 
 const BottomCol = ({ buttonType, loading, buttonText, disabled }) => {
-  console.log('aaa');
   return (
     <BottomWarrper>
       <Btn type="primary" size="large" htmlType={buttonType} loading={loading} disabled={disabled}>

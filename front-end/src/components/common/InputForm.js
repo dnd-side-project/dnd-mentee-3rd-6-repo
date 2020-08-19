@@ -1,10 +1,24 @@
 import styled from 'styled-components';
 import { Input } from 'antd';
-import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
 
-const InputForm = styled(Input)`
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & + & {
+    margin-top: 50px;
+  }
+`;
+
+export const Textarea = styled(Input.TextArea)`
+  padding: 0;
+`;
+
+export const InputForm = styled(Input)`
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -14,12 +28,12 @@ const InputForm = styled(Input)`
   width: 343px;
   padding: 0;
   padding-bottom: 14px;
-  margin-top: 26px;
+  margin-top: 31px;
 
   border: none;
   border-radius: 0;
 
-  border-bottom: 1px solid ${pallete.gray[3]};
+  border-bottom: 1px solid ${pallete.gray[4]};
 
   &:focus {
     border: none;
@@ -46,7 +60,7 @@ const InputForm = styled(Input)`
     }
 
     & input {
-      flex: 0.75;
+      flex: 0.74;
       padding: 0;
       border: none;
       &:focus {
@@ -61,7 +75,7 @@ const InputForm = styled(Input)`
       border: none;
 
       p {
-        margin-left: 30px;
+        margin-left: 50px;
       }
 
       color: ${pallete.orange};
@@ -97,8 +111,4 @@ const InputForm = styled(Input)`
   }
 `;
 
-InputForm.prototype = {
-  primary: PropTypes.bool.isRequired,
-};
-
-export default InputForm;
+export default InputWrapper;

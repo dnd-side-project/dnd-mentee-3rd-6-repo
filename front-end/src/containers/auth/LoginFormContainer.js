@@ -3,24 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from '../../components/auth/SignUp/LoginForm';
 import useInput from '../../hooks/useInput';
-import { GO_TO, loginRequestAction } from '../../modules/user';
+import { GO_TO, LOG_IN_REQUEST } from '../../modules/user';
 
 const LoginFormContainer = () => {
   const dispatch = useDispatch();
-  const { logInLoading, logInDone } = useSelector((state) => state.user);
+  const { logInLoading, logInDone, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  // 나중에 서버에서 받아오는 데이터
-  const isNotMatch = false;
-
   const onSubmitLogIn = useCallback(() => {
-    dispatch(
-      loginRequestAction({
-        email,
-        password,
-      }),
-    );
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { email, password },
+    });
   }, [dispatch, email, password]);
 
   useEffect(() => {
@@ -39,7 +34,7 @@ const LoginFormContainer = () => {
       onChangeEmail={onChangeEmail}
       onChangePassword={onChangePassword}
       logInLoading={logInLoading}
-      isNotMatch={isNotMatch}
+      logInError={logInError}
     />
   );
 };
