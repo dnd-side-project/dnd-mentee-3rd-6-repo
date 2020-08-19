@@ -14,10 +14,6 @@ const InputWrapper = styled.div`
   }
 `;
 
-export const Textarea = styled(Input.TextArea)`
-  padding: 0;
-`;
-
 export const InputForm = styled(Input)`
   font-style: normal;
   font-weight: 500;
