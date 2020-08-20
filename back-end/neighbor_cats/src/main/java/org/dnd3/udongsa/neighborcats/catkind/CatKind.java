@@ -5,9 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
-@Entity @Getter
+@Entity @Getter @Setter(value = AccessLevel.PRIVATE)
 public class CatKind {
 
   @Id
@@ -15,5 +17,11 @@ public class CatKind {
   private Long id;
 
   private String name;
+
+  public static CatKind of(String name){
+    CatKind catKind = new CatKind();
+    catKind.setName(name);
+    return catKind;
+  }
 
 }

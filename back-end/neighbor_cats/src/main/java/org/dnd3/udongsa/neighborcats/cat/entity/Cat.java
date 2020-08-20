@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.cat;
+package org.dnd3.udongsa.neighborcats.cat.entity;
 
 import java.time.LocalDate;
 
@@ -39,6 +39,8 @@ public class Cat {
     private EGender gender;
     
     private LocalDate birthday;
+
+    private ENeutralized neutralized;
     
     @ManyToOne
     @JoinColumn
@@ -49,12 +51,14 @@ public class Cat {
         return this;
     }
 
-    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday){
+    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Servant servant){
         this.name = name;
         this.features = features;
         this.kind = catKind;
         this.gender = gender;
         this.birthday = birthday;
+        this.neutralized = neutralized;
+        this.servant = servant;
         return this;
     }
     

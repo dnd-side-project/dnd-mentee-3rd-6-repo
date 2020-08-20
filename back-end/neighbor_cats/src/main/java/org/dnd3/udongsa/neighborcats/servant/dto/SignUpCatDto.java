@@ -2,7 +2,7 @@ package org.dnd3.udongsa.neighborcats.servant.dto;
 
 import java.time.LocalDate;
 
-import org.dnd3.udongsa.neighborcats.cat.EGender;
+import org.dnd3.udongsa.neighborcats.cat.entity.EGender;
 
 import lombok.Data;
 

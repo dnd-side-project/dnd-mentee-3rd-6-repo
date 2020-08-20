@@ -13,7 +13,10 @@ import org.dnd3.udongsa.neighborcats.feed.Feed;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
 
-@Entity
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity @Getter @NoArgsConstructor
 public class Like {
 
     @Id
