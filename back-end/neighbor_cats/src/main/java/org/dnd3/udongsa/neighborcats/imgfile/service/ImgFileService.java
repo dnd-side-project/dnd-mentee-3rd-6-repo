@@ -1,16 +1,14 @@
 package org.dnd3.udongsa.neighborcats.imgfile.service;
 
-import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
-import org.dnd3.udongsa.neighborcats.servant.dto.ProfileUploadDto;
 
 public interface ImgFileService {
 
-	ImgFile upload(ProfileUploadDto uploadDto);
+	ImgFile upload(byte[] bytes);
 
 	ImgFileDto findById(Long id);
 
-	void delete(CatProfileImg img);
+	boolean delete(ImgFile imgFile);
   
 }

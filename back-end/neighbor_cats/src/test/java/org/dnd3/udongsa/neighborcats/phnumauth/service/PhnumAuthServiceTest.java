@@ -2,7 +2,6 @@ package org.dnd3.udongsa.neighborcats.phnumauth.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -11,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.dnd3.udongsa.neighborcats.config.AppProperties;
+import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.CheckCodeReqDto;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.CheckCodeResDto;
 import org.dnd3.udongsa.neighborcats.phnumauth.dto.SendCodeResDto;
 import org.dnd3.udongsa.neighborcats.phnumauth.entity.PhnumAuthCode;
-import org.dnd3.udongsa.neighborcats.phnumauth.repository.PhnumberAuthRepository;
 import org.dnd3.udongsa.neighborcats.phnumauth.repository.PhnumAuthCodeRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 public class PhnumAuthServiceTest {
@@ -60,10 +58,10 @@ public class PhnumAuthServiceTest {
     @Test
     public void Given_SendFailed_When_sendCode_Then_Thorw_BadRequest(){
         String phoneNumber = "010999911111";
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> {
+        CustomException ex = assertThrows(CustomException.class, () -> {
             this.service.sendCode(phoneNumber);
           },"Expected ResponseStatusException");
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
 
     @Test
@@ -97,12 +95,12 @@ public class PhnumAuthServiceTest {
         reqDto.setVerificationCode(invalidCode);
 
         // when
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, ()->
+        CustomException ex = assertThrows(CustomException.class, ()->
                                                 this.service.checkCode(reqDto),
                                                 "Expected BadRequest Exception");
 
         // then
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
     @Test
     public void Given_expired_When_CheckCode_Then_Throws_BadRequestException(){
@@ -118,11 +116,11 @@ public class PhnumAuthServiceTest {
         reqDto.setVerificationCode(invalidCode);
 
         // when
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, ()->
+        CustomException ex = assertThrows(CustomException.class, ()->
                                                 this.service.checkCode(reqDto),
                                                 "Expected BadRequest Exception");
 
         // then
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
     }
 }

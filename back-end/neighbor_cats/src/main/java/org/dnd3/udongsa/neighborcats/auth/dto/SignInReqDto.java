@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.security.auth.dto;
+package org.dnd3.udongsa.neighborcats.auth.dto;
 
 import lombok.Data;
 
