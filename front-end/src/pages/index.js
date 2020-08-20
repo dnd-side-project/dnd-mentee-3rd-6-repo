@@ -22,53 +22,75 @@ const HomeHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-content: center;
-  margin-top: 250px;
+  margin-top: 148px;
 
   h1 {
-    font-weight: bold;
-    font-size: 15px;
-    line-height: 20px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 155%;
+
     text-align: center;
-    strong {
-      color: ${pallete.orange};
-    }
+    margin-bottom: 88px;
   }
 
-  h2 {
-    font-weight: 800;
-    font-size: 30px;
-    line-height: 41px;
-    text-align: center;
-  }
-
-  img {
+  .logo {
     width: 163px;
     height: auto;
     margin: 0 auto;
-    margin-bottom: 1rem;
+    margin-bottom: 55px;
+  }
+
+  .bubble-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    right: 105px;
+    top: 40px;
+
+    & img {
+      position: absolute;
+    }
+
+    & .bubble-text {
+      position: absolute;
+      font-family: BM JUA_OTF;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 19px;
+    }
   }
 `;
 
 const AuthButton = styled(Button)`
-  width: 100%;
-  height: 50px;
+  width: 315px;
+  height: 55px;
+  margin: 0 auto;
+  border-radius: 14px;
+  color: ${pallete.gray[6]};
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 20px;
   text-align: center;
-  color: black;
+
   background: ${pallete.gray[3]};
-  border: 1px solid ${pallete.gray[3]};
+  border: none;
+
+  transition: all 0.125s;
 
   &:hover {
     background: ${pallete.gray[3]};
-    border: 1px solid ${pallete.gray[3]};
+    border: none;
   }
 
   &:active {
-    background: ${pallete.gray[3]};
-    border: 1px solid ${pallete.gray[3]};
-  }
-
-  &:last-child {
-    margin-bottom: 61px;
+    background: ${pallete.orange};
+    border: none;
   }
 
   & + & {
@@ -81,10 +103,13 @@ const Home = () => {
     <HomeLayout>
       <HomeHeader>
         <h1>
-          <strong>우</strong>리 <strong>동</strong>네 <strong>집</strong>사 커뮤니티
+          안녕하세요 집사님! <br /> 우동집에 오신걸 환영합니다 'ᴗ'
         </h1>
-        <img src={logo} alt="우동집 로고" />
-        <h2>우동집</h2>
+        <span className="bubble-wrapper">
+          <img src="/images/bubble/speech.svg" alt="말풍선 안냥!" />
+          <span className="bubble-text">안냥!</span>
+        </span>
+        <img className="logo" src={logo} alt="우동집 로고" />
       </HomeHeader>
       <div>
         <AuthButton type="primary" shape="round">

@@ -1,29 +1,20 @@
-import { delay, put, takeLatest, all, fork, call } from 'redux-saga/effects';
-import produce from 'immer';
+import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import axios from 'axios';
-
-import { NEXT_PAGE } from './pageNumber';
+import produce from 'immer';
 
 /* 0.초기 상태 */
 
 export const initialSate = {
-  userSignUp: {
-    username: '',
-    phoneNumber: null,
-    email: '',
-    password: '',
-    isServant: true,
-  },
-  // accessToken= '',
+  emailValidData: false,
   identifyLoading: false, // 본인인증(리캡챠) 시도 중
   identifyDone: false,
   identifyError: null,
   numberVerifyLoading: false, // 인증번호 시도 중
   numberVerifyDone: false,
   numberVerifyError: null,
-  nextRegisterPageLoading: false, // 회원가입 3페이지
-  nextRegisterPageDone: false,
-  nextRegisterPageError: null,
+  emailValidLoading: false, // 이메일 중복확인 시도 중
+  emailValidDone: false,
+  emailValidError: null,
 };
 
 /* 1.액션 */
@@ -36,9 +27,9 @@ export const NUMBER_VERIFY_REQUEST = 'auth/NUMBER_VERIFY_REQUEST';
 export const NUMBER_VERIFY_SUCCESS = 'auth/NUMBER_VERIFY_SUCCESS';
 export const NUMBER_VERIFY_FAILURE = 'auth/NUMBER_VERIFY_FAILURE';
 
-export const NEXT_REGISTER_PAGE_REQUEST = 'auth/NEXT_REGISTER_PAGE_REQUEST';
-export const NEXT_REGISTER_PAGE_SUCCESS = 'auth/NEXT_REGISTER_PAGE_SUCCESS';
-export const NEXT_REGISTER_PAGE_FAILURE = 'auth/NEXT_REGISTER_PAGE_FAILURE';
+export const EMAIL_VALID_REQUEST = 'auth/EMAIL_VALID_REQUEST';
+export const EMAIL_VALID_SUCCESS = 'auth/EMAIL_VALID_SUCCESS';
+export const EMAIL_VALID_FAILURE = 'auth/EMAIL_VALID_FAILURE';
 
 export const PROFILE_IMAGE_REQUEST = 'auth/PROFILE_IMAGE_REQUEST';
 export const PROFILE_IMAGE_SUCCESS = 'auth/PROFILE_IMAGE_SUCCESS';
@@ -48,49 +39,44 @@ export const PROFILE_IMAGE_FAILURE = 'auth/PROFILE_IMAGE_FAILURE';
 
 /* 3.사가 */
 
-const postSignUp = (data) => {
-  return axios({
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    url: '/api/auth/signup',
-    data: JSON.stringify(data),
+const emailValidAPI = (data) => {
+  return axios.get(`/servants/isExist`, {
+    params: { email: data },
   });
 };
 
-function* nextRegisterPage(action) {
+function* emailValid(action) {
   try {
-    const result = call(postSignUp, action.data);
-    yield delay(1000);
+    const result = yield call(emailValidAPI, action.data);
+    console.log(result);
     yield put({
-      type: NEXT_REGISTER_PAGE_SUCCESS,
-      data: action.data,
-    });
-    yield put({
-      type: NEXT_PAGE,
+      type: EMAIL_VALID_SUCCESS,
+      data: result.data,
     });
   } catch (error) {
+    console.log(error);
     yield put({
-      type: NEXT_REGISTER_PAGE_FAILURE,
+      type: EMAIL_VALID_FAILURE,
       error: error.response.data,
     });
   }
 }
 
-const profileImage = (data) => {
-  return axios({
-    method: 'post',
-    headers: { 'Content-Type': 'multipart/form-data' },
-    url: '/api/signup/cats/profileimg',
-    data: JSON.stringify(data),
-  });
-};
+// const profileImage = (data) => {
+//   return axios({
+//     method: 'post',
+//     headers: { 'Content-Type': 'multipart/form-data' },
+//     url: '/api/signup/cats/profileimg',
+//     data: JSON.stringify(data),
+//   });
+// };
 
-function* watchNextRegisterPage() {
-  yield takeLatest(NEXT_REGISTER_PAGE_REQUEST, nextRegisterPage);
+function* watchEmailValid() {
+  yield takeLatest(EMAIL_VALID_REQUEST, emailValid);
 }
 
 export function* authSaga() {
-  yield all([fork(watchNextRegisterPage)]);
+  yield all([fork(watchEmailValid)]);
 }
 
 /* 4.리듀서 */
@@ -126,21 +112,20 @@ const reducer = (state = initialSate, action) => {
         draft.numberVerifyLoading = false;
         draft.numberVerifyError = action.error;
         break;
-      /* 회원가입 3페이지 */
-      case NEXT_REGISTER_PAGE_REQUEST:
-        draft.nextRegisterPageLoading = true;
-        draft.nextRegisterPageDone = false;
-        draft.nextRegisterPageError = null;
+      /* 이메일 중복확인 */
+      case EMAIL_VALID_REQUEST:
+        draft.emailValidLoading = true;
+        draft.emailValidDone = false;
+        draft.emailValidError = null;
         break;
-      case NEXT_REGISTER_PAGE_SUCCESS:
-        draft.userSignUp = action.data;
-        // draft.accessToken = action.data;
-        draft.nextRegisterPageLoading = false;
-        draft.nextRegisterPageDone = true;
+      case EMAIL_VALID_SUCCESS:
+        draft.emailValidData = action.data;
+        draft.emailValidLoading = false;
+        draft.emailValidDone = true;
         break;
-      case NEXT_REGISTER_PAGE_FAILURE:
-        draft.nextRegisterPageLoading = false;
-        draft.nextRegisterPageError = action.error;
+      case EMAIL_VALID_FAILURE:
+        draft.emailValidLoading = false;
+        draft.emailValidError = action.error;
         break;
       default:
         break;

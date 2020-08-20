@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import firebase from '../../lib/api/firebaseAuth';
 import EmailPassword from '../../components/auth/SignUp/EmailPassword';
-import ButlerOrNotButler from '../../components/auth/Butler/ButlerOrNotButler';
+import ButlerOrNotButler from '../../components/auth/SignUp/Butler/ButlerOrNotButler';
 
 import {
   IDENTIFY_REQUEST,
   NUMBER_VERIFY_REQUEST,
-  NEXT_REGISTER_PAGE_REQUEST,
   IDENTIFY_SUCCESS,
   IDENTIFY_FAILURE,
   NUMBER_VERIFY_SUCCESS,
   NUMBER_VERIFY_FAILURE,
+  EMAIL_VALID_REQUEST,
 } from '../../modules/auth';
+import { SIGN_UP_REQUEST } from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 import useInput from '../../hooks/useInput';
 import IdentifyForm from '../../components/auth/SignUp/IdentifyForm';
@@ -24,10 +25,10 @@ const RegisterFormContainer = () => {
   const [authNumber, onChangeAuthNumber] = useInput('');
 
   const [email, onChangeEmail] = useInput('');
+  const [prevEmail, setPrevEmail] = useState('');
   const [password, onChangePassword] = useInput('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [timeCheck, setTimeCheck] = useState(false);
@@ -37,11 +38,17 @@ const RegisterFormContainer = () => {
   const [isServant, setIsServant] = useState(true);
 
   const dispatch = useDispatch();
-  const { identifyLoading, identifyDone, numberVerifyLoading, numberVerifyDone } = useSelector(
-    (state) => state.auth,
-  );
+  const {
+    identifyLoading,
+    identifyDone,
+    numberVerifyLoading,
+    numberVerifyDone,
+    emailValidData,
+  } = useSelector((state) => state.auth);
 
   const { page } = useSelector((state) => state.pageNumber);
+
+  const emailInputRef = useRef();
 
   /* 리캡챠 설정 */
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,10 +120,16 @@ const RegisterFormContainer = () => {
     [password],
   );
 
-  const onClickCheckEmail = useCallback(() => {
-    // 이메일을 서버로 보내는 액션을 만듬
-    email && setEmailError(false);
-  }, [email]);
+  const onFocusCheckEmail = useCallback(() => {
+    if (prevEmail === email) {
+      return null;
+    }
+    setPrevEmail(() => email);
+    return dispatch({
+      type: EMAIL_VALID_REQUEST,
+      data: email,
+    });
+  }, [dispatch, email, prevEmail]);
 
   /* 이메일 패스워드 확인 */
   const onSubmitEmailPassword = useCallback(() => {
@@ -131,9 +144,9 @@ const RegisterFormContainer = () => {
 
   const nextRegisterPage = useCallback(() => {
     dispatch({
-      type: NEXT_REGISTER_PAGE_REQUEST,
+      type: SIGN_UP_REQUEST,
       data: {
-        username,
+        name: username,
         phoneNumber,
         email,
         password,
@@ -175,6 +188,13 @@ const RegisterFormContainer = () => {
     }
   }, [time, timeCheck]);
 
+  useEffect(() => {
+    emailValidData && emailInputRef.current.focus();
+    if (email !== prevEmail) {
+      emailValidData && emailInputRef.current.focus();
+    }
+  }, [email, emailValidData, prevEmail]);
+
   return (
     <>
       {page === 1 && (
@@ -203,8 +223,9 @@ const RegisterFormContainer = () => {
           passwordCheck={passwordCheck}
           onChangePasswordCheck={onChangePasswordCheck}
           passwordError={passwordError}
-          emailError={emailError}
-          onClickCheckEmail={onClickCheckEmail}
+          emailInputRef={emailInputRef}
+          emailValidData={emailValidData}
+          onFocusCheckEmail={onFocusCheckEmail}
           onSubmitEmailPassword={onSubmitEmailPassword}
         />
       )}

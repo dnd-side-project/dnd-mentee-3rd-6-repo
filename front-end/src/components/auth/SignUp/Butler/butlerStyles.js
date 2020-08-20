@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle, css } from 'styled-components';
-import { pallete } from '../../../lib/style/pallete';
+import { pallete } from '../../../../lib/style/pallete';
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -35,13 +35,12 @@ export const ImageBox = styled.div`
           .dot2-img {
             transform: scale(0.7);
             transition: all 0.2s;
-            opacity: 0.8;
+            opacity: 0.5;
 
             width: auto;
             height: 100%;
             margin: 0 auto;
             background: ${pallete.white};
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
             border-radius: 14px;
           }
         `
@@ -49,13 +48,12 @@ export const ImageBox = styled.div`
           .dot1-img {
             transform: scale(0.7);
             transition: all 0.2s;
-            opacity: 0.8;
+            opacity: 0.5;
 
             width: auto;
             height: 100%;
             margin: 0 auto;
             background: ${pallete.white};
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
             border-radius: 14px;
           }
           .dot2-img {

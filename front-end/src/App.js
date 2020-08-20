@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Home from './pages';
-import Pheed from './pages/PheedPage';
+import FeedPage from './pages/FeedPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 
@@ -15,15 +15,19 @@ const StatusBar = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background: #cc5de8;
+  background: #f1f3f5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function App() {
   return (
     <>
-      <StatusBar>상태 바</StatusBar>
+      <StatusBar>상태 바(아아폰x 기준)</StatusBar>
       <Route path="/" component={Home} exact />
-      <Route path="/pheed" component={Pheed} />
+      <Route path="/feed" component={FeedPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/login" component={LoginPage} />
     </>

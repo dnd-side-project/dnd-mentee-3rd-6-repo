@@ -1,10 +1,14 @@
-import { delay, put, takeLatest, getContext, all, fork } from 'redux-saga/effects';
+import { delay, put, takeLatest, getContext, all, fork, call } from 'redux-saga/effects';
+import axios from 'axios';
 import produce from 'immer';
+
+import { NEXT_PAGE } from './pageNumber';
 
 /* 초기 상태 */
 
 export const initialSate = {
-  userInfo: null,
+  userInfo: '',
+  imagePath: '',
   logInLoading: false, // 로그인 시도 중
   logInDone: false,
   logInError: null,
@@ -14,6 +18,9 @@ export const initialSate = {
   signUpLoading: false, // 회원가입 시도 중
   signUpDone: false,
   signUpError: null,
+  uploadImageLoading: false, // 프로필 사진 등록 시도 중
+  uploadImageDone: false,
+  uploadImageError: null,
 };
 
 /* 액션 */
@@ -30,31 +37,24 @@ export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
+export const UPLOAD_IMAGE_REQUEST = 'user/UPLOAD_IMAGE_REQUEST';
+export const UPLOAD_IMAGE_SUCCESS = 'user/UPLOAD_IMAGE_SUCCESS';
+export const UPLOAD_IMAGE_FAILURE = 'user/UPLOAD_IMAGE_FAILURE';
+
 export const GO_TO = 'GO_TO';
-
-/* 액션 생성함수 */
-
-export const loginRequestAction = (data) => {
-  return {
-    type: LOG_IN_REQUEST,
-    data,
-  };
-};
-
-export const logoutRequestAction = () => {
-  return {
-    type: LOG_OUT_REQUEST,
-  };
-};
 
 /* 사가 */
 
+const logInAPI = (data) => {
+  return axios.post('/auth/signin', data);
+};
+
 function* logIn(action) {
   try {
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
@@ -78,17 +78,49 @@ function* logOut() {
   }
 }
 
-function* signUp() {
+const signUpAPI = (data) => {
+  return axios.post('/auth/signup', data);
+};
+
+function* signUp(action) {
   try {
-    // const result = yield call(signUpAPI)
-    yield delay(1000);
+    const result = yield call(signUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS,
-      data: null,
+      data: result.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
     });
   } catch (error) {
+    console.error(error);
     yield put({
       type: SIGN_UP_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+const uploadImageAPI = (data) => {
+  return axios.post('/signup/cats/profileimg', data);
+};
+
+function* uploadImage(action) {
+  console.log(action.data);
+  try {
+    const result = yield call(uploadImageAPI, action.data);
+    console.log(result);
+    yield put({
+      type: UPLOAD_IMAGE_SUCCESS,
+      data: result.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: UPLOAD_IMAGE_FAILURE,
       error: error.response.data,
     });
   }
@@ -110,12 +142,23 @@ function* watchLogOut() {
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
+
+function* watchUploadImage() {
+  yield takeLatest(UPLOAD_IMAGE_REQUEST, uploadImage);
+}
+
 function* watchGoTo() {
   yield takeLatest(GO_TO, goTo);
 }
 
 export function* userSaga() {
-  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp), fork(watchGoTo)]);
+  yield all([
+    fork(watchLogIn),
+    fork(watchLogOut),
+    fork(watchGoTo),
+    fork(watchUploadImage),
+    fork(watchSignUp),
+  ]);
 }
 
 /* 리듀서 */
@@ -130,7 +173,7 @@ const user = (state = initialSate, action) => {
         draft.logInError = null;
         break;
       case LOG_IN_SUCCESS:
-        draft.userInfo = action.data;
+        draft.userInfo.accessToken = action.data.accessToken;
         draft.logInLoading = false;
         draft.logInDone = true;
         break;
@@ -160,12 +203,28 @@ const user = (state = initialSate, action) => {
         draft.signUpError = null;
         break;
       case SIGN_UP_SUCCESS:
+        draft.userInfo = action.data;
         draft.signUpLoading = false;
         draft.signUpDone = true;
         break;
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
+        break;
+      /* 프로필 사진 등록 */
+      case UPLOAD_IMAGE_REQUEST:
+        draft.uploadImageLoading = true;
+        draft.uploadImageDone = false;
+        draft.signUpError = null;
+        break;
+      case UPLOAD_IMAGE_SUCCESS:
+        draft.imagePath = action.data;
+        draft.uploadImageLoading = false;
+        draft.uploadImageDone = true;
+        break;
+      case UPLOAD_IMAGE_FAILURE:
+        draft.uploadImageLoading = false;
+        draft.uploadImageError = action.error;
         break;
       default:
         break;

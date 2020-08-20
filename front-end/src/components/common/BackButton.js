@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { LeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -10,11 +9,12 @@ import { pallete } from '../../lib/style/pallete';
 import { PREV_PAGE } from '../../modules/pageNumber';
 
 const GoBackButton = styled(Button)`
-  padding: 0;
-  margin-top: 10px;
-  width: 24px;
-  font-size: 24px;
-  span {
+  display: flex;
+  align-items: center;
+  width: 25px;
+  padding: 5px 0px;
+
+  img {
     color: ${pallete.gray[6]};
   }
 `;
@@ -34,7 +34,7 @@ const BackButton = ({ history }) => {
   return (
     <>
       <GoBackButton type="link" size="small" onClick={onGoBack}>
-        <LeftOutlined size="large" />
+        <img src="/images/button/back.svg" alt="뒤로가기" />
       </GoBackButton>
     </>
   );
