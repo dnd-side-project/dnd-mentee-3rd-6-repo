@@ -53,7 +53,6 @@ const LoginForm = ({
         </div>
       </InputWrapper>
       <BottomCol
-        bottomText="로그인"
         buttonType="submit"
         loading={logInLoading}
         buttonText="로그인"

@@ -16,27 +16,6 @@ const HomeLayout = styled.div`
     display: flex;
     flex-direction: column;
   }
-
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: absolute;
-    width: 64px;
-    height: 43px;
-    left: 56px;
-    top: 344px;
-
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 19px;
-    text-align: center;
-
-    background: ${pallete.gray[3]};
-    border-radius: 14px;
-  }
 `;
 
 const HomeHeader = styled.header`
@@ -55,11 +34,34 @@ const HomeHeader = styled.header`
     margin-bottom: 88px;
   }
 
-  img {
+  .logo {
     width: 163px;
     height: auto;
     margin: 0 auto;
     margin-bottom: 55px;
+  }
+
+  .bubble-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    right: 105px;
+    top: 40px;
+
+    & img {
+      position: absolute;
+    }
+
+    & .bubble-text {
+      position: absolute;
+      font-family: BM JUA_OTF;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 19px;
+    }
   }
 `;
 
@@ -103,9 +105,12 @@ const Home = () => {
         <h1>
           안녕하세요 집사님! <br /> 우동집에 오신걸 환영합니다 'ᴗ'
         </h1>
-        <img src={logo} alt="우동집 로고" />
+        <span className="bubble-wrapper">
+          <img src="/images/bubble/speech.svg" alt="말풍선 안냥!" />
+          <span className="bubble-text">안냥!</span>
+        </span>
+        <img className="logo" src={logo} alt="우동집 로고" />
       </HomeHeader>
-      <span>안냥!</span>
       <div>
         <AuthButton type="primary" shape="round">
           <Link to="/login">로그인</Link>

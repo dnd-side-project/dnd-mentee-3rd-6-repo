@@ -17,13 +17,15 @@ const StatusBar = styled.div`
   margin: 0 auto;
   background: #f1f3f5;
 
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function App() {
   return (
     <>
-      <StatusBar>상태 바</StatusBar>
+      <StatusBar>상태 바(아아폰x 기준)</StatusBar>
       <Route path="/" component={Home} exact />
       <Route path="/feed" component={FeedPage} />
       <Route path="/register" component={RegisterPage} />
