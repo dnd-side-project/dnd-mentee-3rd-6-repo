@@ -38,7 +38,7 @@ const EmailPassword = ({
           {emailValidData ? (
             <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
           ) : emailRule.test(email) ? (
-            <CleanMessage>올바른 이메일 형식입니다.</CleanMessage>
+            <CleanMessage>올바른 이메일입니다.</CleanMessage>
           ) : (
             <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
           )}
