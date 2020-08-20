@@ -51,11 +51,11 @@ const EmailPassword = ({
             <br />
             <InputForm
               type="password"
-              name="password"
-              placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상 (만들 예정)"
-              value={password}
-              onChange={onChangePassword}
+              name="password-check"
+              placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
+              value={passwordCheck}
               onFocus={onFocusCheckEmail}
+              onChange={onChangePasswordCheck}
               required
             />
           </div>
