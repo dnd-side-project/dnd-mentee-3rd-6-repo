@@ -49,7 +49,7 @@ const EmailPassword = ({
           <InputForm
             type="password"
             name="password"
-            placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상 (만들 예정)"
+            placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
             value={password}
             onChange={onChangePassword}
             onFocus={onFocusCheckEmail}
@@ -64,6 +64,7 @@ const EmailPassword = ({
               addonAfter={password && passwordCheck && !passwordError && <p>일치</p>}
               type="password"
               name="password-check"
+              placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
               value={passwordCheck}
               onChange={onChangePasswordCheck}
               required
