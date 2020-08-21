@@ -25,6 +25,12 @@ const Btn = styled(Button)`
   border-radius: 14px;
   text-shadow: none;
 
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+
   &:hover {
     background: ${pallete.orange};
   }

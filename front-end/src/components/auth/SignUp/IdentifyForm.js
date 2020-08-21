@@ -4,6 +4,7 @@ import { Button, Form } from 'antd';
 
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
+import MarginTop from '../../common/MarginTop';
 
 const IdentifyForm = ({
   username,
@@ -22,6 +23,7 @@ const IdentifyForm = ({
 }) => {
   return (
     <>
+      <MarginTop top="105px" />
       <Form onFinish={identifyDone && onSubmitCheckAuthNumber}>
         <InputWrapper>
           <div>
