@@ -1,29 +1,16 @@
 package org.dnd3.udongsa.neighborcats.imgfile.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.Iterator;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.IIOByteBuffer;
-import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.io.FileUtils;
-import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.ImgFileRepository;
-import org.dnd3.udongsa.neighborcats.servant.dto.ProfileUploadDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,20 +27,19 @@ public class ImgFileServiceImpl implements ImgFileService {
 
   @Override
   @Transactional
-  public ImgFile upload(ProfileUploadDto uploadDto) {
-    MultipartFile multipartFile = uploadDto.getImgFile();
+  public ImgFile upload(byte[] bytes) {
     String fileName = generateRandomFileName();
-    String filePath = saveImgFile(multipartFile, fileName);
+    String filePath = saveImgFile(bytes, fileName);
     ImgFile imgFile = ImgFile.of(filePath, fileName, IMG_FILE_EXT);
     repo.save(imgFile);
     return imgFile;
   }
 
-  private String saveImgFile(MultipartFile multipartFile, String fileName) {
+  private String saveImgFile(byte[] bytes, String fileName) {
     Path filePath = Path.of(imgFileDir, fileName).toAbsolutePath();
     File file = filePath.toFile();
     try {
-      FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
+      FileUtils.writeByteArrayToFile(file, bytes);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -81,8 +67,11 @@ public class ImgFileServiceImpl implements ImgFileService {
   }
 
   @Override
-  public void delete(CatProfileImg img) {
-    FileUtils.deleteQuietly(new File(img.getImgFile().getFilePath()));
+  @Transactional
+  public boolean delete(ImgFile imgFile) {
+    FileUtils.deleteQuietly(new File(imgFile.getFilePath()));
+    repo.delete(imgFile);
+    return true;
   }
 
 

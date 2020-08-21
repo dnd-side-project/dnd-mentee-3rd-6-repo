@@ -1,6 +1,5 @@
 package org.dnd3.udongsa.neighborcats.imgfile.controller;
 
-import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.imgfile.service.ImgFileService;
 import org.springframework.http.HttpHeaders;

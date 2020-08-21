@@ -25,6 +25,44 @@ const EmailPassword = ({
     <>
       <Form onFinish={onSubmitEmailPassword}>
         <MarginTop top="105px">
+        <InputWrapper>
+          <div>
+            <label htmlFor="email">이메일</label>
+            <br />
+            <InputForm
+              type="email"
+              name="email"
+              placeholder="이메일을 입력해 주세요"
+              value={email}
+              onChange={onChangeEmail}
+              ref={emailInputRef}
+              required
+            />
+            {emailValidData ? (
+              <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
+            ) : emailRule.test(email) ? (
+              <CleanMessage>올바른 이메일입니다.</CleanMessage>
+            ) : (
+              <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
+            )}
+          </div>
+        </InputWrapper>
+        <InputWrapper>
+          <div>
+            <label htmlFor="password">비밀번호</label>
+            <br />
+            <InputForm
+              type="password"
+              name="password"
+              placeholder="* 숫자, 영어, 혹은 특수문자 포함 8자리 이상"
+              value={password}
+              onChange={onChangePassword}
+              onFocus={onFocusCheckEmail}
+              required
+            />
+          </div>
+        </InputWrapper>
+        {password.length >= 8 && (
           <InputWrapper>
             <div>
               <label htmlFor="email">이메일</label>
