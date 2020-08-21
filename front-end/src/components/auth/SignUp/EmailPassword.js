@@ -23,61 +23,62 @@ const EmailPassword = ({
   const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
-      <MarginTop top="105px" />
       <Form onFinish={onSubmitEmailPassword}>
-        <InputWrapper>
-          <div>
-            <label htmlFor="email">이메일</label>
-            <br />
-            <InputForm
-              type="email"
-              name="email"
-              placeholder="이메일을 입력해 주세요"
-              value={email}
-              onChange={onChangeEmail}
-              ref={emailInputRef}
-              required
-            />
-            {emailValidData ? (
-              <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
-            ) : emailRule.test(email) ? (
-              <CleanMessage>올바른 이메일 형식입니다.</CleanMessage>
-            ) : (
-              <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
-            )}
-          </div>
-        </InputWrapper>
-        <InputWrapper>
-          <div>
-            <label htmlFor="password">비밀번호</label>
-            <br />
-            <InputForm
-              type="password"
-              name="password"
-              placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상 (만들 예정)"
-              value={password}
-              onChange={onChangePassword}
-              onFocus={onFocusCheckEmail}
-              required
-            />
-          </div>
-        </InputWrapper>
-        {password.length >= 8 && (
+        <MarginTop top="105px">
           <InputWrapper>
             <div>
-              <label htmlFor="password-check">비밀번호 확인</label>
+              <label htmlFor="email">이메일</label>
               <br />
               <InputForm
-                addonAfter={password && passwordCheck && !passwordError && <p>일치</p>}
+                type="email"
+                name="email"
+                placeholder="이메일을 입력해 주세요"
+                value={email}
+                onChange={onChangeEmail}
+                ref={emailInputRef}
+                required
+              />
+              {emailValidData ? (
+                <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
+              ) : emailRule.test(email) ? (
+                <CleanMessage>올바른 이메일 형식입니다.</CleanMessage>
+              ) : (
+                <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
+              )}
+            </div>
+          </InputWrapper>
+          <InputWrapper>
+            <div>
+              <label htmlFor="password">비밀번호</label>
+              <br />
+              <InputForm
                 type="password"
-                name="password-check"
-                value={passwordCheck}
-                onChange={onChangePasswordCheck}
+                name="password"
+                placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상 (만들 예정)"
+                value={password}
+                onChange={onChangePassword}
+                onFocus={onFocusCheckEmail}
                 required
               />
             </div>
           </InputWrapper>
-        )}
+          {password.length >= 8 && (
+            <InputWrapper>
+              <div>
+                <label htmlFor="password-check">비밀번호 확인</label>
+                <br />
+                <InputForm
+                  addonAfter={password && passwordCheck && !passwordError && <p>일치</p>}
+                  type="password"
+                  name="password-check"
+                  value={passwordCheck}
+                  onChange={onChangePasswordCheck}
+                  required
+                />
+              </div>
+            </InputWrapper>
+          )}
+        </MarginTop>
         <BottomCol
           buttonType="submit"
           buttonText="다음으로"

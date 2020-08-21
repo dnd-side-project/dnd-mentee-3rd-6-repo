@@ -6,6 +6,7 @@ import EmailPassword from '../../components/auth/SignUp/EmailPassword';
 import ButlerOrNotButler from '../../components/auth/SignUp/Butler/ButlerOrNotButler';
 
 import {
+  SIGN_UP_REQUEST,
   IDENTIFY_REQUEST,
   NUMBER_VERIFY_REQUEST,
   IDENTIFY_SUCCESS,
@@ -13,8 +14,7 @@ import {
   NUMBER_VERIFY_SUCCESS,
   NUMBER_VERIFY_FAILURE,
   EMAIL_VALID_REQUEST,
-} from '../../modules/auth';
-import { SIGN_UP_REQUEST } from '../../modules/user';
+} from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 import useInput from '../../hooks/useInput';
 import IdentifyForm from '../../components/auth/SignUp/IdentifyForm';
@@ -44,7 +44,7 @@ const RegisterFormContainer = () => {
     numberVerifyLoading,
     numberVerifyDone,
     emailValidData,
-  } = useSelector((state) => state.auth);
+  } = useSelector((state) => state.user);
 
   const { page } = useSelector((state) => state.pageNumber);
 

@@ -25,6 +25,15 @@ const TopCol = styled(Col)`
 `;
 
 const MiddleCol = styled(Col)`
+  min-height: 90vh;
+
+  form {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
   label {
     font-style: normal;
     font-weight: bold;

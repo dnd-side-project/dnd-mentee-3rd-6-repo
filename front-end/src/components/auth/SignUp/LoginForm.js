@@ -18,43 +18,44 @@ const LoginForm = ({
 }) => {
   return (
     <>
-      <MarginTop top="75px" />
       <Form onFinish={onSubmitLogIn}>
-        <InputWrapper>
-          <div>
-            <label htmlFor="email">이메일</label>
-            <br />
-            <InputForm
-              type="email"
-              name="email"
-              placeholder="이메일을 입력해 주세요"
-              onChange={onChangeEmail}
-              value={email}
-              required
-            />
-          </div>
-        </InputWrapper>
-        <InputWrapper>
-          <div>
-            <label htmlFor="password">패스워드</label>
-            <br />
-            <InputForm
-              type="password"
-              name="password"
-              placeholder="비밀번호를 입력해 주세요"
-              onChange={onChangePassword}
-              value={password}
-              required
-            />
-            {logInError ? (
-              logInError.message ? (
-                <ErrorMessage>{logInError.message}</ErrorMessage>
-              ) : (
-                <ErrorMessage>네트워크 에러</ErrorMessage>
-              )
-            ) : null}
-          </div>
-        </InputWrapper>
+        <MarginTop top="75px">
+          <InputWrapper>
+            <div>
+              <label htmlFor="email">이메일</label>
+              <br />
+              <InputForm
+                type="email"
+                name="email"
+                placeholder="이메일을 입력해 주세요"
+                onChange={onChangeEmail}
+                value={email}
+                required
+              />
+            </div>
+          </InputWrapper>
+          <InputWrapper>
+            <div>
+              <label htmlFor="password">패스워드</label>
+              <br />
+              <InputForm
+                type="password"
+                name="password"
+                placeholder="비밀번호를 입력해 주세요"
+                onChange={onChangePassword}
+                value={password}
+                required
+              />
+              {logInError ? (
+                logInError.message ? (
+                  <ErrorMessage>{logInError.message}</ErrorMessage>
+                ) : (
+                  <ErrorMessage>네트워크 에러</ErrorMessage>
+                )
+              ) : null}
+            </div>
+          </InputWrapper>
+        </MarginTop>
         <BottomCol
           buttonType="submit"
           loading={logInLoading}
