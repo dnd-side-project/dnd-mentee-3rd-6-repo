@@ -7,8 +7,7 @@ import { NEXT_PAGE } from './pageNumber';
 /* 초기 상태 */
 
 export const initialSate = {
-  userInfo: '',
-  imagePath: '',
+  userInfo: null,
   logInLoading: false, // 로그인 시도 중
   logInDone: false,
   logInError: null,
@@ -102,14 +101,14 @@ function* signUp(action) {
 }
 
 const uploadImageAPI = (data) => {
-  return axios.post('/signup/cats/profileimg', data);
+  return axios.post('/sign-up/cats', data);
 };
 
 function* uploadImage(action) {
-  console.log(action.data);
   try {
     const result = yield call(uploadImageAPI, action.data);
     console.log(result);
+    yield delay(1000);
     yield put({
       type: UPLOAD_IMAGE_SUCCESS,
       data: result.data,
@@ -203,7 +202,7 @@ const user = (state = initialSate, action) => {
         draft.signUpError = null;
         break;
       case SIGN_UP_SUCCESS:
-        draft.userInfo = action.data;
+        draft.userInfo.accessToken = action.data.accessToken;
         draft.signUpLoading = false;
         draft.signUpDone = true;
         break;
@@ -218,7 +217,7 @@ const user = (state = initialSate, action) => {
         draft.signUpError = null;
         break;
       case UPLOAD_IMAGE_SUCCESS:
-        draft.imagePath = action.data;
+        draft.userInfo.ProfileImage.push(action.data);
         draft.uploadImageLoading = false;
         draft.uploadImageDone = true;
         break;

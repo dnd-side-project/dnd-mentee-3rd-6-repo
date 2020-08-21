@@ -8,18 +8,15 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 
 const StatusBar = styled.div`
-  position: fixed;
   width: 100vw;
   height: 44px;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
   background: #f1f3f5;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transform: translateX(-16px);
 `;
 
 function App() {

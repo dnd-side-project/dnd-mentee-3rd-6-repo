@@ -5,6 +5,7 @@ import { Form } from 'antd';
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
 import { ErrorMessage } from '../../common/Message';
+import MarginTop from '../../common/MarginTop';
 
 const LoginForm = ({
   logInLoading,
@@ -16,49 +17,52 @@ const LoginForm = ({
   logInError,
 }) => {
   return (
-    <Form onFinish={onSubmitLogIn}>
-      <InputWrapper>
-        <div>
-          <label htmlFor="email">이메일</label>
-          <br />
-          <InputForm
-            type="email"
-            name="email"
-            placeholder="이메일을 입력해 주세요"
-            onChange={onChangeEmail}
-            value={email}
-            required
-          />
-        </div>
-      </InputWrapper>
-      <InputWrapper>
-        <div>
-          <label htmlFor="password">패스워드</label>
-          <br />
-          <InputForm
-            type="password"
-            name="password"
-            placeholder="비밀번호를 입력해 주세요"
-            onChange={onChangePassword}
-            value={password}
-            required
-          />
-          {logInError ? (
-            logInError.message ? (
-              <ErrorMessage>{logInError.message}</ErrorMessage>
-            ) : (
-              <ErrorMessage>네트워크 에러</ErrorMessage>
-            )
-          ) : null}
-        </div>
-      </InputWrapper>
-      <BottomCol
-        buttonType="submit"
-        loading={logInLoading}
-        buttonText="로그인"
-        disabled={!(email && password)}
-      />
-    </Form>
+    <>
+      <MarginTop top="75px" />
+      <Form onFinish={onSubmitLogIn}>
+        <InputWrapper>
+          <div>
+            <label htmlFor="email">이메일</label>
+            <br />
+            <InputForm
+              type="email"
+              name="email"
+              placeholder="이메일을 입력해 주세요"
+              onChange={onChangeEmail}
+              value={email}
+              required
+            />
+          </div>
+        </InputWrapper>
+        <InputWrapper>
+          <div>
+            <label htmlFor="password">패스워드</label>
+            <br />
+            <InputForm
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력해 주세요"
+              onChange={onChangePassword}
+              value={password}
+              required
+            />
+            {logInError ? (
+              logInError.message ? (
+                <ErrorMessage>{logInError.message}</ErrorMessage>
+              ) : (
+                <ErrorMessage>네트워크 에러</ErrorMessage>
+              )
+            ) : null}
+          </div>
+        </InputWrapper>
+        <BottomCol
+          buttonType="submit"
+          loading={logInLoading}
+          buttonText="로그인"
+          disabled={!(email && password)}
+        />
+      </Form>
+    </>
   );
 };
 

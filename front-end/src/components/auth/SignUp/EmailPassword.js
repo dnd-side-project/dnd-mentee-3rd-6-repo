@@ -5,6 +5,7 @@ import { Form } from 'antd';
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
 import { ErrorMessage, CleanMessage } from '../../common/Message';
+import MarginTop from '../../common/MarginTop';
 
 const EmailPassword = ({
   email,
@@ -22,6 +23,7 @@ const EmailPassword = ({
   const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
+      <MarginTop top="105px" />
       <Form onFinish={onSubmitEmailPassword}>
         <InputWrapper>
           <div>

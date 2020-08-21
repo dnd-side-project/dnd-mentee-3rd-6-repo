@@ -7,7 +7,7 @@ import ProfileName from '../../components/auth/ProfileImage/ProfileName';
 import { UPLOAD_IMAGE_REQUEST } from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 
-const ProfileImageContainner = () => {
+const ProfileImageContainer = () => {
   const [catName, onChangeCatName] = useInput('');
   const [character, onChangeCharacter] = useInput('');
   const [prevImagePath, setPrevImagePath] = useState({
@@ -45,9 +45,9 @@ const ProfileImageContainner = () => {
 
   const onSubmitImage = useCallback(() => {
     const imageFormData = new FormData();
-    imageFormData.append('catProfileImg', prevImagePath.file);
-    imageFormData.append('catName', catName);
-    imageFormData.append('character', character);
+    imageFormData.append('profileImg', prevImagePath.file);
+    imageFormData.append('name', catName);
+    imageFormData.append('featuers', character);
 
     return dispatch({
       type: UPLOAD_IMAGE_REQUEST,
@@ -81,4 +81,4 @@ const ProfileImageContainner = () => {
   );
 };
 
-export default ProfileImageContainner;
+export default ProfileImageContainer;
