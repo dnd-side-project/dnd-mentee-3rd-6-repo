@@ -101,4 +101,26 @@ const ProfileImageWrapper = styled.div`
   }
 `;
 
+// seoha 냥이정보등록용 이미지 파일
+export const EnrollImageBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 110px;
+  height: 120px;
+  background: ${pallete.gray[2]};
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    height: auto;
+
+    background: ${pallete.gray[2]};
+  }
+`;
+
+
 export default ProfileImageWrapper;

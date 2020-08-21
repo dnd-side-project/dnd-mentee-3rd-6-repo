@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useInput from '../../hooks/useInput';
 import ProfileImageUpload from '../../components/auth/ProfileImage/ProfileImageUpload';
 import ProfileName from '../../components/auth/ProfileImage/ProfileName';
+import ProfileEnroll from '../../components/auth/ProfileImage/ProfileEnroll';
 import { UPLOAD_IMAGE_REQUEST } from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 
@@ -68,6 +69,17 @@ const ProfileImageContainner = () => {
       )}
       {page === 5 && (
         <ProfileName
+          catName={catName}
+          onChangeCatName={onChangeCatName}
+          character={character}
+          onChangeCharacter={onChangeCharacter}
+          onSubmitImage={onSubmitImage}
+          previewPath={prevImagePath.previewPath}
+          uploadImageDone={uploadImageDone}
+        />
+      )}
+      {page === 6 && (
+        <ProfileEnroll
           catName={catName}
           onChangeCatName={onChangeCatName}
           character={character}

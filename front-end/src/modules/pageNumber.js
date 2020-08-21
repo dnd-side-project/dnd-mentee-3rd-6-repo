@@ -14,14 +14,16 @@ export const PREV_PAGE = 'pageNumbe/PREV_PAGE';
 /* 리듀서 */
 
 const pageNumber = (state = initialSate, action) => {
-  switch (action.type) {
-    case NEXT_PAGE:
-      return { page: state.page + 1 };
-    case PREV_PAGE:
-      return { page: state.page - 1 };
-    default:
-      return state;
-  }
+  // seoha 6페이지 제작중 
+  return { page: 6 }
+  // switch (action.type) {
+  //   case NEXT_PAGE:
+  //     return { page: state.page + 1 };
+  //   case PREV_PAGE:
+  //     return { page: state.page - 1 };
+  //   default:
+  //     return state;
+  // }
 };
 
 export default pageNumber;
