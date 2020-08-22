@@ -1,0 +1,16 @@
+= API 문서
+이 문서는 우동집 API 가이드입니다. 
+:toc: left
+:toclevels: 2
+:sectnums:
+:sectnumlevels: 2
+
+Doc Writer <hopefulyun@gmail.com> +
+{docdatetime}
+
+== Authentication
+=== Login
+operation::AuthDoc/signIn[snippets='http-request,request-body,request-fields,response-body,response-fields']
+
+=== Me
+operation::AuthDoc/me[snippets='http-request,response-body,response-fields']

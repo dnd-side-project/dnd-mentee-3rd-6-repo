@@ -1,10 +1,12 @@
 package org.dnd3.udongsa.neighborcats.auth;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.CatProfileUploadResDto;
+import org.dnd3.udongsa.neighborcats.auth.dto.LoggedServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
@@ -23,14 +25,15 @@ import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.dnd3.udongsa.neighborcats.role.RoleRepository;
 import org.dnd3.udongsa.neighborcats.security.jwt.JwtUtils;
-import org.dnd3.udongsa.neighborcats.security.service.UserDetailsServiceImpl;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
 import org.dnd3.udongsa.neighborcats.servant.repository.ServantRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,23 +43,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-  private final ServantRepository servantRepo;
-
-  private final RoleRepository roleRepository;
-
   private final PasswordEncoder encoder;
-
   private final JwtUtils jwtUtils;
-
-  private final UserDetailsServiceImpl userDetailsService;
-
+  private final UserDetailsService userDetailsService;
+  private final ServantRepository servantRepo;
+  private final RoleRepository roleRepository;
   private final CatKindRepository catKindRepo;
-
   private final CatRepository catRepo;
-
-  private final ImgFileService imgFileService;
-
   private final CatProfileImgRepository catProfileRepo;
+  private final ImgFileService imgFileService;
 
   @Override
   @Transactional
@@ -110,38 +105,62 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @Transactional
-  public CatProfileUploadResDto signUpCatProfileImg(byte[] imgBytes, String userEmail) {
-    // imgbytes 확인
-    if(imgBytes.length == 0){
+  public CatProfileUploadResDto signUpCatProfileImg(byte[] imgBytes) {
+    String userEmail = getLoggedUserEmail();
+    if (imgBytes.length == 0) {
       throw new CustomException(HttpStatus.BAD_REQUEST, "이미지 파일 사이즈가 0입니다.");
     }
-    // 유저 정보 get
     Servant servant = servantRepo.findByEmail(userEmail).orElseThrow();
 
-    // 유저의 cat 겟
     List<Cat> cats = catRepo.findByServant(servant);
-    if(cats.size() == 0){
+    if (cats.size() == 0) {
       throw new CustomException(HttpStatus.BAD_REQUEST, "고양이 회원가입 정보가 없습니다.");
-    }else if(cats.size() >= 2){
+    } else if (cats.size() >= 2) {
       throw new CustomException(HttpStatus.BAD_REQUEST, "고양이가 2마리 이상 가입되어 있습니다. 마이페이지에서 프로필을 추가해보세요.");
     }
     Cat cat = cats.get(0);
-    if(catProfileRepo.existsByCat(cat)){
-      // 이 cat에 등록된 catImgFile 조회하여 있다면, imgFile와 catImgFile 삭제
+    if (catProfileRepo.existsByCat(cat)) {
       CatProfileImg catProfile = catProfileRepo.findByCat(cat);
       ImgFile imgFile = catProfile.getImgFile();
       catProfileRepo.delete(catProfile);
       imgFileService.delete(imgFile);
     }
-    // 이미지파일 저장
     ImgFile imgFile = imgFileService.upload(imgBytes);
-    // cat img file 엔티티 생성 후 저장
     CatProfileImg catProfile = CatProfileImg.of(cat, imgFile);
     catProfile = catProfileRepo.save(catProfile);
-    // url 생성
     CatProfileUploadResDto res = new CatProfileUploadResDto();
-    res.setCatProfileImgUrl("/api/imgfiles/"+imgFile.getId());
+    res.setCatProfileImgUrl("/api/imgfiles/" + imgFile.getId());
     return res;
+  }
+
+  @Override
+  public LoggedServantDto getLoggedServant() {
+    String email = getLoggedUserEmail();
+    Servant servant = servantRepo.findByEmail(email)
+      .orElseThrow(()->new CustomException(HttpStatus.BAD_REQUEST, "해당 유저를 찾을 수 없습니다.", "email: {}", email));
+    LoggedServantDto dto = new LoggedServantDto();
+    dto.setId(servant.getId());
+    dto.setName(servant.getName());
+    dto.setEmail(servant.getEmail());
+    dto.setNickName(servant.getNickname());
+    dto.setAddress(servant.getAddress());
+    dto.setPhoneNumber(servant.getPhoneNumber());
+    dto.setRoles(servant.getRoles());
+    return dto;
+  }
+
+  private String getLoggedUserEmail(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentPrincipalName = authentication.getName();
+    if(Objects.isNull(currentPrincipalName)){
+      throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
+    }
+    return currentPrincipalName;
+  }
+
+  @Override
+  public Boolean isExistEmail(String email) {
+    return servantRepo.existsByEmail(email);
   }
 
 }

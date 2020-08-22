@@ -13,6 +13,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
   @ExceptionHandler(CustomException.class)
-  public ResponseEntity<Object> global(CustomException ex) {
+  public ResponseEntity<Object> customExceptionHandle(CustomException ex) {
     CustomExceptionResponse response = new CustomExceptionResponse(LocalDateTime.now(), ex.getHttpStatus(),
         ex.getMessage(), ex.getDescription());
     ex.printStackTrace();
@@ -80,6 +81,18 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
         "필드 제약조건을 위반하였습니다.",
         json);
     return ResponseEntity.status(httpStatus).body(response);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<Object> customExceptionHandle(AccessDeniedException ex){
+    ex.printStackTrace();
+    HttpStatus status = HttpStatus.FORBIDDEN;
+    CustomExceptionResponse response = new CustomExceptionResponse(
+      LocalDateTime.now(), 
+      status,
+      ex.getLocalizedMessage(),
+      "AccessToken 및 유저 권한을 확인해주세요.");
+    return ResponseEntity.status(status).body(response);
   }
 
   

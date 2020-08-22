@@ -1,7 +1,6 @@
 package org.dnd3.udongsa.neighborcats.auth;
 
 import java.security.Principal;
-import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -9,18 +8,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.CatProfileUploadResDto;
+import org.dnd3.udongsa.neighborcats.auth.dto.LoggedServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
-import org.dnd3.udongsa.neighborcats.exception.CustomException;
-import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
   private final AuthService service;
-  private final ServantService servantService;
 
   @PostMapping("/sign-up")
   @ResponseStatus(code = HttpStatus.CREATED)
@@ -48,10 +43,7 @@ public class AuthController {
   @Secured({ "ROLE_USER" })
   @PostMapping(value = "/sign-up/cat-profile-img", produces = "image/jpeg;charset=UTF-8")
   public ResponseEntity<String> signUpCatProfileImg(@RequestBody byte[] imgBytes, Principal principal){
-    // if(Objects.isNull(principal)){
-    //   throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
-    // }
-    CatProfileUploadResDto resDto = service.signUpCatProfileImg(imgBytes, getLoggedUserEmail());
+    CatProfileUploadResDto resDto = service.signUpCatProfileImg(imgBytes);
     String json = "";
     try {
       json = new ObjectMapper().writeValueAsString(resDto);
@@ -70,22 +62,13 @@ public class AuthController {
   
   @GetMapping("/email/is-exist")
   public Boolean isExistEmail(@RequestParam("email") String email){
-    return servantService.isExistEmail(email);
+    return service.isExistEmail(email);
   }
 
   @Secured({"ROLE_USER"})
-  @PostMapping("/sign-out")
-  public void signOut() {
-    SecurityContextHolder.getContext().setAuthentication(null);
-  }
-
-  private String getLoggedUserEmail(){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String currentPrincipalName = authentication.getName();
-    if(Objects.isNull(currentPrincipalName)){
-      throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
-    }
-    return currentPrincipalName;
+  @GetMapping("/me")
+  public LoggedServantDto getLoggedServant(){
+    return service.getLoggedServant();
   }
   
 

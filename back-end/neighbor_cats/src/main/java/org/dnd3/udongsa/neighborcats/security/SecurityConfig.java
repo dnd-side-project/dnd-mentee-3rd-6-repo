@@ -4,9 +4,7 @@ import java.util.Arrays;
 
 import com.google.common.collect.ImmutableList;
 
-import org.dnd3.udongsa.neighborcats.security.jwt.AuthEntryPointJwt;
 import org.dnd3.udongsa.neighborcats.security.jwt.AuthTokenFilter;
-import org.dnd3.udongsa.neighborcats.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -27,13 +26,13 @@ import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
+		securedEnabled = true,
+		jsr250Enabled = true,
         prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-	private final UserDetailsServiceImpl userDetailsService;
+	private final UserDetailsService userDetailsService;
 
 	
 	@Bean
