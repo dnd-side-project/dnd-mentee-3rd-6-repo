@@ -4,7 +4,7 @@ import { Button, Form } from 'antd';
 
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
-import MarginTop from '../../common/MarginTop';
+import Margin from '../../common/Margin';
 
 const IdentifyForm = ({
   username,
@@ -24,7 +24,7 @@ const IdentifyForm = ({
   return (
     <>
       <Form onFinish={identifyDone && onSubmitCheckAuthNumber}>
-        <MarginTop top="105px">
+        <Margin top="105px">
           <InputWrapper>
             <div>
               <label htmlFor="username">이름</label>
@@ -78,7 +78,7 @@ const IdentifyForm = ({
               </div>
             </InputWrapper>
           )}
-        </MarginTop>
+        </Margin>
         <BottomCol
           buttonType="submit"
           loading={identifyLoading || numberVerifyLoading}

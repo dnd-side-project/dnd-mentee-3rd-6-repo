@@ -7,8 +7,32 @@ import { NEXT_PAGE } from './pageNumber';
 /* 초기 상태 */
 
 export const initialSate = {
-  userInfo: null,
+  userInfo: {
+    accessToken: '',
+    phoneNumber: '',
+    name: '',
+    email: '',
+    password: '',
+    nickName: '',
+    address: '',
+    isServant: true,
+    CatInfo: [
+      {
+        catKindId: 1,
+        catName: '',
+        catFeatures: '',
+        catGender: '',
+        catBirthday: '',
+        catNeutralized: null,
+        catProfileImgUrl: '',
+      },
+    ],
+  },
+  catProfilePath: '',
   emailValidData: false,
+  submitNextPageLoading: false, // 완료 후 다음 페이지 이동 시도 중
+  submitNextPageDone: false,
+  submitNextPageError: null,
   logInLoading: false, // 로그인 시도 중
   logInDone: false,
   logInError: null,
@@ -33,6 +57,10 @@ export const initialSate = {
 };
 
 /* 액션 */
+
+export const SUBMIT_NEXT_PAGE_REQUEST = 'user/SUBMIT_NEXT_PAGE_REQUEST';
+export const SUBMIT_NEXT_PAGE_SUCCESS = 'user/SUBMIT_NEXT_PAGE_SUCCESS';
+export const SUBMIT_NEXT_PAGE_FAILURE = 'user/SUBMIT_NEXT_PAGE_FAILURE';
 
 export const LOG_IN_REQUEST = 'user/LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
@@ -69,6 +97,23 @@ export const CAT_PROFILE_IMAGE_FAILURE = 'user/CAT_PROFILE_IMAGE_FAILURE';
 export const GO_TO = 'GO_TO';
 
 /* 사가 */
+
+function* submitNextPage(action) {
+  try {
+    yield put({
+      type: SUBMIT_NEXT_PAGE_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: SUBMIT_NEXT_PAGE_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 
 const logInAPI = (data) => {
   return axios.post('/auth/sign-in', data);
@@ -142,9 +187,6 @@ function* signUp(action) {
       type: SIGN_UP_SUCCESS,
       data: result.data,
     });
-    yield put({
-      type: NEXT_PAGE,
-    });
   } catch (error) {
     console.error(error);
     yield put({
@@ -184,6 +226,10 @@ function* goTo() {
   history.push('/pheed');
 }
 
+function* watcSubmitNextPage() {
+  yield takeLatest(SUBMIT_NEXT_PAGE_REQUEST, submitNextPage);
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -211,6 +257,7 @@ function* watchGoTo() {
 export function* userSaga() {
   yield all([
     fork(watchGoTo),
+    fork(watcSubmitNextPage),
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchEmailValid),
@@ -224,6 +271,20 @@ export function* userSaga() {
 const user = (state = initialSate, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      /* 완료 후 다음 페이지 이동 */
+      case SUBMIT_NEXT_PAGE_REQUEST:
+        draft.submitNextPageLoading = true;
+        draft.submitNextPageDone = false;
+        draft.submitNextPageError = null;
+        break;
+      case SUBMIT_NEXT_PAGE_SUCCESS:
+        draft.submitNextPageLoading = false;
+        draft.submitNextPageDone = true;
+        break;
+      case SUBMIT_NEXT_PAGE_FAILURE:
+        draft.logInLoading = false;
+        draft.submitNextPageError = action.error;
+        break;
       /* 로그인 */
       case LOG_IN_REQUEST:
         draft.logInLoading = true;
@@ -275,6 +336,7 @@ const user = (state = initialSate, action) => {
         draft.numberVerifyError = null;
         break;
       case NUMBER_VERIFY_SUCCESS:
+        draft.userInfo.phoneNumber = action.data;
         draft.numberVerifyLoading = false;
         draft.numberVerifyDone = true;
         break;

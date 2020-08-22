@@ -5,9 +5,9 @@ import { Form } from 'antd';
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
 import { ErrorMessage, CleanMessage } from '../../common/Message';
-import MarginTop from '../../common/MarginTop';
+import Margin from '../../common/Margin';
 
-const EmailPassword = ({
+const EmailPasswordForm = ({
   email,
   onChangeEmail,
   password,
@@ -18,13 +18,13 @@ const EmailPassword = ({
   emailInputRef,
   emailValidData,
   onFocusCheckEmail,
-  onSubmitEmailPassword,
+  nextPage3,
 }) => {
   const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
-      <Form onFinish={onSubmitEmailPassword}>
-        <MarginTop top="105px">
+      <Form onFinish={nextPage3}>
+        <Margin top="105px">
           <InputWrapper>
             <div>
               <label htmlFor="email">이메일</label>
@@ -78,7 +78,7 @@ const EmailPassword = ({
               </div>
             </InputWrapper>
           )}
-        </MarginTop>
+        </Margin>
         <BottomCol
           buttonType="submit"
           buttonText="다음으로"
@@ -89,7 +89,7 @@ const EmailPassword = ({
   );
 };
 
-EmailPassword.prototype = {
+EmailPasswordForm.prototype = {
   email: PropTypes.string.isRequired,
   onChangeEmail: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
@@ -101,7 +101,7 @@ EmailPassword.prototype = {
   emailNone: PropTypes.bool.isRequired,
   emailValid: PropTypes.bool.isRequired,
   onFocusCheckEmail: PropTypes.func.isRequired,
-  onSubmitEmailPassword: PropTypes.func.isRequired,
+  nextPage3: PropTypes.func.isRequired,
 };
 
-export default React.memo(EmailPassword);
+export default React.memo(EmailPasswordForm);

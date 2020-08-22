@@ -3,8 +3,8 @@ import { Form } from 'antd';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import BottomCol from '../../common/BottomCol';
-import MarginTop from '../../common/MarginTop';
+import BottomCol from '../../../common/BottomCol';
+import Margin from '../../../common/Margin';
 
 const MapWrapper = styled.div`
   width: 100vw;
@@ -12,10 +12,10 @@ const MapWrapper = styled.div`
   transform: translateX(-16px);
 `;
 
-const HometownAuth = ({ hometown, onSubmitHometownClose }) => {
+const ServantInfoAddressForm = ({ hometown, onSubmitHometownClose }) => {
   return (
     <>
-      <MarginTop top="26px" />
+      <Margin top="26px" />
       <MapWrapper id="map" />
       <Form onFinish={onSubmitHometownClose}>
         {hometown}
@@ -29,10 +29,10 @@ const HometownAuth = ({ hometown, onSubmitHometownClose }) => {
   );
 };
 
-HometownAuth.prototype = {
+ServantInfoAddressForm.prototype = {
   hometown: PropTypes.string.isRequired,
   onSubmitHometownClose: PropTypes.func.isRequired,
   mapRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
-export default HometownAuth;
+export default ServantInfoAddressForm;
