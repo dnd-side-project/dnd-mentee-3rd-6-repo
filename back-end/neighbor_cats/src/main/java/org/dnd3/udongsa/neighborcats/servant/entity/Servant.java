@@ -45,7 +45,9 @@ public class Servant {
 	private String nickname;
 	
 	// 우편번호
-	private String postcode;
+  private String postcode;
+  
+  private String address;
 	
 	private String phoneNumber;
 
@@ -58,12 +60,14 @@ public class Servant {
 	@NotNull
 	private Boolean isServant;
 	
-	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant){
+	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, String address){
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
-		this.isServant = isServant;
+    this.isServant = isServant;
+    this.nickname = nickName;
+    this.address = address;
 	}
 
 	public void addRole(Role role) {

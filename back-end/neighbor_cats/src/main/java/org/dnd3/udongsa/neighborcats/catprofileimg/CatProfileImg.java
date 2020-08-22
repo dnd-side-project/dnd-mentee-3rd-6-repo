@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.cat.Cat;
+import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 
 import lombok.Getter;
@@ -29,10 +29,10 @@ public class CatProfileImg {
     @JoinColumn
     private ImgFile imgFile;
 
-    public static CatProfileImg of(Cat cat, ImgFile imgfile){
+    public static CatProfileImg of(Cat cat, ImgFile imgFile){
         CatProfileImg profile = new CatProfileImg();
         profile.cat = cat;
-        profile.imgFile = imgfile;
+        profile.imgFile = imgFile;
         return profile;
     }
 }

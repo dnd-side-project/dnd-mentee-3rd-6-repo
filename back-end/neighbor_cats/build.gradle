@@ -47,6 +47,8 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	// 파일 저장 관리 유틸
 	implementation 'commons-io:commons-io:2.7'
+	implementation 'org.apache.commons:commons-lang3:3.11'
+
 
 }
 
