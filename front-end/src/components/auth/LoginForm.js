@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'antd';
 
-import InputWrapper, { InputForm } from '../../common/InputForm';
-import BottomCol from '../../common/BottomCol';
-import { ErrorMessage } from '../../common/Message';
-import MarginTop from '../../common/MarginTop';
+import InputWrapper, { InputForm } from '../common/InputForm';
+import BottomCol from '../common/BottomCol';
+import { ErrorMessage } from '../common/Message';
+import Margin from '../common/Margin';
 
 const LoginForm = ({
   logInLoading,
@@ -19,7 +19,7 @@ const LoginForm = ({
   return (
     <>
       <Form onFinish={onSubmitLogIn}>
-        <MarginTop top="75px">
+        <Margin top="75px">
           <InputWrapper>
             <div>
               <label htmlFor="email">이메일</label>
@@ -55,7 +55,7 @@ const LoginForm = ({
               ) : null}
             </div>
           </InputWrapper>
-        </MarginTop>
+        </Margin>
         <BottomCol
           buttonType="submit"
           loading={logInLoading}

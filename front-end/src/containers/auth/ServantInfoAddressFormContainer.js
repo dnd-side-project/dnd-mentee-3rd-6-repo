@@ -1,8 +1,10 @@
 /* global kakao */
 import React, { useEffect, useState, useCallback } from 'react';
-import HometownAuth from '../../components/auth/ServantInfo/HometownAuth';
+import PropTypes from 'prop-types';
 
-const HometownAuthContainer = () => {
+import ServantInfoAddressForm from '../../components/auth/SignUp/ServantInfo/ServantInfoAddressForm';
+
+const ServantInfoAddressFormContainer = () => {
   const [hometown, setHometown] = useState('');
   const [myMap, setMyMap] = useState(null);
   const [geoLat, setGeoLat] = useState(null);
@@ -131,7 +133,14 @@ const HometownAuthContainer = () => {
     console.log('onSubmitHometownClose');
   }, []);
 
-  return <HometownAuth hometown={hometown} onSubmitHometownClose={onSubmitHometownClose} />;
+  return (
+    <ServantInfoAddressForm hometown={hometown} onSubmitHometownClose={onSubmitHometownClose} />
+  );
 };
 
-export default HometownAuthContainer;
+ServantInfoAddressFormContainer.prototype = {
+  hometown: PropTypes.string.isRequired,
+  onSubmitHometownClose: PropTypes.func.isRequired,
+};
+
+export default ServantInfoAddressFormContainer;

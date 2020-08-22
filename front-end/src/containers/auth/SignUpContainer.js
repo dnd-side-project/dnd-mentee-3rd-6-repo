@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import firebase from '../../lib/api/firebaseAuth';
-import EmailPassword from '../../components/auth/SignUp/EmailPassword';
-import ButlerOrNotButler from '../../components/auth/SignUp/Butler/ButlerOrNotButler';
+import EmailPasswordForm from '../../components/auth/SignUp/EmailPasswordForm';
+import IsServantForm from '../../components/auth/SignUp/IsServant';
 
 import {
   SIGN_UP_REQUEST,
@@ -14,12 +14,13 @@ import {
   NUMBER_VERIFY_SUCCESS,
   NUMBER_VERIFY_FAILURE,
   EMAIL_VALID_REQUEST,
+  SUBMIT_NEXT_PAGE_REQUEST,
 } from '../../modules/user';
-import { NEXT_PAGE } from '../../modules/pageNumber';
 import useInput from '../../hooks/useInput';
 import IdentifyForm from '../../components/auth/SignUp/IdentifyForm';
+import { NEXT_PAGE } from '../../modules/pageNumber';
 
-const RegisterFormContainer = () => {
+const SignUpContainer = () => {
   const [username, onChangeUsername] = useInput('');
   const [phoneNumber, onChangePhoneNumber] = useInput('');
   const [authNumber, onChangeAuthNumber] = useInput('');
@@ -42,7 +43,7 @@ const RegisterFormContainer = () => {
     identifyLoading,
     identifyDone,
     numberVerifyLoading,
-    numberVerifyDone,
+    // numberVerifyDone,
     emailValidData,
   } = useSelector((state) => state.user);
 
@@ -74,10 +75,13 @@ const RegisterFormContainer = () => {
         .auth()
         .signInWithPhoneNumber(koreaPhoneNumber, window.recaptchaVerifier)
         .then((confirmationResult) => {
-          console.log('문자전송 완료', confirmationResult);
           window.confirmationResult = confirmationResult;
           dispatch({
             type: IDENTIFY_SUCCESS,
+          });
+          // 2페이지 이동
+          dispatch({
+            type: NEXT_PAGE,
           });
         });
     } catch (error) {
@@ -96,9 +100,8 @@ const RegisterFormContainer = () => {
     });
     try {
       await window.confirmationResult.confirm(authNumber).then((result) => {
-        const { user } = result;
-        console.log('유저정보');
-        console.log(user);
+        // const { user } = result;
+        // 2페이지 이동
         dispatch({
           type: NUMBER_VERIFY_SUCCESS,
         });
@@ -132,7 +135,7 @@ const RegisterFormContainer = () => {
   }, [dispatch, email, prevEmail]);
 
   /* 이메일 패스워드 확인 */
-  const onSubmitEmailPassword = useCallback(() => {
+  const nextPage3 = useCallback(() => {
     if (password !== passwordCheck) {
       return setPasswordError(true);
     }
@@ -142,30 +145,30 @@ const RegisterFormContainer = () => {
     });
   }, [dispatch, password, passwordCheck]);
 
-  const nextRegisterPage = useCallback(() => {
+  const nextPage4 = useCallback(() => {
     dispatch({
-      type: SIGN_UP_REQUEST,
-      data: {
-        name: username,
-        phoneNumber,
-        email,
-        password,
-        isServant,
-      },
+      type: SUBMIT_NEXT_PAGE_REQUEST,
+      // data: {
+      //   phoneNumber,
+      //   name: username,
+      //   email,
+      //   password,
+      //   isServant,
+      // },
     });
-  }, [dispatch, email, isServant, password, phoneNumber, username]);
+  }, [dispatch]);
 
   useEffect(() => {
     phoneNumber.length === 11 ? setIsSubmitted((prev) => !prev) : setIsSubmitted(false);
   }, [phoneNumber.length]);
 
-  useEffect(() => {
-    // 2 페이지로 이동
-    numberVerifyDone &&
-      dispatch({
-        type: NEXT_PAGE,
-      });
-  }, [dispatch, numberVerifyDone]);
+  // useEffect(() => {
+  //   // 2 페이지로 이동
+  //   numberVerifyDone &&
+  //     dispatch({
+  //       type: NEXT_PAGE,
+  //     });
+  // }, [dispatch, numberVerifyDone]);
 
   useEffect(() => {
     if (time > 0 && timeCheck) {
@@ -215,7 +218,7 @@ const RegisterFormContainer = () => {
         />
       )}
       {page === 2 && (
-        <EmailPassword
+        <EmailPasswordForm
           email={email}
           onChangeEmail={onChangeEmail}
           password={password}
@@ -226,19 +229,19 @@ const RegisterFormContainer = () => {
           emailInputRef={emailInputRef}
           emailValidData={emailValidData}
           onFocusCheckEmail={onFocusCheckEmail}
-          onSubmitEmailPassword={onSubmitEmailPassword}
+          nextPage3={nextPage3}
         />
       )}
       {page === 3 && (
-        <ButlerOrNotButler
+        <IsServantForm
           username={username}
           isServant={isServant}
           setIsServant={setIsServant}
-          nextRegisterPage={nextRegisterPage}
+          nextPage4={nextPage4}
         />
       )}
     </>
   );
 };
 
-export default RegisterFormContainer;
+export default SignUpContainer;

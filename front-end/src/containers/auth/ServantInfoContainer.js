@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ServantInfo from '../../components/auth/ServantInfo/index';
+import ServantInfoForm from '../../components/auth/SignUp/ServantInfo';
 import useInput from '../../hooks/useInput';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 
@@ -24,7 +24,7 @@ const ServantInfoContainer = () => {
 
   return (
     <>
-      <ServantInfo
+      <ServantInfoForm
         username={username}
         nickname={nickname}
         onChangeNickname={onChangeNickname}

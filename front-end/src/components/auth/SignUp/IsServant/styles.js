@@ -2,13 +2,6 @@ import styled, { createGlobalStyle, css } from 'styled-components';
 import { pallete } from '../../../../lib/style/pallete';
 
 export const Wrapper = styled.div`
-  position: fixed;
-  top: 168px;
-  left: 0;
-  right: 0;
-
-  margin: 0 auto;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -149,11 +142,14 @@ export const Global = createGlobalStyle`
   .slick-list {
     width: 218px;
     height: 270px;
+    touch-action: pan-x;
+
   }
 
   .slick-trak {
     width: 218px;
     height: 270px;
+
     div {
       margin: 0 auto;
     }

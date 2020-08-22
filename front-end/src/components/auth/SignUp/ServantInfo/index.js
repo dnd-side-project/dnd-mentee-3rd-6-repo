@@ -3,11 +3,11 @@ import { Form, Button } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
-import InputWrapper, { InputForm } from '../../common/InputForm';
-import BottomCol from '../../common/BottomCol';
-import MarginTop from '../../common/MarginTop';
+import InputWrapper, { InputForm } from '../../../common/InputForm';
+import BottomCol from '../../../common/BottomCol';
+import MarginTop from '../../../common/Margin';
 
-const ServantInfo = ({
+const ServantInfoForm = ({
   username,
   nickname,
   onChangeNickname,
@@ -56,7 +56,7 @@ const ServantInfo = ({
   );
 };
 
-ServantInfo.prototype = {
+ServantInfoForm.prototype = {
   username: PropTypes.string.isRequired,
   nickname: PropTypes.string.isRequired,
   onChangeNickname: PropTypes.func.isRequired,
@@ -65,4 +65,4 @@ ServantInfo.prototype = {
   onSubmitServant: PropTypes.func.isRequired,
 };
 
-export default ServantInfo;
+export default ServantInfoForm;
