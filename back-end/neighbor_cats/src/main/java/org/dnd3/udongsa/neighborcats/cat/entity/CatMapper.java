@@ -8,7 +8,7 @@ public class CatMapper {
 
   public static Cat map(SignUpReqDto dto, CatKind kind, Servant servant){
     Cat cat = new Cat();
-    cat.signUp(dto.getName(), dto.getCatFeatures(), kind, dto.getGender(), dto.getCatBirthday(), dto.getCatNeutralized(),servant);
+    cat.signUp(dto.getName(), dto.getCatFeatures(), kind, dto.getCatGender(), dto.getCatBirthday(), dto.getCatNeutralized(),servant);
     return cat;
   }
   

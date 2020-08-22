@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	private final UserDetailsServiceImpl userDetailsService;
 
-	private final AuthEntryPointJwt unauthorizedHandler;
 	
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -71,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors().and().csrf().disable().headers().frameOptions().disable().and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
-				.anyRequest().permitAll();
+        .anyRequest().permitAll();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
   }
   

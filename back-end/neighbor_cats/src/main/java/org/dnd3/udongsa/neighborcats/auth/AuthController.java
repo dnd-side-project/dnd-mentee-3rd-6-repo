@@ -19,7 +19,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -45,13 +45,13 @@ public class AuthController {
     return service.signUp(reqDto);
   }
 
-  @Secured({ "ROLE_USER", "ROLE_ADMIN" })
+  @Secured({ "ROLE_USER" })
   @PostMapping(value = "/sign-up/cat-profile-img", produces = "image/jpeg;charset=UTF-8")
   public ResponseEntity<String> signUpCatProfileImg(@RequestBody byte[] imgBytes, Principal principal){
-    if(Objects.isNull(principal)){
-      throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
-    }
-    CatProfileUploadResDto resDto = service.signUpCatProfileImg(imgBytes, principal.getName());
+    // if(Objects.isNull(principal)){
+    //   throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
+    // }
+    CatProfileUploadResDto resDto = service.signUpCatProfileImg(imgBytes, getLoggedUserEmail());
     String json = "";
     try {
       json = new ObjectMapper().writeValueAsString(resDto);
@@ -72,5 +72,21 @@ public class AuthController {
   public Boolean isExistEmail(@RequestParam("email") String email){
     return servantService.isExistEmail(email);
   }
+
+  @Secured({"ROLE_USER"})
+  @PostMapping("/sign-out")
+  public void signOut() {
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
+
+  private String getLoggedUserEmail(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentPrincipalName = authentication.getName();
+    if(Objects.isNull(currentPrincipalName)){
+      throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
+    }
+    return currentPrincipalName;
+  }
+  
 
 }

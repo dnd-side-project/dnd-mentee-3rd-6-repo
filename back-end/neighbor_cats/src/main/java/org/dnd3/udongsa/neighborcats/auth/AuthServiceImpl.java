@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
         .name(servant.getName()).email(servant.getEmail()).password(servant.getPassword())
         .isServant(servant.getIsServant()).nickName(servant.getNickname()).address(servant.getAddress())
         .catId(cat.getId()).catName(cat.getName()).catFeatures(cat.getFeatures()).catKindId(cat.getKind().getId())
-        .gender(cat.getGender()).catBirthday(cat.getBirthday()).catNeutralized(cat.getNeutralized())
+        .catGender(cat.getGender()).catBirthday(cat.getBirthday()).catNeutralized(cat.getNeutralized())
         .accessToken(generateToken(servant)).build();
 
     return res;

@@ -25,7 +25,7 @@ public class CatMapperTest {
     .catName("연탄이")
     .catFeatures("말많음")
     .catKindId(1L)
-    .gender(EGender.MALE)
+    .catGender(EGender.MALE)
     .catBirthday(LocalDate.of(2020, 1, 22))
     .catNeutralized(ENeutralized.NONE)
     .build();
@@ -38,7 +38,7 @@ public class CatMapperTest {
     // then
     assertEquals(dto.getName(), cat.getName());
     assertEquals(dto.getCatFeatures(), cat.getFeatures());
-    assertEquals(dto.getGender(), cat.getGender());
+    assertEquals(dto.getCatGender(), cat.getGender());
     assertEquals(dto.getCatBirthday(), cat.getBirthday());
     assertEquals(kind.getName(), cat.getKind().getName());
     assertEquals(dto.getCatNeutralized(), cat.getNeutralized());

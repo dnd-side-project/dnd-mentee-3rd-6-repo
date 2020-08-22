@@ -26,7 +26,7 @@ public class SignUpResDto {
   private String catName;
   private String catFeatures;
   private Long catKindId;
-  private EGender gender;
+  private EGender catGender;
   private LocalDate catBirthday;
   private ENeutralized catNeutralized;
   private String accessToken;
