@@ -32,6 +32,14 @@ public static List<FieldDescriptor> getMeResDesc() {
   fields.add(fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("전화번호"));
   fields.add(fieldWithPath("roles[].id").type(JsonFieldType.NUMBER).description("Role 식별자"));
   fields.add(fieldWithPath("roles[].name").type(JsonFieldType.STRING).description("Role 명칭"));
+  fields.add(fieldWithPath("cats[].id").type(JsonFieldType.NUMBER).description("Cat 식별자"));
+  fields.add(fieldWithPath("cats[].name").type(JsonFieldType.STRING).description("Cat 이름"));
+  fields.add(fieldWithPath("cats[].features").type(JsonFieldType.STRING).description("Cat 특징"));
+  fields.add(fieldWithPath("cats[].kindName").type(JsonFieldType.STRING).description("Cat 품종"));
+  fields.add(fieldWithPath("cats[].gender").type(JsonFieldType.STRING).description("Cat 성별"));
+  fields.add(fieldWithPath("cats[].birthday").type(JsonFieldType.STRING).description("Cat 생일"));
+  fields.add(fieldWithPath("cats[].neutralized").type(JsonFieldType.STRING).description("Cat 품종"));
+  fields.add(fieldWithPath("cats[].profileImgUrl").type(JsonFieldType.VARIES).description("Cat 프로필 이미지 URL"));
   return fields;
 }
 }

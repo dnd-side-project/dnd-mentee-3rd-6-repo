@@ -1,5 +1,6 @@
 package org.dnd3.udongsa.neighborcats.servant.entity;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.dnd3.udongsa.neighborcats.role.Role;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,7 +61,13 @@ public class Servant {
 	private Set<Role> roles = new HashSet<>();
 
 	@NotNull
-	private Boolean isServant;
+  private Boolean isServant;
+  
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
 	
 	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, String address){
 		this.name = name;

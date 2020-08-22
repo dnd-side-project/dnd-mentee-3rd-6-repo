@@ -2,6 +2,7 @@ package org.dnd3.udongsa.neighborcats.auth;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +12,7 @@ import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
+import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.cat.entity.CatMapper;
 import org.dnd3.udongsa.neighborcats.cat.repository.CatRepository;
@@ -20,6 +22,7 @@ import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImgRepository;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
+import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
 import org.dnd3.udongsa.neighborcats.imgfile.service.ImgFileService;
 import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.role.Role;
@@ -129,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
     CatProfileImg catProfile = CatProfileImg.of(cat, imgFile);
     catProfile = catProfileRepo.save(catProfile);
     CatProfileUploadResDto res = new CatProfileUploadResDto();
-    res.setCatProfileImgUrl("/api/imgfiles/" + imgFile.getId());
+    res.setCatProfileImgUrl(ImgFileUtils.generateImgFileUrl(imgFile.getId()));
     return res;
   }
 
@@ -146,6 +149,17 @@ public class AuthServiceImpl implements AuthService {
     dto.setAddress(servant.getAddress());
     dto.setPhoneNumber(servant.getPhoneNumber());
     dto.setRoles(servant.getRoles());
+    List<Cat> cats = catRepo.findByServant(servant);
+    List<CatDto> catDtos = cats.stream().map(cat->{
+      CatProfileImg profile = catProfileRepo.findByCat(cat);
+      if(Objects.isNull(profile)){
+        return CatMapper.map(cat);
+      }
+      Long imgFileId = profile.getImgFile().getId();
+      String profileUrl = ImgFileUtils.generateImgFileUrl(imgFileId);
+      return CatMapper.map(cat, profileUrl);
+    }).collect(Collectors.toList());
+    dto.setCats(catDtos);
     return dto;
   }
 

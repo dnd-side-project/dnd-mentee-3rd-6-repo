@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.dnd3.udongsa.neighborcats.catkind.CatKind;
+import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
 import lombok.Getter;

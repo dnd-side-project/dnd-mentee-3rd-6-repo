@@ -1,8 +1,11 @@
 package org.dnd3.udongsa.neighborcats.auth.dto;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.role.Role;
 
 import lombok.AllArgsConstructor;
@@ -21,5 +24,6 @@ public class LoggedServantDto {
   private String address;
   private String phoneNumber;
   private Set<Role> roles = new HashSet<>();
+  private List<CatDto> cats = new ArrayList<>();
   
 }
