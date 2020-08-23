@@ -33,7 +33,6 @@ public class PhnumAuthServiceTest {
     private TwilioManager twilioManager;
     private AppProperties properties;
 
-
     @BeforeEach
     public void setup(){
         this.properties = new AppProperties();
