@@ -5,30 +5,32 @@ import useInput from '../../hooks/useInput';
 import CatProfileImageForm from '../../components/auth/SignUp/CatProfileImage';
 import CatProfileNameForm from '../../components/auth/SignUp/CatProfileImage/CatProfileNameForm';
 import CatProfileEnrollForm from '../../components/auth/SignUp/CatProfileImage/CatProfileEnrollForm';
-import { CAT_PROFILE_IMAGE_REQUEST } from '../../modules/user';
+import { SIGN_UP_2_REQUEST, SIGN_UP_3_REQUEST } from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 
 const ProfileImageContainer = () => {
   const [catName, onChangeCatName] = useInput('');
-  const [character, onChangeCharacter] = useInput('');
+  const [catFeatures, onChangeCatFeatures] = useInput('');
+
   const [prevImagePath, setPrevImagePath] = useState({
     file: '',
     previewPath: '',
   });
 
   const dispatch = useDispatch();
-  const { uploadImageDone } = useSelector((state) => state.user);
   const { page } = useSelector((state) => state.pageNumber);
 
   const imageInputRef = useRef();
 
+  /* 페이지 4 - 이미지 등록 버튼 */
   const onClickImageUpload = useCallback(() => {
     imageInputRef.current.click();
   }, []);
 
+  /* 페이지 4 - 이미지 등록 */
   const onChangeImage = useCallback((e) => {
-    const reader = new FileReader();
     const filePath = e.target.files[0];
+    const reader = new FileReader();
     reader.onload = () => {
       setPrevImagePath({
         file: filePath,
@@ -38,24 +40,37 @@ const ProfileImageContainer = () => {
     reader.readAsDataURL(filePath);
   }, []);
 
+  /* 페이지 4 - 다음 페이지 이동 */
   const onNextProfilePage = useCallback(() => {
     dispatch({
       type: NEXT_PAGE,
     });
   }, [dispatch]);
 
+  /* 페이지 5 - 냥이 이름 특징 */
   const onSubmitImage = useCallback(() => {
-    const imageFormData = new FormData();
-    imageFormData.append('profileImg', prevImagePath.file);
-    imageFormData.append('name', catName);
-    imageFormData.append('featuers', character);
-
-    return dispatch({
-      type: CAT_PROFILE_IMAGE_REQUEST,
-      data: imageFormData,
+    dispatch({
+      type: SIGN_UP_2_REQUEST,
+      data: {
+        catName,
+        catFeatures,
+        catProfileImg: prevImagePath.file,
+      },
     });
-  }, [catName, character, dispatch, prevImagePath.file]);
+  }, [catFeatures, catName, dispatch, prevImagePath.file]);
 
+  /* 페이지 6 - 냥이 이름 특징 */
+  const onSubmitCatFeatures = useCallback(() => {
+    dispatch({
+      type: SIGN_UP_3_REQUEST,
+      data: {
+        catKindId: 1,
+        catGender: 'FEMALE',
+        catBirthday: '2000-01-02',
+        catNeutralized: 'TRUE',
+      },
+    });
+  }, [dispatch]);
   return (
     <>
       {page === 4 && (
@@ -71,15 +86,18 @@ const ProfileImageContainer = () => {
         <CatProfileNameForm
           catName={catName}
           onChangeCatName={onChangeCatName}
-          character={character}
-          onChangeCharacter={onChangeCharacter}
+          catFeatures={catFeatures}
+          onChangeCatFeatures={onChangeCatFeatures}
           onSubmitImage={onSubmitImage}
           previewPath={prevImagePath.previewPath}
-          uploadImageDone={uploadImageDone}
         />
       )}
       {page === 6 && (
-        <CatProfileEnrollForm catName={catName} previewPath={prevImagePath.previewPath} />
+        <CatProfileEnrollForm
+          catName={catName}
+          previewPath={prevImagePath.previewPath}
+          onSubmitCatFeatures={onSubmitCatFeatures}
+        />
       )}
     </>
   );

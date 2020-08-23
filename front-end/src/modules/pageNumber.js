@@ -1,7 +1,7 @@
 /* 초기 상태 */
 
 export const initialSate = {
-  page: 1,
+  page: 6,
 };
 
 /* 액션 */

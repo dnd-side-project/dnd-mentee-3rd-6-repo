@@ -84,21 +84,21 @@ export const Imagebutton = styled.button`
 
 export const EnrollImageBox = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
 
   margin-bottom: 34px;
 
-  width: 120px;
-  height: 120px;
-  background: ${pallete.gray[2]};
-  border-radius: 50%;
+  span {
+    width: 120px;
+    height: 120px;
+    background: ${pallete.gray[2]};
+    border-radius: 50%;
+    overflow: hidden;
 
-  overflow: hidden;
-
-  img {
-    max-width: 100%;
-    height: auto;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   }
 `;
 
