@@ -23,13 +23,13 @@ const RegisterPage = () => {
           : null
       }
     >
-      {page < 4 ? (
+      {page <= 3 ? (
         <SignUpContainer />
-      ) : page < 7 ? (
+      ) : page <= 6 ? (
         <CatProfileImageContainer />
-      ) : page === 7 ? (
+      ) : page <= 7 ? (
         <ServantInfoContainer />
-      ) : page === 8 ? (
+      ) : page <= 8 ? (
         <ServantInfoAddressFormContainer />
       ) : null}
     </AuthTemplate>

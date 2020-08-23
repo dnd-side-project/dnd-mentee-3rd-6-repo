@@ -6,7 +6,6 @@ import EmailPasswordForm from '../../components/auth/SignUp/EmailPasswordForm';
 import IsServantForm from '../../components/auth/SignUp/IsServant';
 
 import {
-  SIGN_UP_REQUEST,
   IDENTIFY_REQUEST,
   NUMBER_VERIFY_REQUEST,
   IDENTIFY_SUCCESS,
@@ -14,7 +13,7 @@ import {
   NUMBER_VERIFY_SUCCESS,
   NUMBER_VERIFY_FAILURE,
   EMAIL_VALID_REQUEST,
-  SUBMIT_NEXT_PAGE_REQUEST,
+  SIGN_UP_1_REQUEST,
 } from '../../modules/user';
 import useInput from '../../hooks/useInput';
 import IdentifyForm from '../../components/auth/SignUp/IdentifyForm';
@@ -43,7 +42,7 @@ const SignUpContainer = () => {
     identifyLoading,
     identifyDone,
     numberVerifyLoading,
-    // numberVerifyDone,
+    numberVerifyDone,
     emailValidData,
   } = useSelector((state) => state.user);
 
@@ -51,9 +50,8 @@ const SignUpContainer = () => {
 
   const emailInputRef = useRef();
 
-  /* 리캡챠 설정 */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const setUpRecaptcha = () => {
+  /* 페이지 1 - 리캡챠 설정 */
+  const setUpRecaptcha = useCallback(() => {
     firebase.auth().languageCode = 'ko';
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
@@ -61,16 +59,16 @@ const SignUpContainer = () => {
         setTimeCheck((prev) => !prev);
       },
     });
-  };
+  }, []);
 
-  /* 인증번호 받기 */
+  /* 페이지 1 - 인증번호 받기 */
   const onClcikAuthNumber = useCallback(async () => {
-    dispatch({
+    await dispatch({
       type: IDENTIFY_REQUEST,
     });
-    setUpRecaptcha();
-    const koreaPhoneNumber = `+82 ${phoneNumber}`;
+    await setUpRecaptcha();
     try {
+      const koreaPhoneNumber = `+82 ${phoneNumber}`;
       await firebase
         .auth()
         .signInWithPhoneNumber(koreaPhoneNumber, window.recaptchaVerifier)
@@ -79,42 +77,43 @@ const SignUpContainer = () => {
           dispatch({
             type: IDENTIFY_SUCCESS,
           });
-          // 2페이지 이동
-          dispatch({
-            type: NEXT_PAGE,
-          });
         });
     } catch (error) {
-      console.log('getAuthNumber 에러');
-      console.error(error);
       dispatch({
         type: IDENTIFY_FAILURE,
+        error,
       });
     }
   }, [dispatch, phoneNumber, setUpRecaptcha]);
 
-  /* 인증번호 확인 */
+  /* 페이지 1 - 인증번호 확인 */
   const onSubmitCheckAuthNumber = useCallback(async () => {
     dispatch({
       type: NUMBER_VERIFY_REQUEST,
     });
     try {
       await window.confirmationResult.confirm(authNumber).then((result) => {
-        // const { user } = result;
+        const { user } = result;
+        console.log(user);
         // 2페이지 이동
         dispatch({
           type: NUMBER_VERIFY_SUCCESS,
+          data: {
+            name: username,
+            phoneNumber,
+          },
         });
       });
     } catch (error) {
       dispatch({
         type: NUMBER_VERIFY_FAILURE,
+        error,
       });
       alert('인증번호가 다릅니다.');
     }
-  }, [authNumber, dispatch]);
+  }, [authNumber, dispatch, phoneNumber, username]);
 
-  /* 비밀번호 확인 */
+  /* 페이지 2 - 비밀번호 확인 */
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordCheck(e.target.value);
@@ -123,6 +122,7 @@ const SignUpContainer = () => {
     [password],
   );
 
+  /* 페이지 2 - 이메일 중복 확인 */
   const onFocusCheckEmail = useCallback(() => {
     if (prevEmail === email) {
       return null;
@@ -134,8 +134,8 @@ const SignUpContainer = () => {
     });
   }, [dispatch, email, prevEmail]);
 
-  /* 이메일 패스워드 확인 */
-  const nextPage3 = useCallback(() => {
+  /* 페이지 2 - 패스워드 확인 후 다음 페이지 이동 */
+  const nextPage2 = useCallback(() => {
     if (password !== passwordCheck) {
       return setPasswordError(true);
     }
@@ -145,31 +145,24 @@ const SignUpContainer = () => {
     });
   }, [dispatch, password, passwordCheck]);
 
-  const nextPage4 = useCallback(() => {
+  /* 페이지 3 - 집사 확인 후 다음 페이지 이동 */
+  const nextPage3 = useCallback(() => {
     dispatch({
-      type: SUBMIT_NEXT_PAGE_REQUEST,
-      // data: {
-      //   phoneNumber,
-      //   name: username,
-      //   email,
-      //   password,
-      //   isServant,
-      // },
+      type: SIGN_UP_1_REQUEST,
+      data: {
+        email,
+        password,
+        isServant,
+      },
     });
-  }, [dispatch]);
+  }, [dispatch, email, isServant, password]);
 
+  /* 페이지 1 - 휴대폰 길이 확인 */
   useEffect(() => {
     phoneNumber.length === 11 ? setIsSubmitted((prev) => !prev) : setIsSubmitted(false);
   }, [phoneNumber.length]);
 
-  // useEffect(() => {
-  //   // 2 페이지로 이동
-  //   numberVerifyDone &&
-  //     dispatch({
-  //       type: NEXT_PAGE,
-  //     });
-  // }, [dispatch, numberVerifyDone]);
-
+  /* 페이지 1 - 휴대폰 인증 타이머 */
   useEffect(() => {
     if (time > 0 && timeCheck) {
       const timer = setInterval(() => {
@@ -191,6 +184,16 @@ const SignUpContainer = () => {
     }
   }, [time, timeCheck]);
 
+  /* 페이지 1 - 휴대폰 인증 완료 후 다음 페이지 */
+  useEffect(() => {
+    // 2 페이지로 이동
+    numberVerifyDone &&
+      dispatch({
+        type: NEXT_PAGE,
+      });
+  }, [dispatch, numberVerifyDone]);
+
+  /* 페이지 2 - 이메일 중복확인 */
   useEffect(() => {
     emailValidData && emailInputRef.current.focus();
     if (email !== prevEmail) {
@@ -229,7 +232,7 @@ const SignUpContainer = () => {
           emailInputRef={emailInputRef}
           emailValidData={emailValidData}
           onFocusCheckEmail={onFocusCheckEmail}
-          nextPage3={nextPage3}
+          nextPage2={nextPage2}
         />
       )}
       {page === 3 && (
@@ -237,7 +240,7 @@ const SignUpContainer = () => {
           username={username}
           isServant={isServant}
           setIsServant={setIsServant}
-          nextPage4={nextPage4}
+          nextPage3={nextPage3}
         />
       )}
     </>

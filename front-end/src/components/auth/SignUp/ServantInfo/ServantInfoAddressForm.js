@@ -12,27 +12,24 @@ const MapWrapper = styled.div`
   transform: translateX(-16px);
 `;
 
-const ServantInfoAddressForm = ({ hometown, onSubmitHometownClose }) => {
+const ServantInfoAddressForm = ({ onSubmitHometownClose, addressDepth, currentGPSLoading }) => {
   return (
     <>
-      <Margin top="26px" />
-      <MapWrapper id="map" />
       <Form onFinish={onSubmitHometownClose}>
-        {hometown}
-        <BottomCol
-          buttonType="submit"
-          //   loading={logInLoading}
-          buttonText="동네 인증 완료하기"
-        />
+        <Margin top="26px">
+          <MapWrapper id="map" />
+          {currentGPSLoading && <p>현재 위치 로딩 중</p>}
+        </Margin>
+        <BottomCol buttonType="submit" buttonText="동네 인증 완료하기" disabled={!addressDepth} />
       </Form>
     </>
   );
 };
 
 ServantInfoAddressForm.prototype = {
-  hometown: PropTypes.string.isRequired,
   onSubmitHometownClose: PropTypes.func.isRequired,
-  mapRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  addressDepth: PropTypes.string.isRequired,
+  currentGPSLoading: PropTypes.bool.isRequired,
 };
 
-export default ServantInfoAddressForm;
+export default React.memo(ServantInfoAddressForm);

@@ -18,12 +18,12 @@ const EmailPasswordForm = ({
   emailInputRef,
   emailValidData,
   onFocusCheckEmail,
-  nextPage3,
+  nextPage2,
 }) => {
   const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
-      <Form onFinish={nextPage3}>
+      <Form onFinish={nextPage2}>
         <Margin top="105px">
           <InputWrapper>
             <div>
@@ -101,7 +101,7 @@ EmailPasswordForm.prototype = {
   emailNone: PropTypes.bool.isRequired,
   emailValid: PropTypes.bool.isRequired,
   onFocusCheckEmail: PropTypes.func.isRequired,
-  nextPage3: PropTypes.func.isRequired,
+  nextPage2: PropTypes.func.isRequired,
 };
 
 export default React.memo(EmailPasswordForm);

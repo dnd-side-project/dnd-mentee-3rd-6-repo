@@ -2,34 +2,37 @@ import { delay, put, takeLatest, getContext, all, fork, call } from 'redux-saga/
 import axios from 'axios';
 import produce from 'immer';
 
-import { NEXT_PAGE } from './pageNumber';
+import { NEXT_PAGE, PREV_PAGE } from './pageNumber';
 
 /* 초기 상태 */
 
 export const initialSate = {
-  userInfo: {
-    accessToken: '',
-    phoneNumber: '',
-    name: '',
-    email: '',
-    password: '',
-    nickName: '',
-    address: '',
+  userInfo: null,
+  userInfoAPIPostData: {
+    // numberVerify
+    phoneNumber: '01095184319',
+    name: '서민준',
+    // 1
+    email: 'aa@aa.com',
+    password: 'aaaaaaaa',
     isServant: true,
-    CatInfo: [
-      {
-        catKindId: 1,
-        catName: '',
-        catFeatures: '',
-        catGender: '',
-        catBirthday: '',
-        catNeutralized: null,
-        catProfileImgUrl: '',
-      },
-    ],
+    // 2
+    catName: '',
+    catFeatures: '',
+    catProfileImg: null,
+    // 3
+    catKindId: null,
+    catGender: '',
+    catBirthday: '',
+    catNeutralized: null,
+    // 4
+    addressDepth1: '',
+    addressDepth2: '',
+    addressDepth3: '',
+    addressDepth4: '',
   },
-  catProfilePath: '',
   emailValidData: false,
+  CatKindId: null,
   submitNextPageLoading: false, // 완료 후 다음 페이지 이동 시도 중
   submitNextPageDone: false,
   submitNextPageError: null,
@@ -51,16 +54,9 @@ export const initialSate = {
   signUpLoading: false, // 회원가입 시도 중
   signUpDone: false,
   signUpError: null,
-  catProfileImageLoading: false, // 프로필 사진 등록 시도 중
-  catProfileImageDone: false,
-  catProfileImageError: null,
 };
 
 /* 액션 */
-
-export const SUBMIT_NEXT_PAGE_REQUEST = 'user/SUBMIT_NEXT_PAGE_REQUEST';
-export const SUBMIT_NEXT_PAGE_SUCCESS = 'user/SUBMIT_NEXT_PAGE_SUCCESS';
-export const SUBMIT_NEXT_PAGE_FAILURE = 'user/SUBMIT_NEXT_PAGE_FAILURE';
 
 export const LOG_IN_REQUEST = 'user/LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
@@ -86,34 +82,29 @@ export const PROFILE_IMAGE_REQUEST = 'user/PROFILE_IMAGE_REQUEST';
 export const PROFILE_IMAGE_SUCCESS = 'user/PROFILE_IMAGE_SUCCESS';
 export const PROFILE_IMAGE_FAILURE = 'user/PROFILE_IMAGE_FAILURE';
 
+export const SIGN_UP_1_REQUEST = 'user/SIGN_UP_1_REQUEST';
+export const SIGN_UP_1_SUCCESS = 'user/SIGN_UP_1_SUCCESS';
+export const SIGN_UP_1_FAILURE = 'user/SIGN_UP_1_FAILURE';
+
+export const SIGN_UP_2_REQUEST = 'user/SIGN_UP_2_REQUEST';
+export const SIGN_UP_2_SUCCESS = 'user/SIGN_UP_2_SUCCESS';
+export const SIGN_UP_2_FAILURE = 'user/SIGN_UP_2_FAILURE';
+
+export const SIGN_UP_3_REQUEST = 'user/SIGN_UP_3_REQUEST';
+export const SIGN_UP_3_SUCCESS = 'user/SIGN_UP_3_SUCCESS';
+export const SIGN_UP_3_FAILURE = 'user/SIGN_UP_3_FAILURE';
+
+export const SIGN_UP_4_REQUEST = 'user/SIGN_UP_4_REQUEST';
+export const SIGN_UP_4_SUCCESS = 'user/SIGN_UP_4_SUCCESS';
+export const SIGN_UP_4_FAILURE = 'user/SIGN_UP_4_FAILURE';
+
 export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
-export const CAT_PROFILE_IMAGE_REQUEST = 'user/CAT_PROFILE_IMAGE_REQUEST';
-export const CAT_PROFILE_IMAGE_SUCCESS = 'user/CAT_PROFILE_IMAGE_SUCCESS';
-export const CAT_PROFILE_IMAGE_FAILURE = 'user/CAT_PROFILE_IMAGE_FAILURE';
-
 export const GO_TO = 'GO_TO';
 
 /* 사가 */
-
-function* submitNextPage(action) {
-  try {
-    yield put({
-      type: SUBMIT_NEXT_PAGE_SUCCESS,
-      data: action.data,
-    });
-    yield put({
-      type: NEXT_PAGE,
-    });
-  } catch (error) {
-    yield put({
-      type: SUBMIT_NEXT_PAGE_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
 
 const logInAPI = (data) => {
   return axios.post('/auth/sign-in', data);
@@ -176,6 +167,74 @@ function* emailValid(action) {
   }
 }
 
+function* signUp1(action) {
+  try {
+    yield put({
+      type: SIGN_UP_1_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_1_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* signUp2(action) {
+  try {
+    yield put({
+      type: SIGN_UP_2_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_2_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* signUp3(action) {
+  try {
+    yield put({
+      type: SIGN_UP_3_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: NEXT_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_3_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* signUp4(action) {
+  try {
+    yield put({
+      type: SIGN_UP_4_SUCCESS,
+      data: action.data,
+    });
+    yield put({
+      type: PREV_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_4_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 const signUpAPI = (data) => {
   return axios.post('/auth/sign-up', data);
 };
@@ -196,38 +255,9 @@ function* signUp(action) {
   }
 }
 
-const catProfileImageAPI = (data) => {
-  return axios.post('/auth/sign-up/cat-profile-img', data);
-};
-
-function* catProfileImage(action) {
-  try {
-    const result = yield call(catProfileImageAPI, action.data);
-    console.log(result);
-    yield delay(1000);
-    yield put({
-      type: CAT_PROFILE_IMAGE_SUCCESS,
-      data: result.data,
-    });
-    yield put({
-      type: NEXT_PAGE,
-    });
-  } catch (error) {
-    console.error(error);
-    yield put({
-      type: CAT_PROFILE_IMAGE_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
 function* goTo() {
   const history = yield getContext('history');
   history.push('/pheed');
-}
-
-function* watcSubmitNextPage() {
-  yield takeLatest(SUBMIT_NEXT_PAGE_REQUEST, submitNextPage);
 }
 
 function* watchLogIn() {
@@ -242,12 +272,24 @@ function* watchEmailValid() {
   yield takeLatest(EMAIL_VALID_REQUEST, emailValid);
 }
 
-function* watchSignUp() {
-  yield takeLatest(SIGN_UP_REQUEST, signUp);
+function* watcSignUp1() {
+  yield takeLatest(SIGN_UP_1_REQUEST, signUp1);
 }
 
-function* watchCatProfileImage() {
-  yield takeLatest(CAT_PROFILE_IMAGE_REQUEST, catProfileImage);
+function* watcSignUp2() {
+  yield takeLatest(SIGN_UP_2_REQUEST, signUp2);
+}
+
+function* watcSignUp3() {
+  yield takeLatest(SIGN_UP_3_REQUEST, signUp3);
+}
+
+function* watcSignUp4() {
+  yield takeLatest(SIGN_UP_4_REQUEST, signUp4);
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 function* watchGoTo() {
@@ -257,12 +299,14 @@ function* watchGoTo() {
 export function* userSaga() {
   yield all([
     fork(watchGoTo),
-    fork(watcSubmitNextPage),
+    fork(watcSignUp1),
+    fork(watcSignUp2),
+    fork(watcSignUp3),
+    fork(watcSignUp4),
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchEmailValid),
     fork(watchSignUp),
-    fork(watchCatProfileImage),
   ]);
 }
 
@@ -271,20 +315,6 @@ export function* userSaga() {
 const user = (state = initialSate, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      /* 완료 후 다음 페이지 이동 */
-      case SUBMIT_NEXT_PAGE_REQUEST:
-        draft.submitNextPageLoading = true;
-        draft.submitNextPageDone = false;
-        draft.submitNextPageError = null;
-        break;
-      case SUBMIT_NEXT_PAGE_SUCCESS:
-        draft.submitNextPageLoading = false;
-        draft.submitNextPageDone = true;
-        break;
-      case SUBMIT_NEXT_PAGE_FAILURE:
-        draft.logInLoading = false;
-        draft.submitNextPageError = action.error;
-        break;
       /* 로그인 */
       case LOG_IN_REQUEST:
         draft.logInLoading = true;
@@ -336,7 +366,8 @@ const user = (state = initialSate, action) => {
         draft.numberVerifyError = null;
         break;
       case NUMBER_VERIFY_SUCCESS:
-        draft.userInfo.phoneNumber = action.data;
+        draft.userInfoAPIPostData.phoneNumber = action.data.phoneNumber;
+        draft.userInfoAPIPostData.name = action.data.name;
         draft.numberVerifyLoading = false;
         draft.numberVerifyDone = true;
         break;
@@ -359,35 +390,91 @@ const user = (state = initialSate, action) => {
         draft.emailValidLoading = false;
         draft.emailValidError = action.error;
         break;
-      /* 회원가입 */
+      /* 첫번 쨰 회원가입 데이터 */
+      case SIGN_UP_1_REQUEST:
+        draft.submitNextPageLoading = true;
+        draft.submitNextPageDone = false;
+        draft.submitNextPageError = null;
+        break;
+      case SIGN_UP_1_SUCCESS:
+        draft.userInfoAPIPostData.email = action.data.email;
+        draft.userInfoAPIPostData.password = action.data.password;
+        draft.userInfoAPIPostData.isServant = action.data.isServant;
+        draft.submitNextPageLoading = false;
+        draft.submitNextPageDone = true;
+        break;
+      case SIGN_UP_1_FAILURE:
+        draft.logInLoading = false;
+        draft.submitNextPageError = action.error;
+        break;
+      /* 두번 쨰 회원가입 데이터 */
+      case SIGN_UP_2_REQUEST:
+        draft.submitNextPageLoading = true;
+        draft.submitNextPageDone = false;
+        draft.submitNextPageError = null;
+        break;
+      case SIGN_UP_2_SUCCESS:
+        draft.userInfoAPIPostData.catName = action.data.catName;
+        draft.userInfoAPIPostData.catFeatures = action.data.catFeatures;
+        draft.userInfoAPIPostData.catProfileImg = action.data.catProfileImg;
+        draft.submitNextPageLoading = false;
+        draft.submitNextPageDone = true;
+        break;
+      case SIGN_UP_2_FAILURE:
+        draft.logInLoading = false;
+        draft.submitNextPageError = action.error;
+        break;
+      /* 세번 쨰 회원가입 데이터 */
+      case SIGN_UP_3_REQUEST:
+        draft.submitNextPageLoading = true;
+        draft.submitNextPageDone = false;
+        draft.submitNextPageError = null;
+        break;
+      case SIGN_UP_3_SUCCESS:
+        draft.userInfoAPIPostData.catKindId = action.data.catKindId;
+        draft.userInfoAPIPostData.catGender = action.data.catGender;
+        draft.userInfoAPIPostData.catBirthday = action.data.catBirthday;
+        draft.userInfoAPIPostData.catNeutralized = action.data.catNeutralized;
+        draft.submitNextPageLoading = false;
+        draft.submitNextPageDone = true;
+        break;
+      case SIGN_UP_3_FAILURE:
+        draft.logInLoading = false;
+        draft.submitNextPageError = action.error;
+        break;
+      /* 네번 쨰 회원가입 데이터 */
+      case SIGN_UP_4_REQUEST:
+        draft.submitNextPageLoading = true;
+        draft.submitNextPageDone = false;
+        draft.submitNextPageError = null;
+        break;
+      case SIGN_UP_4_SUCCESS:
+        draft.userInfoAPIPostData.addressDepth1 = action.data.addressDepth1;
+        draft.userInfoAPIPostData.addressDepth2 = action.data.addressDepth2;
+        draft.userInfoAPIPostData.addressDepth3 = action.data.addressDepth3;
+        draft.userInfoAPIPostData.addressDepth4 = action.data.addressDepth4;
+        draft.submitNextPageLoading = false;
+        draft.submitNextPageDone = true;
+        break;
+      case SIGN_UP_4_FAILURE:
+        draft.logInLoading = false;
+        draft.submitNextPageError = action.error;
+        break;
+      /* 최종 회원가입 */
       case SIGN_UP_REQUEST:
         draft.signUpLoading = true;
         draft.signUpDone = false;
         draft.signUpError = null;
         break;
       case SIGN_UP_SUCCESS:
-        draft.userInfo.accessToken = action.data.accessToken;
+        draft.userInfo = action.data;
         draft.signUpLoading = false;
         draft.signUpDone = true;
+        draft.userInfoAPIPostData = null;
         break;
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
-        break;
-      /* 고양이 프로필 사진 업로드 */
-      case CAT_PROFILE_IMAGE_REQUEST:
-        draft.catProfileImageLoading = true;
-        draft.catProfileImageDone = false;
-        draft.catProfileImageError = null;
-        break;
-      case CAT_PROFILE_IMAGE_SUCCESS:
-        draft.userInfo.ProfileImage.push(action.data);
-        draft.catProfileImageLoading = false;
-        draft.catProfileImageDone = true;
-        break;
-      case CAT_PROFILE_IMAGE_FAILURE:
-        draft.catProfileImageLoading = false;
-        draft.catProfileImageError = action.error;
         break;
       default:
         break;
