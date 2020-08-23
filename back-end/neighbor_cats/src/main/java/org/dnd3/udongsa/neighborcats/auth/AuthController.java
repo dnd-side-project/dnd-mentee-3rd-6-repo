@@ -34,9 +34,9 @@ public class AuthController {
 
   private final AuthService service;
 
-  @PostMapping("/sign-up")
+  @PostMapping(value="/sign-up")
   @ResponseStatus(code = HttpStatus.CREATED)
-  public SignUpResDto signUp(@Valid @RequestBody SignUpReqDto reqDto) {
+  public SignUpResDto signUp(@Valid SignUpReqDto reqDto) {
     return service.signUp(reqDto);
   }
 

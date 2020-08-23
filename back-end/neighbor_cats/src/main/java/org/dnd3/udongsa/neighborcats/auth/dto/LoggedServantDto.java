@@ -9,19 +9,17 @@ import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.role.Role;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Data @AllArgsConstructor @NoArgsConstructor @Builder @ToString
+@Data @AllArgsConstructor @NoArgsConstructor 
 public class LoggedServantDto {
 
   private Long id;
   private String name;
   private String email;
   private String nickName;
-  private String address;
+  private String addressName;
   private String phoneNumber;
   private Set<Role> roles = new HashSet<>();
   private List<CatDto> cats = new ArrayList<>();

@@ -9,8 +9,11 @@ Doc Writer <hopefulyun@gmail.com> +
 {docdatetime}
 
 == Authentication
-=== Login
+=== 로그인
 operation::AuthDoc/signIn[snippets='http-request,request-body,request-fields,response-body,response-fields']
 
-=== Me
+=== 로그인한 유저 정보
 operation::AuthDoc/me[snippets='http-request,response-body,response-fields']
+
+=== 회원가입
+operation::AuthDoc/signUp[snippets='http-request,request-parameters,response-headers,response-body,response-fields']

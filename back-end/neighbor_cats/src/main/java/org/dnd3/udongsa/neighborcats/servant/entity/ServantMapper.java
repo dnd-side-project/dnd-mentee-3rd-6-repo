@@ -1,21 +1,22 @@
 package org.dnd3.udongsa.neighborcats.servant.entity;
 
+import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.role.Role;
 
 public class ServantMapper {
   
-  public static Servant map(SignUpReqDto dto, Role role) {
+  public static Servant map(SignUpReqDto dto, Role role, String encodedPassword, Address address) {
     Servant servant = new Servant(  
       dto.getName(), 
       dto.getEmail(), 
-      dto.getPassword(), 
+      encodedPassword, 
       dto.getPhoneNumber(),
       dto.getIsServant(),
       dto.getNickName(),
-      dto.getAddress()
+      role,
+      address
     );
-    servant.addRole(role);
     return servant;
   }
 

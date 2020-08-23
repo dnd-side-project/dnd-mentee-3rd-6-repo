@@ -1,8 +1,10 @@
 package org.dnd3.udongsa.neighborcats.cat.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.catkind.CatKind;
@@ -21,12 +23,15 @@ public class CatMapperTest {
     .password("pw123")
     .isServant(true)
     .nickName("연탄이네")
-    .address("부산광역시 해운대구 우동")
+    .addressDepth1("부산광역시")
+    .addressDepth2("해운대구")
+    .addressDepth3("재송동")
+    .addressDepth4("")
     .catName("연탄이")
     .catFeatures("말많음")
     .catKindId(1L)
     .catGender(EGender.MALE)
-    .catBirthday(LocalDate.of(2020, 1, 22))
+    .catBirthday("2020-01-02")
     .catNeutralized(ENeutralized.NONE)
     .build();
     CatKind kind = CatKind.of("노르웨이숲고양이");
@@ -39,7 +44,7 @@ public class CatMapperTest {
     assertEquals(dto.getName(), cat.getName());
     assertEquals(dto.getCatFeatures(), cat.getFeatures());
     assertEquals(dto.getCatGender(), cat.getGender());
-    assertEquals(dto.getCatBirthday(), cat.getBirthday());
+    assertTrue(LocalDate.parse(dto.getCatBirthday(), DateTimeFormatter.ISO_LOCAL_DATE).isEqual(cat.getBirthday()), "생일이 일치해야 합니다.");
     assertEquals(kind.getName(), cat.getKind().getName());
     assertEquals(dto.getCatNeutralized(), cat.getNeutralized());
     assertEquals(servant, cat.getServant());

@@ -94,6 +94,6 @@ task copyToStatic(type: Copy) {
     into "${project.projectDir}/src/main/resources/static/."
 }
 
-// npmBuild.dependsOn appNpmInstall
-// copyToStatic.dependsOn npmBuild
-// compileJava.dependsOn copyToStatic
+npmBuild.dependsOn appNpmInstall
+copyToStatic.dependsOn npmBuild
+compileJava.dependsOn copyToStatic

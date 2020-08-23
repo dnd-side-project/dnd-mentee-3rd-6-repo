@@ -1,11 +1,16 @@
 package org.dnd3.udongsa.neighborcats.auth;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.dnd3.udongsa.neighborcats.address.Address;
+import org.dnd3.udongsa.neighborcats.address.repository.AddressRepository;
+import org.dnd3.udongsa.neighborcats.auth.dto.AuthMapper;
 import org.dnd3.udongsa.neighborcats.auth.dto.CatProfileUploadResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.LoggedServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
@@ -39,6 +44,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
   private final CatRepository catRepo;
   private final CatProfileImgRepository catProfileRepo;
   private final ImgFileService imgFileService;
+  private final AddressRepository addressRepo;
 
   @Override
   @Transactional
@@ -62,27 +69,72 @@ public class AuthServiceImpl implements AuthService {
     if (servantRepo.existsByEmail(reqDto.getEmail())) {
       throw new CustomException(HttpStatus.BAD_REQUEST, "이메일 중복입니다");
     }
-    Role role = roleRepository.findByName(ERole.ROLE_USER)
-        .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "USER Role이 존재하지 않습니다."));
-    CatKind kind = catKindRepo.findById(reqDto.getCatKindId()).orElseThrow(
-        () -> new CustomException(HttpStatus.BAD_REQUEST, "품종이 존재하지 않습니다.", "kindId:{}", reqDto.getCatKindId()));
+    CatKind kind = findKindByKindId(reqDto.getCatKindId());
+    Role role = findRoleByRoleName(ERole.ROLE_USER);
+    String encodedPassword = encoder.encode(reqDto.getPassword());
+    Address address = findOrSaveAddresByDepths(reqDto.getAddressDepth1(), reqDto.getAddressDepth2(),
+        reqDto.getAddressDepth3(), reqDto.getAddressDepth4());
 
-    reqDto.setPassword(encoder.encode(reqDto.getPassword()));
-    Servant servant = ServantMapper.map(reqDto, role);
+    Servant servant = ServantMapper.map(reqDto, role, encodedPassword, address);
     servant = servantRepo.save(servant);
     Cat cat = CatMapper.map(reqDto, kind, servant);
     cat = catRepo.save(cat);
+    String accessToken = generateToken(servant);
+    String catProfileImgUrl = uploadCatProfileImg(cat, reqDto.getCatProfileImg());
 
-    // Response Dto 생성 맵핑
-    SignUpResDto res = SignUpResDto.builder().servantId(servant.getId()).phoneNumber(servant.getPhoneNumber())
-        .name(servant.getName()).email(servant.getEmail()).password(servant.getPassword())
-        .isServant(servant.getIsServant()).nickName(servant.getNickname()).address(servant.getAddress())
-        .catId(cat.getId()).catName(cat.getName()).catFeatures(cat.getFeatures()).catKindId(cat.getKind().getId())
-        .catGender(cat.getGender()).catBirthday(cat.getBirthday()).catNeutralized(cat.getNeutralized())
-        .accessToken(generateToken(servant)).build();
+    return AuthMapper.map(servant, cat, accessToken, catProfileImgUrl);
+  }
 
-    return res;
+  /**
+   * 냥이 이미지 파일 업로드
+   */
+  private String uploadCatProfileImg(Cat cat, MultipartFile catProfileImg) {
+    if(Objects.isNull(catProfileImg)) return "";
+    if (catProfileRepo.existsByCat(cat)) {
+      CatProfileImg catProfile = catProfileRepo.findByCat(cat);
+      ImgFile imgFile = catProfile.getImgFile();
+      catProfileRepo.delete(catProfile);
+      imgFileService.delete(imgFile);
+    }
+    ImgFile imgFile = imgFileService.upload(getBytes(catProfileImg));
+    catProfileRepo.save(CatProfileImg.of(cat, imgFile));
+    return ImgFileUtils.generateImgFileUrl(imgFile.getId());
+  }
 
+  private byte[] getBytes(MultipartFile file){
+    byte[] bytes = new byte[0];
+    try {
+      bytes = file.getBytes();
+    } catch (IOException e) {
+      throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "프로필 이미지 파일 로딩에 실패했습니다.");
+    }
+    return bytes;
+  }
+
+  private Address findOrSaveAddresByDepths(String depth1, String depth2, String depth3, String depth4) {
+    if(Objects.isNull(depth4)){
+      depth4 = "";
+    }
+    Optional<Address> optAddress = addressRepo.findByDepths(depth1, depth2, depth3, depth4);
+    if(optAddress.isPresent()){
+      return optAddress.get();
+    }
+    Address address = Address.of(depth1, depth2, depth3, depth4);
+    return addressRepo.save(address);
+  }
+
+  private Role findRoleByRoleName(ERole role){
+    return roleRepository.findByName(ERole.ROLE_USER)
+    .orElseThrow(()->new CustomException(HttpStatus.BAD_REQUEST,
+                                        "USER Role이 존재하지 않습니다."));
+  }
+
+  private CatKind findKindByKindId(Long id){
+    return catKindRepo.findById(id)
+    .orElseThrow(()->new CustomException(HttpStatus.BAD_REQUEST, 
+                                          "품종이 존재하지 않습니다.", 
+                                          "kindId:{}", 
+                                          id));
   }
 
   @Override
@@ -146,7 +198,7 @@ public class AuthServiceImpl implements AuthService {
     dto.setName(servant.getName());
     dto.setEmail(servant.getEmail());
     dto.setNickName(servant.getNickname());
-    dto.setAddress(servant.getAddress());
+    dto.setAddressName(servant.getAddress().getName());
     dto.setPhoneNumber(servant.getPhoneNumber());
     dto.setRoles(servant.getRoles());
     List<Cat> cats = catRepo.findByServant(servant);
