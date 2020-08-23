@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Input } from 'antd';
 
 import { pallete } from '../../lib/style/pallete';
@@ -89,8 +89,11 @@ export const InputForm = styled(Input)`
         line-height: 14px;
         text-align: center;
         color: ${pallete.white};
-        background: ${(props) =>
-          props.value.length === 11 ? `${pallete.orange}` : `${pallete.gray[3]}`};
+        ${(props) =>
+          props.addonAfter &&
+          css`
+            background: ${props.value.length === 11 ? `${pallete.orange}` : `${pallete.gray[3]}`};
+          `}
 
         border: none;
 

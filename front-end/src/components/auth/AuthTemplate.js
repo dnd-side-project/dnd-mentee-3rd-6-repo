@@ -11,6 +11,8 @@ const TopCol = styled(Col)`
   align-items: center;
   height: 30px;
 
+  margin-top: 10px;
+
   h1 {
     font-weight: bold;
     font-size: 20px;
@@ -23,7 +25,15 @@ const TopCol = styled(Col)`
 `;
 
 const MiddleCol = styled(Col)`
-  margin-top: 75px;
+  min-height: 90vh;
+
+  form {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
   label {
     font-style: normal;
     font-weight: bold;

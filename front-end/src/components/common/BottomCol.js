@@ -6,14 +6,11 @@ import PropTypes from 'prop-types';
 import { pallete } from '../../lib/style/pallete';
 
 const BottomWarrper = styled.div`
-  position: fixed;
-  bottom: 80px;
-  left: 0;
-  right: 0;
-
   display: flex;
   justify-content: center;
   align-content: center;
+
+  margin-bottom: 80px;
 `;
 
 const Btn = styled(Button)`
@@ -24,6 +21,12 @@ const Btn = styled(Button)`
   border: none;
   border-radius: 14px;
   text-shadow: none;
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
 
   &:hover {
     background: ${pallete.orange};

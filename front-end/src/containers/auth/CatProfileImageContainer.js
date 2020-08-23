@@ -2,12 +2,13 @@ import React, { useRef, useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../../hooks/useInput';
-import ProfileImageUpload from '../../components/auth/ProfileImage/ProfileImageUpload';
-import ProfileName from '../../components/auth/ProfileImage/ProfileName';
-import { UPLOAD_IMAGE_REQUEST } from '../../modules/user';
+import CatProfileImageForm from '../../components/auth/SignUp/CatProfileImage';
+import CatProfileNameForm from '../../components/auth/SignUp/CatProfileImage/CatProfileNameForm';
+import CatProfileEnrollForm from '../../components/auth/SignUp/CatProfileImage/CatProfileEnrollForm';
+import { CAT_PROFILE_IMAGE_REQUEST } from '../../modules/user';
 import { NEXT_PAGE } from '../../modules/pageNumber';
 
-const ProfileImageContainner = () => {
+const ProfileImageContainer = () => {
   const [catName, onChangeCatName] = useInput('');
   const [character, onChangeCharacter] = useInput('');
   const [prevImagePath, setPrevImagePath] = useState({
@@ -45,12 +46,12 @@ const ProfileImageContainner = () => {
 
   const onSubmitImage = useCallback(() => {
     const imageFormData = new FormData();
-    imageFormData.append('catProfileImg', prevImagePath.file);
-    imageFormData.append('catName', catName);
-    imageFormData.append('character', character);
+    imageFormData.append('profileImg', prevImagePath.file);
+    imageFormData.append('name', catName);
+    imageFormData.append('featuers', character);
 
     return dispatch({
-      type: UPLOAD_IMAGE_REQUEST,
+      type: CAT_PROFILE_IMAGE_REQUEST,
       data: imageFormData,
     });
   }, [catName, character, dispatch, prevImagePath.file]);
@@ -58,7 +59,7 @@ const ProfileImageContainner = () => {
   return (
     <>
       {page === 4 && (
-        <ProfileImageUpload
+        <CatProfileImageForm
           imageInputRef={imageInputRef}
           onClickImageUpload={onClickImageUpload}
           onChangeImage={onChangeImage}
@@ -67,7 +68,7 @@ const ProfileImageContainner = () => {
         />
       )}
       {page === 5 && (
-        <ProfileName
+        <CatProfileNameForm
           catName={catName}
           onChangeCatName={onChangeCatName}
           character={character}
@@ -77,8 +78,11 @@ const ProfileImageContainner = () => {
           uploadImageDone={uploadImageDone}
         />
       )}
+      {page === 6 && (
+        <CatProfileEnrollForm catName={catName} previewPath={prevImagePath.previewPath} />
+      )}
     </>
   );
 };
 
-export default ProfileImageContainner;
+export default ProfileImageContainer;

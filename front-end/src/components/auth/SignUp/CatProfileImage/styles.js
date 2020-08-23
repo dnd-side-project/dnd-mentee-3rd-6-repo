@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { pallete } from '../../../lib/style/pallete';
+import { pallete } from '../../../../lib/style/pallete';
 
 export const PrevImageBox = styled.div`
   display: flex;
@@ -24,7 +24,6 @@ export const PrevImageBox = styled.div`
 `;
 
 export const ProfileHeader = styled.h3`
-  margin-top: 20px;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;
@@ -80,6 +79,26 @@ export const Imagebutton = styled.button`
   &:active {
     border: 4px solid ${pallete.gray[3]};
     transition: all 0.25s;
+  }
+`;
+
+export const EnrollImageBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 34px;
+
+  width: 120px;
+  height: 120px;
+  background: ${pallete.gray[2]};
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 `;
 
