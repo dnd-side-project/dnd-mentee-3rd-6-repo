@@ -13,5 +13,5 @@ public class CustomExceptionResponse {
   private LocalDateTime timestamp;
   private HttpStatus httpStatus;
   private String message;
-  private String description;
+  private Object description;
 }

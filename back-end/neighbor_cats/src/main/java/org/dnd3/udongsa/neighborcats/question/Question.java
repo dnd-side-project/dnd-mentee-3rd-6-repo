@@ -10,7 +10,9 @@ import javax.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
+import lombok.Getter;
+
+@Entity @Getter
 public class Question {
 
     @Id

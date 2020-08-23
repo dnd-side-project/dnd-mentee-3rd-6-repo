@@ -1,5 +1,6 @@
 package org.dnd3.udongsa.neighborcats.servant.entity;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,12 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.role.Role;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,11 +49,6 @@ public class Servant {
 	@Size(max = 20)
 	private String nickname;
 	
-	// 우편번호
-  private String postcode;
-  
-  private String address;
-	
 	private String phoneNumber;
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -58,20 +58,36 @@ public class Servant {
 	private Set<Role> roles = new HashSet<>();
 
 	@NotNull
-	private Boolean isServant;
+  private Boolean isServant;
+
+  @NotNull
+  @ManyToOne
+  @JoinColumn
+  private Address address;
+  
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
 	
-	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, String address){
+	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, Role role, Address address){
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
     this.isServant = isServant;
     this.nickname = nickName;
+    this.addRole(role);
     this.address = address;
 	}
 
 	public void addRole(Role role) {
 		this.roles.add(role);
-	}
+  }
+  
+  public void updateAddress(Address address){
+    this.address = address;
+  }
 	
 }

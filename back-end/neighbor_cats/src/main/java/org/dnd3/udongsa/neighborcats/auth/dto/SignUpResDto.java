@@ -21,14 +21,15 @@ public class SignUpResDto {
   private String password;
   private Boolean isServant;
   private String nickName;
-  private String address;
+  private String addressName;
   private Long catId;
   private String catName;
   private String catFeatures;
   private Long catKindId;
-  private EGender gender;
+  private EGender catGender;
   private LocalDate catBirthday;
   private ENeutralized catNeutralized;
+  private String catProfileImgUrl;
   private String accessToken;
 
 }

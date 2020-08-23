@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
@@ -21,11 +21,11 @@ public class CatProfileImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private Cat cat;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private ImgFile imgFile;
 

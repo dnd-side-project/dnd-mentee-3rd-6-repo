@@ -2,8 +2,7 @@ package org.dnd3.udongsa.neighborcats.servant.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-
+import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.cat.entity.EGender;
 import org.dnd3.udongsa.neighborcats.cat.entity.ENeutralized;
@@ -22,26 +21,32 @@ public class ServantMapperTest {
     .password("pw123")
     .isServant(true)
     .nickName("연탄이네")
-    .address("부산광역시 해운대구 우동")
     .catName("연탄이")
+    .addressDepth1("부산광역시")
+    .addressDepth2("해운대구")
+    .addressDepth3("재송동")
+    .addressDepth4("")
     .catFeatures("말많음")
     .catKindId(1L)
-    .gender(EGender.MALE)
-    .catBirthday(LocalDate.of(2020, 1, 22))
+    .catGender(EGender.MALE)
+    .catBirthday("2020-01-22")
     .catNeutralized(ENeutralized.NONE)
     .build();
 
     Role role = new Role();
+    String encodedPassword = "asdfasdf";
 
-    Servant servant = ServantMapper.map(dto, role);
+    Address address = Address.of(dto.getAddressDepth1(), dto.getAddressDepth2(), dto.getAddressDepth3(), dto.getAddressDepth4());
+
+    Servant servant = ServantMapper.map(dto, role, encodedPassword, address);
 
     assertEquals(dto.getPhoneNumber(), servant.getPhoneNumber());
     assertEquals(dto.getName(), servant.getName());
     assertEquals(dto.getEmail(), servant.getEmail());
-    assertEquals(dto.getPassword(), servant.getPassword());
+    assertEquals(encodedPassword, servant.getPassword());
     assertEquals(dto.getIsServant(), servant.getIsServant());
     assertEquals(dto.getNickName(), servant.getNickname());
-    assertEquals(dto.getAddress(), servant.getAddress());
+    assertEquals(address, servant.getAddress());
     assertEquals(true, servant.getRoles().contains(role));
     
     
