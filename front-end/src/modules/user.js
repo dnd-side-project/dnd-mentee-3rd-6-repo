@@ -32,7 +32,29 @@ export const initialSate = {
     addressDepth4: '',
   },
   emailValidData: false,
-  CatKindId: null,
+  CatKindId: [
+    { id: 1, name: '코리안 쇼트헤어' },
+    { id: 2, name: '페르시안' },
+    { id: 3, name: '러시안 블루' },
+    { id: 4, name: '샴' },
+    { id: 5, name: '터키쉬앙고라' },
+    { id: 6, name: '스코티쉬 폴드' },
+    { id: 7, name: '친칠라' },
+    { id: 8, name: '아비시니안' },
+    { id: 9, name: '길고양이' },
+    { id: 10, name: '맹크스' },
+    { id: 11, name: '노르웨이숲' },
+    { id: 12, name: '브리티시 쇼트헤어' },
+    { id: 13, name: '먼치킨' },
+    { id: 14, name: '랙돌' },
+    { id: 15, name: '메인쿤' },
+    { id: 16, name: '시암' },
+    { id: 17, name: '아메리칸 쇼트헤어' },
+    { id: 18, name: '엑조틱 쇼트헤어' },
+    { id: 19, name: '아비시니안' },
+    { id: 20, name: '터키쉬앙고라' },
+    { id: 21, name: '기타' },
+  ],
   submitNextPageLoading: false, // 완료 후 다음 페이지 이동 시도 중
   submitNextPageDone: false,
   submitNextPageError: null,
@@ -51,6 +73,9 @@ export const initialSate = {
   emailValidLoading: false, // 이메일 중복확인 시도 중
   emailValidDone: false,
   emailValidError: null,
+  catKindIdLoading: false, // 고양이 품종 가져오기 시도 중
+  catKindIdDone: false,
+  catKindIdError: null,
   signUpLoading: false, // 회원가입 시도 중
   signUpDone: false,
   signUpError: null,
@@ -81,6 +106,10 @@ export const EMAIL_VALID_FAILURE = 'user/EMAIL_VALID_FAILURE';
 export const PROFILE_IMAGE_REQUEST = 'user/PROFILE_IMAGE_REQUEST';
 export const PROFILE_IMAGE_SUCCESS = 'user/PROFILE_IMAGE_SUCCESS';
 export const PROFILE_IMAGE_FAILURE = 'user/PROFILE_IMAGE_FAILURE';
+
+export const CAT_KIND_ID_REQUEST = 'user/CAT_KIND_ID_REQUEST';
+export const CAT_KIND_ID_SUCCESS = 'user/CAT_KIND_ID_SUCCESS';
+export const CAT_KIND_ID_FAILURE = 'user/CAT_KIND_ID_FAILURE';
 
 export const SIGN_UP_1_REQUEST = 'user/SIGN_UP_1_REQUEST';
 export const SIGN_UP_1_SUCCESS = 'user/SIGN_UP_1_SUCCESS';
@@ -116,6 +145,9 @@ function* logIn(action) {
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
+    });
+    yield put({
+      type: GO_TO,
     });
   } catch (error) {
     yield put({
@@ -162,6 +194,26 @@ function* emailValid(action) {
     console.log(error);
     yield put({
       type: EMAIL_VALID_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+const catKindIdAPI = (data) => {
+  return axios.get(`/catkinds?sort=id,asc`);
+};
+
+function* catKindId(action) {
+  try {
+    const result = yield call(catKindIdAPI, action.data);
+    yield put({
+      type: CAT_KIND_ID_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: CAT_KIND_ID_FAILURE,
       error: error.response.data,
     });
   }
@@ -246,6 +298,9 @@ function* signUp(action) {
       type: SIGN_UP_SUCCESS,
       data: result.data,
     });
+    yield put({
+      type: GO_TO,
+    });
   } catch (error) {
     console.error(error);
     yield put({
@@ -257,7 +312,7 @@ function* signUp(action) {
 
 function* goTo() {
   const history = yield getContext('history');
-  history.push('/pheed');
+  history.push('/feed');
 }
 
 function* watchLogIn() {
@@ -270,6 +325,10 @@ function* watchLogOut() {
 
 function* watchEmailValid() {
   yield takeLatest(EMAIL_VALID_REQUEST, emailValid);
+}
+
+function* watchCatKindId() {
+  yield takeLatest(CAT_KIND_ID_REQUEST, catKindId);
 }
 
 function* watcSignUp1() {
@@ -303,6 +362,7 @@ export function* userSaga() {
     fork(watcSignUp2),
     fork(watcSignUp3),
     fork(watcSignUp4),
+    fork(watchCatKindId),
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchEmailValid),
@@ -322,7 +382,7 @@ const user = (state = initialSate, action) => {
         draft.logInError = null;
         break;
       case LOG_IN_SUCCESS:
-        draft.userInfo.accessToken = action.data.accessToken;
+        draft.userInfo = action.data;
         draft.logInLoading = false;
         draft.logInDone = true;
         break;
@@ -459,6 +519,21 @@ const user = (state = initialSate, action) => {
       case SIGN_UP_4_FAILURE:
         draft.logInLoading = false;
         draft.submitNextPageError = action.error;
+        break;
+      /* 고양이 품종 가져오기 */
+      case CAT_KIND_ID_REQUEST:
+        draft.catKindIdLoading = true;
+        draft.catKindIdDone = false;
+        draft.catKindIdError = null;
+        break;
+      case CAT_KIND_ID_SUCCESS:
+        draft.CatKindId = action.data;
+        draft.catKindIdLoading = false;
+        draft.catKindIdDone = true;
+        break;
+      case CAT_KIND_ID_FAILURE:
+        draft.catKindIdLoading = false;
+        draft.catKindIdError = action.error;
         break;
       /* 최종 회원가입 */
       case SIGN_UP_REQUEST:

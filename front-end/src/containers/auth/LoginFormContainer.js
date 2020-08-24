@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from '../../components/auth/LoginForm';
 import useInput from '../../hooks/useInput';
-import { GO_TO, LOG_IN_REQUEST } from '../../modules/user';
+import { LOG_IN_REQUEST } from '../../modules/user';
 
 const LoginFormContainer = () => {
   const dispatch = useDispatch();
-  const { logInLoading, logInDone, logInError } = useSelector((state) => state.user);
+  const { logInLoading, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
@@ -17,14 +17,6 @@ const LoginFormContainer = () => {
       data: { email, password },
     });
   }, [dispatch, email, password]);
-
-  useEffect(() => {
-    if (logInDone) {
-      dispatch({
-        type: GO_TO,
-      });
-    }
-  }, [dispatch, logInDone]);
 
   return (
     <LoginForm
