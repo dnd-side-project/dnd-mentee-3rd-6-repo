@@ -12,8 +12,7 @@ body {
 
 #root {
   min-height: 100vh;
-
-  overflow-y: auto;
+  overflow: hidden;
   padding-left: 16px;
   padding-right: 16px;
 }
