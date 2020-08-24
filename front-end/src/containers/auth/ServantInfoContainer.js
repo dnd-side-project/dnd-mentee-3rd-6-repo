@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 /* global kakao */
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
