@@ -1,12 +1,12 @@
 import React from 'react';
 import AppLayoutContainer from '../containers/common/AppLayoutContainer';
 
-const MyPage = () => {
+const PostsPage = () => {
   return (
-    <AppLayoutContainer title="마이페이지">
-      <h1>여기는 마이페이지 입니다.</h1>
+    <AppLayoutContainer title="질문">
+      <h1>여기는 질문페이지 입니다.</h1>
     </AppLayoutContainer>
   );
 };
 
-export default MyPage;
+export default PostsPage;

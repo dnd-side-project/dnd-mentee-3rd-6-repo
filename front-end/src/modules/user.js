@@ -6,7 +6,7 @@ import { RESET_AUTH_INFO } from './auth';
 /* 초기 상태 */
 
 export const initialSate = {
-  userInfo: null,
+  userInfo: {},
   logInLoading: false, // 로그인 시도 중
   logInDone: false,
   logInError: null,
@@ -140,7 +140,7 @@ const user = (state = initialSate, action) => {
         draft.logInError = null;
         break;
       case LOG_IN_SUCCESS:
-        draft.userInfo = action.data;
+        draft.userInfo = action.data.accessToken;
         draft.logInLoading = false;
         draft.logInDone = true;
         break;
