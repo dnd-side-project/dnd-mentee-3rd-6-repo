@@ -9,7 +9,7 @@ const TopCol = styled(Col)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 30px;
+  height: 28px;
 
   margin-top: 10px;
 

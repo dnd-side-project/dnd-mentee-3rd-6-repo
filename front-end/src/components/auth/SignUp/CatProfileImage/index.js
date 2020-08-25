@@ -12,10 +12,10 @@ const CatProfileImageForm = ({
   onClickImageUpload,
   onChangeImage,
   prevImagePath,
-  onNextProfilePage,
+  onSubmitSignUp,
 }) => {
   return (
-    <Form onFinish={onNextProfilePage}>
+    <Form onFinish={onSubmitSignUp}>
       <Margin top="94px">
         <ProfileImageWrapper>
           <div>
@@ -59,7 +59,7 @@ CatProfileImageForm.prototype = {
   onClickImageUpload: PropTypes.func.isRequired,
   onChangeImage: PropTypes.func.isRequired,
   prevImagePath: PropTypes.object.isRequired,
-  onNextProfilePage: PropTypes.func.isRequired,
+  onSubmitSignUp: PropTypes.func.isRequired,
 };
 
 export default CatProfileImageForm;

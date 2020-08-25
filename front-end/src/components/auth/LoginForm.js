@@ -46,13 +46,11 @@ const LoginForm = ({
                 value={password}
                 required
               />
-              {logInError ? (
-                logInError.message ? (
-                  <ErrorMessage>{logInError.message}</ErrorMessage>
-                ) : (
-                  <ErrorMessage>네트워크 에러</ErrorMessage>
-                )
-              ) : null}
+              {logInError && (
+                <ErrorMessage>
+                  {logInError?.message ? logInError.message : '네트워크 에러'}
+                </ErrorMessage>
+              )}
             </div>
           </InputWrapper>
         </Margin>

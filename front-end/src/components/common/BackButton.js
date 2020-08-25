@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
-import { PREV_PAGE } from '../../modules/pageNumber';
+import { PREV_PAGE, NOT_SERVANT_PREV_PAGE } from '../../modules/auth';
 
 const GoBackButton = styled(Button)`
   display: flex;
@@ -21,11 +21,16 @@ const GoBackButton = styled(Button)`
 
 const BackButton = ({ history }) => {
   const dispatch = useDispatch();
-  const { page } = useSelector((state) => state.pageNumber);
+  const { pageIndex, isServant } = useSelector((state) => state.auth);
 
   const onGoBack = () => {
-    if (page <= 1) {
+    if (pageIndex <= 1) {
       return history.goBack();
+    }
+    if (!isServant && pageIndex === 7) {
+      return dispatch({
+        type: NOT_SERVANT_PREV_PAGE,
+      });
     }
     dispatch({
       type: PREV_PAGE,

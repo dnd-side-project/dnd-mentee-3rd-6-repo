@@ -4,20 +4,18 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../../hooks/useInput';
-import { NEXT_PAGE } from '../../modules/pageNumber';
-import { SIGN_UP_REQUEST } from '../../modules/user';
 import ServantInfoForm from '../../components/auth/SignUp/ServantInfo/index';
+import { SIGN_UP_REQUEST } from '../../modules/user';
+import { SIGN_UP_7, NEXT_PAGE } from '../../modules/auth';
 
-const ServantInfoContainer = () => {
-  const [nickName, onChangeNickName] = useInput('');
-
-  const { userInfoAPIPostData } = useSelector((state) => state.user);
+const ServantInfoFormContainer = () => {
   const {
     phoneNumber,
     name,
     email,
     password,
     isServant,
+    nickName,
     addressDepth1,
     addressDepth2,
     addressDepth3,
@@ -29,16 +27,22 @@ const ServantInfoContainer = () => {
     catBirthday,
     catNeutralized,
     catProfileImg,
-  } = userInfoAPIPostData;
+  } = useSelector((state) => state.auth.authInfo);
+
+  const [initialNickName, onChangeInitialNickName] = useInput(nickName || '');
 
   const dispatch = useDispatch();
 
   /* 페이지 7 - 현재 위치 찾기 버튼 */
   const onSearchHometown = useCallback(() => {
     dispatch({
+      type: SIGN_UP_7,
+      data: initialNickName,
+    });
+    return dispatch({
       type: NEXT_PAGE,
     });
-  }, [dispatch]);
+  }, [dispatch, initialNickName]);
 
   /* 페이지 7 - 회원가입 마무리 단계 버튼 */
   const onSubmitSignUp = useCallback(async () => {
@@ -89,14 +93,14 @@ const ServantInfoContainer = () => {
     <>
       <ServantInfoForm
         username={name}
-        nickName={nickName}
-        onChangeNickName={onChangeNickName}
+        nickName={initialNickName}
+        onChangeNickName={onChangeInitialNickName}
         onSearchHometown={onSearchHometown}
-        onSubmitSignUp={onSubmitSignUp}
         addressDepth1={addressDepth1}
+        onSubmitSignUp={onSubmitSignUp}
       />
     </>
   );
 };
 
-export default ServantInfoContainer;
+export default ServantInfoFormContainer;

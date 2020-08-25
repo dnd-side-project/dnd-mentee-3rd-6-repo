@@ -23,12 +23,12 @@ const CatProfileEnrollForm = ({
   onChangeCatBirthday,
   catNeutralized,
   onClickCatNeutralized,
-  onSubmitCatFeatures,
+  onSubmitSignUp,
 }) => {
   return (
     <>
       <ScrollStop selectCheck={selectCheck} />
-      <Form onFinish={onSubmitCatFeatures}>
+      <Form onFinish={onSubmitSignUp}>
         <Margin top="34px" bottom="70px">
           <EnrollImageBox>
             <span>{previewPath && <img src={previewPath} alt="고양이 사진" />}</span>
@@ -170,7 +170,7 @@ CatProfileEnrollForm.prototype = {
   onChangeCatBirthday: PropTypes.func.isRequired,
   catNeutralized: PropTypes.string.isRequired,
   onClickCatNeutralized: PropTypes.func.isRequired,
-  onSubmitCatFeatures: PropTypes.func.isRequired,
+  onSubmitSignUp: PropTypes.func.isRequired,
 };
 
 export default React.memo(CatProfileEnrollForm);

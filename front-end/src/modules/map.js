@@ -1,6 +1,9 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const initialSate = {
   regionCodeData: {
@@ -21,6 +24,8 @@ export const initialSate = {
   currentGPSError: null,
 };
 
+const KAKAO_MAP_URL = '//dapi.kakao.com/v2/local/geo/coord2regioncode.json';
+
 export const CURRENT_GPS_REQUEST = 'map/CURRENT_GPS_REQUEST';
 export const CURRENT_GPS_SUCCESS = 'map/CURRENT_GPS_SUCCESS';
 export const CURRENT_GPS_FAILURE = 'map/CURRENT_GPS_FAILURE';
@@ -29,16 +34,10 @@ export const REGION_CODE_REQUEST = 'map/REGION_CODE_REQUEST';
 export const REGION_CODE_SUCCESS = 'map/REGION_CODE_SUCCESS';
 export const REGION_CODE_FAILURE = 'map/REGION_CODE_FAILURE';
 
-const regionCodeAPI = (data) => {
-  return axios.get('//dapi.kakao.com/v2/local/geo/coord2regioncode.json', {
-    params: {
-      x: data.x,
-      y: data.y,
-    },
-    headers: {
-      Authorization: 'KakaoAK 3ce071c14606ca34fe9549f7856c90bb',
-    },
-  });
+const regionCodeAPI = ({ x, y }) => {
+  const params = { x, y };
+  const headers = { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_TOKEN}` };
+  return axios.get(KAKAO_MAP_URL, { params, headers });
 };
 
 function* regionCode(action) {

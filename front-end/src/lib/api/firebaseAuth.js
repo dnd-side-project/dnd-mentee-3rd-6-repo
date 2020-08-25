@@ -1,9 +1,12 @@
 import * as firebase from 'firebase/app';
+import dotenv from 'dotenv';
 import 'firebase/auth';
+
+dotenv.config();
 
 // Initialize Firebase
 firebase.initializeApp({
-  apiKey: 'AIzaSyA1eK-MhYEIZRJmjJOmBh2G_pvAPtEn40M',
+  apiKey: `${process.env.REACT_APP_FIREBASE_API_KEY}`,
   authDomain: 'neighbor-cats.firebaseapp.com',
   databaseURL: 'https://neighbor-cats.firebaseio.com',
   projectId: 'neighbor-cats',

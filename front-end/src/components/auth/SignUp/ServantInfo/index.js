@@ -12,10 +12,9 @@ const ServantInfoForm = ({
   nickName,
   onChangeNickName,
   onSearchHometown,
-  onSubmitSignUp,
   addressDepth1,
+  onSubmitSignUp,
 }) => {
-  // console.log(addressDepth1);
   return (
     <>
       <Form onFinish={onSubmitSignUp} encType="multipart/form-data">
@@ -66,8 +65,8 @@ ServantInfoForm.prototype = {
   onChangeNickName: PropTypes.func.isRequired,
   onChangeHometown: PropTypes.func.isRequired,
   onSearchHometown: PropTypes.func.isRequired,
-  onSubmitSignUp: PropTypes.func.isRequired,
   addressDepth1: PropTypes.string.isRequired,
+  onSubmitSignUp: PropTypes.func.isRequired,
 };
 
 export default React.memo(ServantInfoForm);
