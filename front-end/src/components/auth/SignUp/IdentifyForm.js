@@ -58,6 +58,7 @@ const IdentifyForm = ({
                 required
               />
             </div>
+            <div id="recaptcha-container" />
           </InputWrapper>
           {identifyDone && (
             <InputWrapper>
@@ -86,7 +87,6 @@ const IdentifyForm = ({
           disabled={!(authNumber.toString().length === 6 && username)}
         />
       </Form>
-      <div id="recaptcha-container" />
     </>
   );
 };

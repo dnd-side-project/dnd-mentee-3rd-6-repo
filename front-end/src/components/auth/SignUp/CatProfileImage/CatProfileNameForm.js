@@ -12,11 +12,11 @@ const CatProfileNameForm = ({
   onChangeCatName,
   catFeatures,
   onChangeCatFeatures,
-  onSubmitImage,
   previewPath,
+  onSubmitSignUp,
 }) => {
   return (
-    <Form onFinish={onSubmitImage}>
+    <Form onFinish={onSubmitSignUp}>
       <Margin top="94px" bottom="71px">
         <ProfileHeader>
           <strong>냥이의 이름</strong>이 궁금해요
@@ -63,6 +63,7 @@ CatProfileNameForm.prototype = {
   catFeatures: PropTypes.string.isRequired,
   onChangeCatFeatures: PropTypes.func.isRequired,
   previewPath: PropTypes.string.isRequired,
+  onSubmitSignUp: PropTypes.func.isRequired,
 };
 
 export default CatProfileNameForm;

@@ -1,15 +1,18 @@
 /* global kakao */
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import dotenv from 'dotenv';
 
 import ServantInfoAddressForm from '../../components/auth/SignUp/ServantInfo/ServantInfoAddressForm';
-import { SIGN_UP_4_REQUEST } from '../../modules/user';
 import {
   REGION_CODE_REQUEST,
   CURRENT_GPS_REQUEST,
   CURRENT_GPS_SUCCESS,
   CURRENT_GPS_FAILURE,
 } from '../../modules/map';
+import { SIGN_UP_8, PREV_PAGE } from '../../modules/auth';
+
+dotenv.config();
 
 const ServantInfoAddressFormContainer = () => {
   const [myMap, setMyMap] = useState(null);
@@ -20,22 +23,13 @@ const ServantInfoAddressFormContainer = () => {
   const { geoLat, geoLon } = currentLocation;
   const dispatch = useDispatch();
 
-  /* 페이지 8 - 행정동 입력 */
-  const onSubmitHometownClose = useCallback(() => {
-    dispatch({
-      type: SIGN_UP_4_REQUEST,
-      data: regionCodeData,
-    });
-  }, [dispatch, regionCodeData]);
-
   /* 지도 생성 */
   useEffect(() => {
     const script = document.createElement('script');
     if (myMap === null) {
       console.log('1. 지도 생성');
       script.type = 'text/javascript';
-      script.src =
-        '//dapi.kakao.com/v2/maps/sdk.js?appkey=6143843e556646f143fe9ceaa635a513&libraries=services&autoload=false';
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_JS_APP_KEY}&libraries=services&autoload=false`;
       document.head.appendChild(script);
 
       script.onload = () => {
@@ -119,11 +113,6 @@ const ServantInfoAddressFormContainer = () => {
       });
       marker.setMap(myMap);
 
-      // 마커 포지션 지도의 중심으로 옮기기
-      const center = myMap.getCenter();
-      myMap.relayout();
-      myMap.setCenter(center);
-
       // 지도 중심을 부드럽게 이동시킵니다
       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
       myMap.panTo(locPosition);
@@ -146,11 +135,22 @@ const ServantInfoAddressFormContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGPSDone]);
 
+  /* 페이지 8 - 행정동 입력 */
+  const onSubmitSignUp = useCallback(() => {
+    dispatch({
+      type: SIGN_UP_8,
+      data: regionCodeData,
+    });
+    return dispatch({
+      type: PREV_PAGE,
+    });
+  }, [dispatch, regionCodeData]);
+
   return (
     <ServantInfoAddressForm
-      onSubmitHometownClose={onSubmitHometownClose}
-      addressDepth={regionCodeData}
+      regionCodeData={regionCodeData}
       currentGPSLoading={currentGPSLoading}
+      onSubmitSignUp={onSubmitSignUp}
     />
   );
 };
