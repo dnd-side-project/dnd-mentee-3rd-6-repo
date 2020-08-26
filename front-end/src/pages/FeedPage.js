@@ -1,7 +1,13 @@
 import React from 'react';
+import AppLayoutContainer from '../containers/common/AppLayoutContainer';
+import FeedContainer from '../containers/Feed/FeedContainer';
 
 const FeedPage = () => {
-  return <h1>여기는 피드 입니다.</h1>;
+  return (
+    <AppLayoutContainer title="피드">
+      <FeedContainer />
+    </AppLayoutContainer>
+  );
 };
 
 export default FeedPage;

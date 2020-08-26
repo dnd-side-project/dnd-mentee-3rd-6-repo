@@ -149,6 +149,8 @@ export const Global = createGlobalStyle`
   .slick-trak {
     width: 218px;
     height: 270px;
+    touch-action: pan-x;
+
 
     div {
       margin: 0 auto;

@@ -16,14 +16,14 @@ const EmailPasswordForm = ({
   onChangePasswordCheck,
   passwordError,
   emailInputRef,
-  emailValidData,
+  EmailValidData,
   onFocusCheckEmail,
-  nextPage3,
+  onSubmitSignUp,
 }) => {
   const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
-      <Form onFinish={nextPage3}>
+      <Form onFinish={onSubmitSignUp}>
         <Margin top="105px">
           <InputWrapper>
             <div>
@@ -38,7 +38,7 @@ const EmailPasswordForm = ({
                 ref={emailInputRef}
                 required
               />
-              {emailValidData ? (
+              {EmailValidData ? (
                 <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
               ) : emailRule.test(email) ? (
                 <CleanMessage>올바른 이메일 형식입니다.</CleanMessage>
@@ -82,7 +82,7 @@ const EmailPasswordForm = ({
         <BottomCol
           buttonType="submit"
           buttonText="다음으로"
-          disabled={!(passwordCheck && !emailValidData && !passwordError)}
+          disabled={!(passwordCheck && !EmailValidData && !passwordError)}
         />
       </Form>
     </>
@@ -99,9 +99,10 @@ EmailPasswordForm.prototype = {
   passwordError: PropTypes.bool.isRequired,
   emailInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   emailNone: PropTypes.bool.isRequired,
+  EmailValidData: PropTypes.bool.isRequired,
   emailValid: PropTypes.bool.isRequired,
   onFocusCheckEmail: PropTypes.func.isRequired,
-  nextPage3: PropTypes.func.isRequired,
+  onSubmitSignUp: PropTypes.func.isRequired,
 };
 
 export default React.memo(EmailPasswordForm);

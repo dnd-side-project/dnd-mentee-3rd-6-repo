@@ -7,9 +7,9 @@ import { ImageBox, Wrapper, Title, SubTitle, Global, DotsIndicator } from './sty
 import BottomCol from '../../../common/BottomCol';
 import Margin from '../../../common/Margin';
 
-const IsServantForm = ({ username, isServant, setIsServant, nextPage4 }) => {
+const IsServantForm = ({ username, isServant, setIsServant, onSubmitSignUp }) => {
   return (
-    <Form onFinish={nextPage4}>
+    <Form onFinish={onSubmitSignUp}>
       <Margin top="92px" bottom="35px">
         <Global />
         <Wrapper>
@@ -51,7 +51,7 @@ IsServantForm.prototype = {
   username: PropTpyes.string.isRequired,
   isServant: PropTpyes.bool.isRequired,
   setIsServant: PropTpyes.func.isRequired,
-  nextPage4: PropTpyes.func.isRequired,
+  onSubmitSignUp: PropTpyes.func.isRequired,
 };
 
 export default IsServantForm;

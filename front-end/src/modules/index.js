@@ -2,19 +2,22 @@ import { combineReducers } from 'redux';
 import { all, fork } from 'redux-saga/effects';
 import axios from 'axios';
 
-import user, { userSaga, initialSate } from './user';
-import pageNumber from './pageNumber';
+import auth, { authSaga } from './auth';
+import user, { userSaga } from './user';
+import map, { mapSaga } from './map';
+import goToPage, { goToPageSaga } from './goToPage';
 
 axios.defaults.baseURL = 'http://15.164.158.155/api';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export function* rootSaga() {
-  yield all([fork(userSaga)]);
+  yield all([fork(authSaga), fork(mapSaga), fork(userSaga), fork(goToPageSaga)]);
 }
 
 const rootReducer = combineReducers({
+  auth,
+  map,
   user,
-  pageNumber,
+  goToPage,
 });
 
 export default rootReducer;

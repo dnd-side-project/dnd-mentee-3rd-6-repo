@@ -2,38 +2,35 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import AuthTemplate from '../components/auth/AuthTemplate';
-import SignUpContainer from '../containers/auth/SignUpContainer';
-import CatProfileImageContainer from '../containers/auth/CatProfileImageContainer';
-import ServantInfoContainer from '../containers/auth/ServantInfoContainer';
+import IdentifyFormContainer from '../containers/auth/IdentifyFormContainer';
+import EmailPasswordFormContainer from '../containers/auth/EmailPasswordFormContainer';
+import IsServantContainer from '../containers/auth/IsServantContainer';
+import CatProfileImageFormContainer from '../containers/auth/CatProfileImageFormContainer';
+import CatProfileNameFormContainer from '../containers/auth/CatProfileNameFormContainer';
+import CatProfileEnrollFormContainer from '../containers/auth/CatProfileEnrollFormContainer';
+import ServantInfoFormContainer from '../containers/auth/ServantInfoFormContainer';
 import ServantInfoAddressFormContainer from '../containers/auth/ServantInfoAddressFormContainer';
 
 const RegisterPage = () => {
-  const { page } = useSelector((state) => state.pageNumber);
-  return (
-    <AuthTemplate
-      title={
-        page < 3
-          ? '회원가입'
-          : page === 6
-          ? '냥이 정보 등록'
-          : page === 7
-          ? '집사정보 등록'
-          : page === 8
-          ? '우리 동네 인증'
-          : null
-      }
-    >
-      {page < 4 ? (
-        <SignUpContainer />
-      ) : page < 7 ? (
-        <CatProfileImageContainer />
-      ) : page === 7 ? (
-        <ServantInfoContainer />
-      ) : page === 8 ? (
-        <ServantInfoAddressFormContainer />
-      ) : null}
-    </AuthTemplate>
-  );
+  const { pageIndex } = useSelector((state) => state.auth);
+  const titles = ['회원가입', '회원가입', null, null, null, null, '집사 정보 등록', null];
+
+  const stepContents = [
+    IdentifyFormContainer,
+    EmailPasswordFormContainer,
+    IsServantContainer,
+    CatProfileImageFormContainer,
+    CatProfileNameFormContainer,
+    CatProfileEnrollFormContainer,
+    ServantInfoFormContainer,
+    ServantInfoAddressFormContainer,
+  ];
+
+  const currentStepContent = () => {
+    const ComponentName = stepContents[pageIndex - 1];
+    return <ComponentName />;
+  };
+  return <AuthTemplate title={titles[pageIndex - 1]}>{currentStepContent()}</AuthTemplate>;
 };
 
 export default RegisterPage;

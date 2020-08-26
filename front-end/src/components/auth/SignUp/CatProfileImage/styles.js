@@ -1,5 +1,21 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import { pallete } from '../../../../lib/style/pallete';
+
+export const ScrollStop = createGlobalStyle`
+${({ selectCheck }) => {
+  return selectCheck
+    ? css`
+        body {
+          overflow: hidden;
+        }
+      `
+    : css`
+        body {
+          overflow: scroll;
+        }
+      `;
+}}
+`;
 
 export const PrevImageBox = styled.div`
   display: flex;
@@ -84,22 +100,117 @@ export const Imagebutton = styled.button`
 
 export const EnrollImageBox = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
 
   margin-bottom: 34px;
 
-  width: 120px;
-  height: 120px;
-  background: ${pallete.gray[2]};
-  border-radius: 50%;
+  span {
+    width: 120px;
+    height: 120px;
+    background: ${pallete.gray[2]};
+    border-radius: 50%;
+    overflow: hidden;
 
-  overflow: hidden;
-
-  img {
-    max-width: 100%;
-    height: auto;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   }
+`;
+
+export const CatKindModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0 auto;
+
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+
+  .modal-wrapper {
+    position: relative;
+    width: 288px;
+    height: 582px;
+
+    background: ${pallete.white};
+    border-radius: 14px;
+    overflow: auto;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      height: 530px;
+      overflow-y: scroll;
+
+      li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 19px;
+        text-align: center;
+
+        color: ${pallete.gray[6]};
+      }
+    }
+    .modal-btn {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      margin: 0 auto;
+      width: 288px;
+      height: 52px;
+
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 19px;
+      text-align: center;
+
+      color: ${pallete.orange};
+      background: ${pallete.white};
+
+      outline: none;
+      border: none;
+      border-top: 1px solid ${pallete.gray[3]};
+    }
+  }
+`;
+
+export const CheckButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 254px;
+  height: 45px;
+  background: ${pallete.white};
+  outline: none;
+  border: none;
+
+  cursor: pointer;
+  ${({ catKindCheck, checkId }) => {
+    return catKindCheck === checkId
+      ? css`
+          background: ${pallete.orange};
+        `
+      : css`
+          background: ${pallete.white};
+        `;
+  }}
 `;
 
 const ProfileImageWrapper = styled.div`

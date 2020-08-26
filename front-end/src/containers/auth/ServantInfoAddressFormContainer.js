@@ -1,49 +1,39 @@
 /* global kakao */
 import React, { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import dotenv from 'dotenv';
 
 import ServantInfoAddressForm from '../../components/auth/SignUp/ServantInfo/ServantInfoAddressForm';
+import {
+  REGION_CODE_REQUEST,
+  CURRENT_GPS_REQUEST,
+  CURRENT_GPS_SUCCESS,
+  CURRENT_GPS_FAILURE,
+} from '../../modules/map';
+import { SIGN_UP_8, PREV_PAGE } from '../../modules/auth';
+
+dotenv.config();
 
 const ServantInfoAddressFormContainer = () => {
-  const [hometown, setHometown] = useState('');
   const [myMap, setMyMap] = useState(null);
-  const [geoLat, setGeoLat] = useState(null);
-  const [geoLon, setGeoLon] = useState(null);
 
-  // 좌표를 가져오기 성공 했을 때
-  const handleGeoSucces = (position) => {
-    const { latitude } = position.coords;
-    const { longitude } = position.coords;
-    setGeoLat(latitude);
-    setGeoLon(longitude);
-  };
-
-  // 좌표를 가져오기 실패 했을 때
-  const handleGeoError = () => {
-    alert('GPS값을 가져올 수 없습니다.');
-  };
-
-  // 좌표를 호출하는 함수
-  const askForCoords = useCallback(() => {
-    if (navigator.geolocation) {
-      console.log('1. gps 값 가져오기');
-      navigator.geolocation.getCurrentPosition(handleGeoSucces, handleGeoError);
-    }
-  }, []);
+  const { regionCodeData, currentLocation, currentGPSLoading, currentGPSDone } = useSelector(
+    (state) => state.map,
+  );
+  const { geoLat, geoLon } = currentLocation;
+  const dispatch = useDispatch();
 
   /* 지도 생성 */
   useEffect(() => {
+    const script = document.createElement('script');
     if (myMap === null) {
-      const script = document.createElement('script');
-      console.log('2. 지도 생성');
+      console.log('1. 지도 생성');
       script.type = 'text/javascript';
-      script.src =
-        'http://dapi.kakao.com/v2/maps/sdk.js?appkey=6143843e556646f143fe9ceaa635a513&libraries=services&autoload=false';
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_JS_APP_KEY}&libraries=services&autoload=false`;
       document.head.appendChild(script);
 
       script.onload = () => {
         kakao.maps.load(() => {
-          askForCoords();
           const mapContainer = document.getElementById('map'); // 지도를 표시할 div
           const options = {
             center: new kakao.maps.LatLng(33.450701, 126.570667),
@@ -56,12 +46,53 @@ const ServantInfoAddressFormContainer = () => {
         });
       };
     }
-  }, [askForCoords, geoLat, geoLon, myMap]);
+    return () => {
+      document.head.removeChild(script);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* 현재 위치 가져오기 */
+  useEffect(() => {
+    if (navigator.geolocation) {
+      dispatch({
+        type: CURRENT_GPS_REQUEST,
+      });
+      // GPS를 지원하면
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude } = position.coords;
+          const { longitude } = position.coords;
+          console.log('2. GPS 가져오기');
+          dispatch({
+            type: CURRENT_GPS_SUCCESS,
+            data: {
+              geoLat: latitude,
+              geoLon: longitude,
+            },
+          });
+        },
+        (error) => {
+          console.error(error);
+          dispatch({
+            type: CURRENT_GPS_FAILURE,
+            error,
+          });
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 0,
+          timeout: Infinity,
+        },
+      );
+    } else {
+      alert('GPS를 지원하지 않습니다');
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (myMap !== null && geoLat && geoLon) {
       console.log('3. 마커 등록');
-      console.log(geoLat, geoLon);
 
       // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
       const locPosition = new kakao.maps.LatLng(geoLat, geoLon);
@@ -82,65 +113,46 @@ const ServantInfoAddressFormContainer = () => {
       });
       marker.setMap(myMap);
 
-      // 마커 포지션 지도의 중심으로 옮기기
-      const center = myMap.getCenter();
-      myMap.relayout();
-      myMap.setCenter(center);
-
       // 지도 중심을 부드럽게 이동시킵니다
       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
       myMap.panTo(locPosition);
     }
   }, [geoLat, geoLon, myMap]);
 
+  /* 행정동 찾기 */
   useEffect(() => {
-    if (myMap !== null && geoLat && geoLon) {
+    if (currentGPSDone) {
       console.log('4. 행정동 찾기');
-      // 주소-좌표 변환 객체를 생성합니다
-      const geocoder = new kakao.maps.services.Geocoder();
-
-      const searchAddrFromCoords = (coords, callback) => {
-        // 좌표로 행정동 주소 정보를 요청합니다
-        geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
-      };
-
-      // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
-      const displayCenterInfo = (result, status) => {
-        if (status === kakao.maps.services.Status.OK) {
-          for (let i = 0; i < result.length; i++) {
-            // 행정동의 region_type 값은 'H' 이므로
-            if (result[i].region_type === 'H') {
-              setHometown(result[i].address_name);
-              break;
-            }
-          }
-        } else {
-          setHometown('행정동을 찾을 수 없습니다.');
-        }
-      };
-
-      // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-      searchAddrFromCoords(myMap.getCenter(), displayCenterInfo);
-
-      // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
-      kakao.maps.event.addListener(myMap, 'idle', () => {
-        searchAddrFromCoords(myMap.getCenter(), displayCenterInfo);
+      console.log(geoLat, geoLon);
+      dispatch({
+        type: REGION_CODE_REQUEST,
+        data: {
+          x: geoLon,
+          y: geoLat,
+        },
       });
     }
-  }, [geoLat, geoLon, myMap]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGPSDone]);
 
-  const onSubmitHometownClose = useCallback(() => {
-    console.log('onSubmitHometownClose');
-  }, []);
+  /* 페이지 8 - 행정동 입력 */
+  const onSubmitSignUp = useCallback(() => {
+    dispatch({
+      type: SIGN_UP_8,
+      data: regionCodeData,
+    });
+    return dispatch({
+      type: PREV_PAGE,
+    });
+  }, [dispatch, regionCodeData]);
 
   return (
-    <ServantInfoAddressForm hometown={hometown} onSubmitHometownClose={onSubmitHometownClose} />
+    <ServantInfoAddressForm
+      regionCodeData={regionCodeData}
+      currentGPSLoading={currentGPSLoading}
+      onSubmitSignUp={onSubmitSignUp}
+    />
   );
-};
-
-ServantInfoAddressFormContainer.prototype = {
-  hometown: PropTypes.string.isRequired,
-  onSubmitHometownClose: PropTypes.func.isRequired,
 };
 
 export default ServantInfoAddressFormContainer;
