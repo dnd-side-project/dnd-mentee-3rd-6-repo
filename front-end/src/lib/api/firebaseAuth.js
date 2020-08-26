@@ -1,8 +1,5 @@
 import * as firebase from 'firebase/app';
-import dotenv from 'dotenv';
 import 'firebase/auth';
-
-dotenv.config();
 
 // Initialize Firebase
 firebase.initializeApp({

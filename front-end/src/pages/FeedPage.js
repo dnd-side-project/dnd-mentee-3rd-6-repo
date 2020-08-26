@@ -1,12 +1,12 @@
 import React from 'react';
-import AppLayoutContainer from '../containers/common/AppLayoutContainer';
 import FeedContainer from '../containers/Feed/FeedContainer';
+import Applayout from '../components/common/AppLayout';
 
 const FeedPage = () => {
   return (
-    <AppLayoutContainer title="피드">
+    <Applayout title="피드">
       <FeedContainer />
-    </AppLayoutContainer>
+    </Applayout>
   );
 };
 
