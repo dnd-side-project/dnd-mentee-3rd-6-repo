@@ -1,12 +1,11 @@
 import React from 'react';
-import FeedHead from '../../components/Feed/FeedHead';
-import FeedCard from '../../components/Feed/FeedCard';
+
+import Feed from '../../components/Feed/index';
 
 const FeedContainer = () => {
   return (
     <>
-      <FeedHead />
-      <FeedCard />
+      <Feed />
     </>
   );
 };

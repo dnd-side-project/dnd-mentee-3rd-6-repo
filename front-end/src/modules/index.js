@@ -5,19 +5,17 @@ import axios from 'axios';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import map, { mapSaga } from './map';
-import goToPage, { goToPageSaga } from './goToPage';
 
-axios.defaults.baseURL = 'http://15.164.158.155/api';
+axios.defaults.baseURL = `${process.env.REACT_APP_BASE_URL}`;
 
 export function* rootSaga() {
-  yield all([fork(authSaga), fork(mapSaga), fork(userSaga), fork(goToPageSaga)]);
+  yield all([fork(authSaga), fork(mapSaga), fork(userSaga)]);
 }
 
 const rootReducer = combineReducers({
   auth,
   map,
   user,
-  goToPage,
 });
 
 export default rootReducer;
