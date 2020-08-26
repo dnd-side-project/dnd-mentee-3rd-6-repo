@@ -43,6 +43,7 @@ public static List<FieldDescriptor> getMeResDesc() {
   fields.add(fieldWithPath("cats[].birthday").type(JsonFieldType.STRING).description("Cat 생일"));
   fields.add(fieldWithPath("cats[].neutralized").type(JsonFieldType.STRING).description("Cat 품종"));
   fields.add(fieldWithPath("cats[].profileImgUrl").type(JsonFieldType.VARIES).description("Cat 프로필 이미지 URL"));
+  fields.add(fieldWithPath("cats[].weight").type(JsonFieldType.VARIES).description("Cat 몸무게"));
   return fields;
 }
 
@@ -64,6 +65,7 @@ public static List<ParameterDescriptor> getSignUpReqDesc() {
   fields.add(parameterWithName("catGender").description("Cat 성별"));
   fields.add(parameterWithName("catBirthday").description("Cat 생일"));
   fields.add(parameterWithName("catNeutralized").description("Cat 중성화했는지"));
+  fields.add(parameterWithName("catWeight").description("고양이 무게"));
   return fields;
 }
 
@@ -86,6 +88,7 @@ public static List<FieldDescriptor> getSignUpResDesc() {
   fields.add(fieldWithPath("catNeutralized").type(JsonFieldType.VARIES).description("Cat 중성화했는지"));
   fields.add(fieldWithPath("accessToken").type(JsonFieldType.STRING).description("인증 토큰"));
   fields.add(fieldWithPath("catProfileImgUrl").type(JsonFieldType.STRING).description("고양이 프로필 이미지 URL"));
+  fields.add(fieldWithPath("catWeight").type(JsonFieldType.NUMBER).description("고양이 무게"));
   return fields;
 }
 }

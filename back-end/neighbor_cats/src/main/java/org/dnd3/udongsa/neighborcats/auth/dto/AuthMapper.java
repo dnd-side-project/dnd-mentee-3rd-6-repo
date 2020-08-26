@@ -23,8 +23,24 @@ public class AuthMapper {
                                     .catBirthday(cat.getBirthday())
                                     .catNeutralized(cat.getNeutralized())
                                     .catProfileImgUrl(catProfileImgUrl)
+                                    .catWeight(cat.getWeight())
                                     .accessToken(accessToken).build();
     return res;
   }
+
+public static SignUpResDto map(Servant servant, String accessToken) {
+  SignUpResDto res = SignUpResDto.builder()
+  .servantId(servant.getId())
+  .phoneNumber(servant.getPhoneNumber())
+  .name(servant.getName())
+  .email(servant.getEmail())
+  .password(servant.getPassword())
+  .isServant(servant.getIsServant())
+  .nickName(servant.getNickname())
+  .addressName(servant.getAddress().getName())
+  .accessToken(accessToken)
+  .build();
+return res;
+}
   
 }
