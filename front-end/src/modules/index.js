@@ -5,17 +5,19 @@ import axios from 'axios';
 import auth, { authSaga } from './auth';
 import user, { userSaga } from './user';
 import map, { mapSaga } from './map';
+import feed, { feedSaga } from './feed';
 
 axios.defaults.baseURL = `${process.env.REACT_APP_BASE_URL}`;
 
 export function* rootSaga() {
-  yield all([fork(authSaga), fork(mapSaga), fork(userSaga)]);
+  yield all([fork(authSaga), fork(mapSaga), fork(userSaga), fork(feedSaga)]);
 }
 
 const rootReducer = combineReducers({
   auth,
   map,
   user,
+  feed,
 });
 
 export default rootReducer;

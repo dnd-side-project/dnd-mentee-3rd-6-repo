@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
@@ -11,6 +12,7 @@ import NotificationIcon from '../../lib/style/menuIcon/NotificationIcon';
 import PostsIcon from '../../lib/style/menuIcon/PostsIcon';
 import QnAIcon from '../../lib/style/menuIcon/QnAIcon';
 import MessageIcon from '../../lib/style/menuIcon/MessageIcon';
+import BackButton from './BackButton';
 
 const TopCol = styled(Col)`
   display: flex;
@@ -27,7 +29,7 @@ const TopCol = styled(Col)`
   }
 
   span {
-    width: 25px;
+    width: 20px;
   }
 `;
 
@@ -71,11 +73,13 @@ const Menu = styled.ul`
 `;
 
 const Applayout = ({ children, title, location: { pathname } }) => {
+  const { pageIndex } = useSelector((state) => state.feed);
+
   return (
     <div>
       <Row gutter={[0, 0]}>
         <TopCol xs={24}>
-          <span className="opacity-block" />
+          {pageIndex > 3 ? <BackButton page={2} /> : <span />}
           <h1>{title}</h1>
           <MessageIcon />
         </TopCol>
