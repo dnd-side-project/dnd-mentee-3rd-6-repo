@@ -1,7 +1,7 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
-export const FeedWrapper = styled.section`
+export const Wrapper = styled.main`
   position: relative;
   width: 100vw;
   height: 645px;
@@ -10,7 +10,7 @@ export const FeedWrapper = styled.section`
 
   transform: translateX(-16px);
 
-  .feed-section {
+  .feed-list {
     position: absolute;
     top: 0;
 
@@ -28,15 +28,13 @@ export const FeedWrapper = styled.section`
   }
 `;
 
-export const FeedHeader = styled.header`
+export const Header = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
 
   width: 100%;
-  height: 122px;
-
-  border-bottom: 1px solid ${pallete.gray[3]};
+  /* height: 122px; */
 
   .feed-head__title {
     display: flex;
@@ -54,35 +52,6 @@ export const FeedHeader = styled.header`
       background: ${pallete.white};
 
       border-bottom: 1px solid ${pallete.gray[4]};
-
-      a {
-        display: flex;
-        justify-content: center;
-
-        color: ${pallete.gray[4]};
-        width: 100%;
-
-        button {
-          border: none;
-          outline: none;
-          padding: 0;
-          margin-bottom: 14px;
-
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 19px;
-
-          background: ${pallete.white};
-        }
-
-        &.selected {
-          border-bottom: 2px solid ${pallete.gray[6]};
-          color: ${pallete.gray[6]};
-
-          transform: translateY(2px);
-        }
-      }
     }
   }
 
@@ -91,7 +60,9 @@ export const FeedHeader = styled.header`
     width: 100%;
     height: 56px;
 
-    margin-top: 16px;
+    padding-top: 16px;
+
+    background: ${pallete.gray[1]};
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -105,7 +76,7 @@ export const FeedHeader = styled.header`
 
     ul {
       position: absolute;
-      top: 0;
+      top: 14px;
       left: 0;
 
       width: auto;
@@ -117,11 +88,8 @@ export const FeedHeader = styled.header`
         margin-left: 9px;
 
         button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 71px;
           height: 28px;
+          min-width: 90px;
 
           border: none;
           outline: none;
@@ -151,31 +119,65 @@ export const FeedHeader = styled.header`
   }
 `;
 
-export const FeedMain = styled.main`
+export const HeaderButton = styled.button`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  padding: 0;
+  padding-bottom: 14px;
+
+  border: none;
+  outline: none;
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+
+  background: ${pallete.white};
+
+  ${({ value, titleIndex }) => {
+    return value === parseInt(titleIndex, 10)
+      ? css`
+          color: ${pallete.gray[6]};
+          border-bottom: 2px solid ${pallete.gray[5]};
+        `
+      : css`
+          color: ${pallete.gray[4]};
+        `;
+  }}
+`;
+
+export const CardList = styled.section`
+  margin-top: 21px;
+
   ul {
     display: flex;
     flex-direction: column;
     align-items: center;
 
     margin-top: 15px;
-
-    li {
-      width: 100%;
-      height: auto;
-      margin-top: 25px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-
-      &:last-child {
-        margin-bottom: 40px;
-      }
-    }
   }
 `;
 
-export const FeedCardTitle = styled.div`
+export const CardItem = styled.li`
+  list-style: none;
+
+  width: 100%;
+  height: auto;
+  margin-top: 25px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 40px;
+  }
+`;
+
+export const CardTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -224,7 +226,7 @@ export const FeedCardTitle = styled.div`
   }
 `;
 
-export const FeedCardImage = styled.div`
+export const CardImage = styled.div`
   position: relative;
   width: 100vw;
   height: 319px;
@@ -261,25 +263,25 @@ export const FeedCardImage = styled.div`
 
     z-index: 999;
   }
+`;
 
-  .feed-card__img-box {
-    width: 100vw;
+export const CardImageBox = styled.div`
+  width: 100vw;
+  height: 319px;
+
+  overflow: hidden;
+
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: auto;
     height: 319px;
-
-    overflow: hidden;
-
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      width: auto;
-      height: 319px;
-    }
   }
 `;
 
-export const FeedCardIcon = styled.div`
+export const CardIcon = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -311,7 +313,7 @@ export const FeedCardIcon = styled.div`
   }
 `;
 
-export const FeedCardContent = styled.div`
+export const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -323,40 +325,7 @@ export const FeedCardContent = styled.div`
     display: flex;
     justify-content: space-between;
 
-    p {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 19px;
-
-      width: 300px;
-
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-
-      color: ${pallete.gray[6]};
-    }
-
-    button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      height: 19px;
-      padding: 0;
-
-      border: none;
-      outline: none;
-
-      background: ${pallete.white};
-
-      font-style: normal;
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 19px;
-      color: ${pallete.gray[3]};
-    }
+    width: 100%;
   }
 
   .feed-card__content-column:last-child {
@@ -373,7 +342,82 @@ export const FeedCardContent = styled.div`
   }
 `;
 
-export const FeedCardSlickStyle = createGlobalStyle`
+export const CardContentText = styled.p`
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19px;
+
+  /* max-width: 85%;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; */
+
+  color: ${pallete.gray[6]};
+`;
+
+export const CardContentButton = styled.button`
+  ${({ length }) => {
+    if (length <= 22) {
+      return css`
+        display: none;
+      `;
+    }
+    return css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      height: 19px;
+      padding: 0;
+
+      border: none;
+      outline: none;
+
+      background: ${pallete.white};
+
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 19px;
+      color: ${pallete.gray[4]};
+    `;
+  }}
+`;
+
+export const CommentSection = styled.section`
+  position: relative;
+  width: 100vw;
+  height: 70vh;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  transform: translateX(-16px);
+
+  margin-top: 18px;
+
+  border: 1px solid red;
+
+  & > div {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  header {
+    height: 126px;
+    background: ${pallete.gray[1]};
+  }
+
+  dl {
+    height: 131px;
+    border-top: 1px solid ${pallete.gray[3]};
+  }
+`;
+
+export const FeedSlickStyle = createGlobalStyle`
   .slick-list {
     width: 375px;
     height: 319px;

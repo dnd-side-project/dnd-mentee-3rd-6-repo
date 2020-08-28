@@ -46,7 +46,7 @@ const AuthTemplate = ({ children, title }) => {
   return (
     <Row gutter={[0, 0]}>
       <TopCol xs={24}>
-        <BackButton />
+        <BackButton page={1} />
         <h1>{title}</h1>
         <span className="opacity-block" />
       </TopCol>

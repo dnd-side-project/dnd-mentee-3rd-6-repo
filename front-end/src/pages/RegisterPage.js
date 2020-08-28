@@ -30,6 +30,7 @@ const RegisterPage = () => {
     const ComponentName = stepContents[pageIndex - 1];
     return <ComponentName />;
   };
+
   return <AuthTemplate title={titles[pageIndex - 1]}>{currentStepContent()}</AuthTemplate>;
 };
 
