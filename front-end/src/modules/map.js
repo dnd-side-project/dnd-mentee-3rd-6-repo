@@ -1,9 +1,6 @@
 import { put, takeLatest, all, fork, call } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const initialSate = {
   regionCodeData: {

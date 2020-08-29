@@ -1,33 +1,38 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
-import { pallete } from '../../lib/style/pallete';
 import { PREV_PAGE, NOT_SERVANT_PREV_PAGE } from '../../modules/auth';
+import BackIcon from '../../lib/style/button/BackIcon';
+import { PREV_FEED_PAGE } from '../../modules/feed';
 
-const GoBackButton = styled(Button)`
+const GoBackButton = styled.button`
   display: flex;
+  justify-content: center;
   align-items: center;
-  width: 25px;
-  padding: 5px 0px;
+  width: 20px;
 
-  img {
-    color: ${pallete.gray[6]};
-  }
+  padding: 0;
+
+  border: none;
+  outline: none;
+  background: none;
 `;
 
-const BackButton = ({ history }) => {
+const BackButton = ({ history, page }) => {
+  // 회원가입 1, 피드 2, 글쓰기 3,
   const dispatch = useDispatch();
-  const { pageIndex, isServant } = useSelector((state) => state.auth);
+  const { pageIndex: registerIndex, isServant } = useSelector((state) => state.auth);
+  const { prevPageIndex: feedIndex } = useSelector((state) => state.feed);
 
-  const onGoBack = () => {
-    if (pageIndex <= 1) {
+  /* 회원가입 */
+  const onClickRegister = useCallback(() => {
+    if (registerIndex <= 1) {
       return history.goBack();
     }
-    if (!isServant && pageIndex === 7) {
+    if (!isServant && registerIndex === 7) {
       return dispatch({
         type: NOT_SERVANT_PREV_PAGE,
       });
@@ -35,11 +40,31 @@ const BackButton = ({ history }) => {
     dispatch({
       type: PREV_PAGE,
     });
-  };
+  }, [dispatch, history, isServant, registerIndex]);
+
+  /* 피드 */
+  const onClickFeed = useCallback(() => {
+    if (feedIndex) {
+      dispatch({
+        type: PREV_FEED_PAGE,
+        data: feedIndex,
+      });
+    }
+  }, [dispatch, feedIndex]);
+
+  /* 글쓰기 */
+  const onClickWrite = useCallback(() => {
+    return history.goBack('/feed');
+  }, [history]);
+
+  /* 모아주기 */
+  const stepButtons = [onClickRegister, onClickFeed, onClickWrite];
+  const currentStepButtons = () => stepButtons[page - 1];
+
   return (
     <>
-      <GoBackButton type="link" size="small" onClick={onGoBack}>
-        <img src="/images/button/back.svg" alt="뒤로가기" />
+      <GoBackButton type="button" onClick={currentStepButtons()}>
+        <BackIcon />
       </GoBackButton>
     </>
   );
@@ -47,6 +72,7 @@ const BackButton = ({ history }) => {
 
 BackButton.prototype = {
   history: PropTypes.object.isRequired,
+  page: PropTypes.number.isRequired,
 };
 
 export default withRouter(BackButton);

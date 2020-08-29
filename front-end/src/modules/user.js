@@ -140,7 +140,7 @@ const user = (state = initialSate, action) => {
         draft.logInError = null;
         break;
       case LOG_IN_SUCCESS:
-        draft.userInfo = action.data.accessToken;
+        draft.userInfo = action.data;
         draft.logInLoading = false;
         draft.logInDone = true;
         break;

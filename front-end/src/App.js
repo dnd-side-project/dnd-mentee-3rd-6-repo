@@ -8,8 +8,9 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import MyPage from './pages/MyPage';
 import NotificationPage from './pages/NotificationPage';
-import PostsPage from './pages/PostsPage';
+import QnAPage from './pages/QnAPage';
 import ChatPage from './pages/ChatPage';
+import WritePage from './pages/WritePage';
 
 const StatusBar = styled.div`
   width: 100vw;
@@ -26,12 +27,13 @@ const StatusBar = styled.div`
 function App() {
   return (
     <>
-      <StatusBar>상태 바(아아폰x 기준)</StatusBar>
+      {process.env.REACT_APP_ENV === 'development' && <StatusBar>상태 바(아아폰x 기준)</StatusBar>}
       <Route path="/" component={Home} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
-      <Route path="/feed" component={FeedPage} />
-      <Route path="/qna" component={PostsPage} />
+      <Route path="/feed" exact component={FeedPage} />
+      <Route path="/feed/write" component={WritePage} />
+      <Route path="/qna" component={QnAPage} />
       <Route path="/notification" component={NotificationPage} />
       <Route path="/mypage" component={MyPage} />
       <Route path="/chat" component={ChatPage} />

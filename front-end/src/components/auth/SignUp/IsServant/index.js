@@ -27,10 +27,10 @@ const IsServantForm = ({ username, isServant, setIsServant, onSubmitSignUp }) =>
             }}
           >
             <ImageBox choice={isServant}>
-              <img className="dot1-img" src="http://placekitten.com/200/300" alt="집사" />
+              <img className="dot1-img" src="/images/isServant/1.svg" alt="집사" />
             </ImageBox>
             <ImageBox choice={isServant}>
-              <img className="dot2-img" src="http://placekitten.com/g/200/300" alt="랜선집사" />
+              <img className="dot2-img" src="/images/isServant/2.svg" alt="랜선집사" />
             </ImageBox>
           </Slick>
           <SubTitle>
