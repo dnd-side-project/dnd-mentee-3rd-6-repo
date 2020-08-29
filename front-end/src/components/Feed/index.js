@@ -31,7 +31,7 @@ const Feed = ({
           <CardList>
             {contents.map((feed) => (
               <FeedCard
-                key={contents.id}
+                key={feed.id}
                 feed={feed}
                 currentSlide={currentSlide}
                 setCurrentSlide={setCurrentSlide}
@@ -48,18 +48,7 @@ const Feed = ({
 };
 
 Feed.prototype = {
-  contents: PropTypes.shape({
-    id: PropTypes.number,
-    content: PropTypes.string,
-    author: PropTypes.object,
-    images: PropTypes.arrayOf(PropTypes.object),
-    comments: PropTypes.arrayOf(PropTypes.object),
-    isLike: PropTypes.bool,
-    numberOfLikes: PropTypes.number,
-    numberOfComments: PropTypes.number,
-    createdDateTime: PropTypes.string,
-    timeDesc: PropTypes.string,
-  }).isRequired,
+  contents: PropTypes.arrayOf(PropTypes.object).isRequired,
   titleIndex: PropTypes.number.isRequired,
   onClickHometown: PropTypes.func.isRequired,
   onClickAll: PropTypes.func.isRequired,

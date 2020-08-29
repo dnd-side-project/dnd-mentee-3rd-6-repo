@@ -3,7 +3,7 @@ import axios from 'axios';
 import produce from 'immer';
 
 export const initialSate = {
-  pageIndex: 4,
+  pageIndex: 1,
   titleIndex: 1,
   prevPageIndex: null,
   Feeds: {
@@ -19,54 +19,53 @@ export const initialSate = {
         images: [
           {
             id: 1,
-            url:
-              'https://www.kfm.co.kr/files/blog/2020/01/17/dbbe22e49c74a5b784d09690a0350a4b161550.jpg',
+            url: 'https://cdn.pixabay.com/photo/2014/11/30/14/11/kitty-551554_1280.jpg',
           },
           {
             id: 2,
-            url:
-              'https://lh3.googleusercontent.com/proxy/zsQYGaAc08eFMWF8Fe6w2hXadtPzL_T-oF-RE9dCa4KDui_CsZJxycjE1yk8DtJc-OD_RYT058ZeupTkoS3pqZpMCehGLdA2sp8uAbPER3mSqv2crHjXmRcSBDt7PXxVM7sh16I92uZwCkXWPJ-OEqWX8_4JectOzAisC21pX5mOaGJ3TyXZjGJYo6_1-l0j6l7Xom9B39-83_nUzY4_1kczUo5GzdJpZnHGNYtShxCRVjoRUINSgLX0FDldLxHHp7FTnGRQVYVi8MyVMawxzbAKWrBhAQ',
+            url: 'https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg',
           },
         ],
         author: {
           id: 1,
           nickName: '연탄범벅 연탄이네',
-          profileImg:
-            'https://lh3.googleusercontent.com/proxy/hlCmM4voanQJbrBLr0xBWEOJRNHljQGPkzyCiEdQ1EXYadUvQJw2F2El7KukFLyQ5tG0sU0Gm6-9T4Dopns_FlHuEdaHZ6mLKLrbgzljU5sqvlvf-A',
+          profileImg: 'https://i.ytimg.com/vi/IMaRld3s0CY/maxresdefault.jpg',
           addressName: '분당구 정자 2동',
         },
         comments: [
           {
-            id: 1,
+            id: 2,
             content: '넘 귀여운거 아닌가요?!',
             numberOfLikes: 10,
+            isLike: false,
             numberOfReplies: 1,
             createdDateTime: '2020-01-02T21:23:00',
             timeDesc: '3시간 전',
             author: {
               id: 1,
               nickName: '연탄범벅 연탄이네',
-              profileImg:
-                'https://image.dongascience.com/Photo/2020/01/910608e7413ea2ce900a0d570ab9e391.jpg',
+              profileImg: 'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
               addressName: '수지구 풍덕천동',
             },
-            replies: {
-              id: 1,
-              content: '까미랑 보리랑',
-              numberOfLikes: 3,
-              createdDateTime: '2020-01-02T21:23:00',
-              timeDesc: '5시간 전',
-              author: {
-                id: 1,
-                nickName: '연탄범벅 연탄이네',
-                profileImg:
-                  'https://lh3.googleusercontent.com/proxy/IEKBE5r3EL4oye1b_kksAlhf3btAv1syUwJmz12suBVoW8vJBJ38b3ngV8g1BNcGcPvY6BMRdDJPw_hpeLAGjQpbSdNTV1EpUTJAZG76HQ8Jcajpwb1RfPDKUtxYbgHfKcQqo-uGlcsI4yEBAc8xQm8KweCxE6B9vSeMvL5s6yld3-AFKQs-sswQzuLBpylzP5r2QTH9h0LsiZelg7GvXkaY_RRL4MDtctzVW7gbKRMydpiT7fAjhtQIOeTGfxf6tcAYEynQ2Z16UuRxBDYEclPWd_kujwjo9-ZJp-E0135_SqHhYj9mH0Fv71Nljmhm4nnlpllc9V-g5q_YSii-xUrdGZe55nk19tha',
-                addressName: '수지구 풍덕천동',
+            replies: [
+              {
+                id: 3,
+                content: '까미랑 보리랑',
+                numberOfLikes: 3,
+                isLike: false,
+                createdDateTime: '2020-01-02T21:23:00',
+                timeDesc: '5시간 전',
+                author: {
+                  id: 1,
+                  nickName: '연탄범벅 연탄이네',
+                  profileImg: 'https://cdn.pixabay.com/photo/2016/01/20/13/05/cat-1151519_1280.jpg',
+                  addressName: '수지구 풍덕천동',
+                },
               },
-            },
+            ],
           },
         ],
-        isLike: false,
+        isLike: true,
         numberOfLikes: 15,
         numberOfComments: 6,
         createdDateTime: '2020-01-02T21:23:00',
@@ -74,13 +73,14 @@ export const initialSate = {
       },
     ],
   },
-  hometownPageLoading: false, // 우리동네 페이지 불러오기
+  feedId: null,
+  hometownPageLoading: false, // 우리동네 페이지 불러오기 1
   hometownPageDone: false,
   hometownPageError: null,
-  allPageLoading: false, // 전체 페이지 불러오기
+  allPageLoading: false, // 전체 페이지 불러오기 2
   allPageDone: false,
   allPageError: null,
-  myFriendLoading: false, // 내 친구 페이지 불러오기
+  myFriendLoading: false, // 내 친구 페이지 불러오기 3
   myFriendDone: false,
   myFriendError: null,
   likeFeedLoading: false, // 좋아요
@@ -90,6 +90,8 @@ export const initialSate = {
   unLikeFeedDone: false,
   unLikeFeedError: null,
 };
+
+const headers = (token) => ({ Authorization: `${token}` });
 
 export const HOMETOWN_PAGE_REQUEST = 'feed/HOMETOWN_PAGE_REQUEST';
 export const HOMETOWN_PAGE_SUCCESS = 'feed/HOMETOWN_PAGE_SUCCESS';
@@ -111,6 +113,22 @@ export const UNLIKE_FEED_REQUEST = 'feed/UNLIKE_FEED_REQUEST';
 export const UNLIKE_FEED_SUCCESS = 'feed/UNLIKE_FEED_SUCCESS';
 export const UNLIKE_FEED_FAILURE = 'feed/UNLIKE_FEED_FAILURE';
 
+export const LIKE_COMMENT_REQUEST = 'feed/LIKE_COMMENT_REQUEST';
+export const LIKE_COMMENT_SUCCESS = 'feed/LIKE_COMMENT_SUCCESS';
+export const LIKE_COMMENT_FAILURE = 'feed/LIKE_COMMENT_FAILURE';
+
+export const UNLIKE_COMMENT_REQUEST = 'feed/UNLIKE_COMMENT_REQUEST';
+export const UNLIKE_COMMENT_SUCCESS = 'feed/UNLIKE_COMMENT_SUCCESS';
+export const UNLIKE_COMMENT_FAILURE = 'feed/UNLIKE_COMMENT_FAILURE';
+
+export const LIKE_REPLE_REQUEST = 'feed/LIKE_REPLE_REQUEST';
+export const LIKE_REPLE_SUCCESS = 'feed/LIKE_REPLE_SUCCESS';
+export const LIKE_REPLE_FAILURE = 'feed/LIKE_REPLE_FAILURE';
+
+export const UNLIKE_REPLE_REQUEST = 'feed/UNLIKE_REPLE_REQUEST';
+export const UNLIKE_REPLE_SUCCESS = 'feed/UNLIKE_REPLE_SUCCESS';
+export const UNLIKE_REPLE_FAILURE = 'feed/UNLIKE_REPLE_FAILURE';
+
 export const GO_BACK_LOGIN_PAGE = 'GO_BACK_LOGIN_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 export const COMMENT_PAGE = 'feed/COMMENT_PAGE';
@@ -120,8 +138,9 @@ function* goBackLoginPage() {
   history.push('/');
 }
 
-const hometownPageAPI = (data) => {
-  return axios.get();
+const hometownPageAPI = ({ accessToken }) => {
+  const params = {};
+  return axios.get('', { params, headers: headers(accessToken) });
 };
 
 function* hometownPage(action) {
@@ -180,26 +199,6 @@ function* myFriendPage(action) {
   }
 }
 
-// const commentPageAPI = (data) => {
-//   return axios.get();
-// };
-
-// function* commentPage(action) {
-//   try {
-//     // const result = yield call(commentPageAPI, action);
-//     yield delay(1000);
-//     yield put({
-//       type: HOMETOWN_PAGE_SUCCESS,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     yield put({
-//       type: HOMETOWN_PAGE_FAILURE,
-//       error: error.response.data,
-//     });
-//   }
-// }
-
 const likeFeedAPI = (data) => {
   // data 는 postId
   return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
@@ -241,6 +240,88 @@ function* unlikeFeed(action) {
   }
 }
 
+const likeCommentAPI = (data) => {
+  // data 는 postId
+  return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
+};
+
+function* likeComment(action) {
+  try {
+    // const result = yield call(likeCommentAPI, action.data);
+    yield delay(500);
+    yield put({
+      type: LIKE_COMMENT_SUCCESS,
+      data: action.data, // 게시글들의 배열이 들어 있음
+    });
+  } catch (error) {
+    yield put({
+      type: LIKE_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const unlikeCommentAPI = (data) => {
+  return axios.delete(`/post/${data}/like`); // 최대한 요청, 응답을 가볍게 만들기 위해 두번 쨰 파라미터(data)는 제외(넣어도 되긴 함)
+};
+
+function* unlikeComment(action) {
+  try {
+    // const result = yield call(unlikeCommentAPI, action.data);
+    yield delay(500);
+    yield put({
+      type: UNLIKE_COMMENT_SUCCESS,
+      data: action.data, // 게시글들의 배열이 들어 있음
+    });
+  } catch (error) {
+    yield put({
+      type: UNLIKE_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const likeRepleAPI = (data) => {
+  // data 는 postId
+  return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
+};
+
+function* likeReple(action) {
+  try {
+    // const result = yield call(likeRepleAPI, action.data);
+    yield delay(500);
+    yield put({
+      type: LIKE_REPLE_SUCCESS,
+      data: action.data, // 게시글들의 배열이 들어 있음
+    });
+  } catch (error) {
+    yield put({
+      type: LIKE_REPLE_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const unlikeRepleAPI = (data) => {
+  return axios.delete(`/post/${data}/like`); // 최대한 요청, 응답을 가볍게 만들기 위해 두번 쨰 파라미터(data)는 제외(넣어도 되긴 함)
+};
+
+function* unlikeReple(action) {
+  try {
+    // const result = yield call(unlikeRepleAPI, action.data);
+    yield delay(500);
+    yield put({
+      type: UNLIKE_REPLE_SUCCESS,
+      data: action.data, // 게시글들의 배열이 들어 있음
+    });
+  } catch (error) {
+    yield put({
+      type: UNLIKE_REPLE_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
 function* watchGoBackLoginPage() {
   yield takeLatest(GO_BACK_LOGIN_PAGE, goBackLoginPage);
 }
@@ -265,6 +346,22 @@ function* watchUnlikeFeed() {
   yield takeLatest(UNLIKE_FEED_REQUEST, unlikeFeed);
 }
 
+function* watchLikeComment() {
+  yield takeLatest(LIKE_COMMENT_REQUEST, likeComment);
+}
+
+function* watchUnlikeComment() {
+  yield takeLatest(UNLIKE_COMMENT_REQUEST, unlikeComment);
+}
+
+function* watchLikeReple() {
+  yield takeLatest(LIKE_REPLE_REQUEST, likeReple);
+}
+
+function* watchUnlikeReple() {
+  yield takeLatest(UNLIKE_REPLE_REQUEST, unlikeReple);
+}
+
 export function* feedSaga() {
   yield all([
     fork(watchHometownPage),
@@ -273,6 +370,10 @@ export function* feedSaga() {
     fork(watchGoBackLoginPage),
     fork(watchLikeFeed),
     fork(watchUnlikeFeed),
+    fork(watchLikeComment),
+    fork(watchUnlikeComment),
+    fork(watchLikeReple),
+    fork(watchUnlikeReple),
   ]);
 }
 
@@ -371,6 +472,7 @@ const feed = (state = initialSate, action) => {
         break;
       /* 댓글 화면 이동 */
       case COMMENT_PAGE:
+        draft.feedId = action.data;
         draft.pageIndex = 4;
         break;
       default:

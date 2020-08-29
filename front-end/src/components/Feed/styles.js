@@ -89,7 +89,7 @@ export const Header = styled.header`
 
         button {
           height: 28px;
-          min-width: 90px;
+          min-width: 71px;
 
           border: none;
           outline: none;
@@ -103,6 +103,8 @@ export const Header = styled.header`
           font-size: 12px;
           line-height: 16px;
           text-align: center;
+
+          white-space: nowrap;
 
           color: ${pallete.orange};
         }
@@ -389,15 +391,13 @@ export const CardContentButton = styled.button`
 export const CommentSection = styled.section`
   position: relative;
   width: 100vw;
-  height: 70vh;
+  height: 77.5vh;
 
   overflow-y: scroll;
   overflow-x: hidden;
   transform: translateX(-16px);
 
   margin-top: 18px;
-
-  border: 1px solid red;
 
   & > div {
     position: absolute;
@@ -407,13 +407,203 @@ export const CommentSection = styled.section`
   }
 
   header {
-    height: 126px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 126px;
     background: ${pallete.gray[1]};
+  }
+`;
+
+export const CommentBlock = styled.li`
+  display: flex;
+
+  .comment-reple {
+    margin-top: 23px;
+    margin-right: 13px;
+    padding-left: 27px;
   }
 
   dl {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
     height: 131px;
-    border-top: 1px solid ${pallete.gray[3]};
+    width: 100%;
+    border-top: 1px solid ${pallete.gray[2]};
+
+    dt {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      ${({ reple }) =>
+        reple
+          ? css`
+              padding-right: 27px;
+            `
+          : css`
+              padding: 0 27px;
+            `}
+
+      .comment-block__img {
+        display: flex;
+        align-items: center;
+
+        div:first-child {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: ${pallete.gray[3]};
+
+          overflow: hidden;
+
+          img {
+            width: auto;
+            height: 100%;
+          }
+        }
+
+        div:last-child {
+          margin-left: 18px;
+          display: flex;
+          flex-direction: column;
+
+          span:first-child {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 19px;
+
+            color: ${pallete.gray[5]};
+          }
+
+          span:last-child {
+            margin-top: 2px;
+
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 16px;
+
+            color: ${pallete.gray[4]};
+          }
+        }
+      }
+
+      .comment-block__like {
+        button {
+          border: none;
+          background: none;
+          outline: none;
+        }
+      }
+    }
+
+    dd {
+      display: flex;
+      flex-direction: column;
+
+      ${({ reple }) =>
+        reple
+          ? css`
+              padding-right: 27px;
+            `
+          : css`
+              padding: 0 27px;
+            `}
+
+      div:first-child {
+        margin-top: 7px;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 19px;
+
+        color: ${pallete.gray[5]};
+      }
+
+      div:last-child {
+        margin-top: 8px;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 15px;
+
+        color: ${pallete.gray[4]};
+
+        span {
+          margin-left: 13px;
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CommentInput = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 70px;
+  width: 100%;
+
+  background: ${pallete.gray[2]};
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 19px;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: ${pallete.gray[3]};
+
+    overflow: hidden;
+
+    img {
+      width: auto;
+      height: 100%;
+    }
+  }
+
+  input {
+    width: 75%;
+    height: 41px;
+
+    border: none;
+    outline: none;
+    border-radius: 14px;
+
+    background: ${pallete.white};
+    padding: 10px;
+
+    &::placeholder {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 16px;
+
+      color: ${pallete.gray[3]};
+    }
   }
 `;
 

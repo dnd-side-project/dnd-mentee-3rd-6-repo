@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { pallete } from '../../lib/style/pallete';
 import { PREV_PAGE, NOT_SERVANT_PREV_PAGE } from '../../modules/auth';
 import BackIcon from '../../lib/style/button/BackIcon';
 import { PREV_FEED_PAGE } from '../../modules/feed';
@@ -23,7 +22,7 @@ const GoBackButton = styled.button`
 `;
 
 const BackButton = ({ history, page }) => {
-  // 회원가입 1, 피드 2,
+  // 회원가입 1, 피드 2, 글쓰기 3,
   const dispatch = useDispatch();
   const { pageIndex: registerIndex, isServant } = useSelector((state) => state.auth);
   const { prevPageIndex: feedIndex } = useSelector((state) => state.feed);
@@ -53,8 +52,13 @@ const BackButton = ({ history, page }) => {
     }
   }, [dispatch, feedIndex]);
 
+  /* 글쓰기 */
+  const onClickWrite = useCallback(() => {
+    return history.goBack('/feed');
+  }, [history]);
+
   /* 모아주기 */
-  const stepButtons = [onClickRegister, onClickFeed];
+  const stepButtons = [onClickRegister, onClickFeed, onClickWrite];
   const currentStepButtons = () => stepButtons[page - 1];
 
   return (
