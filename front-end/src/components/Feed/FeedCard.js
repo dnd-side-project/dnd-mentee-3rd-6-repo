@@ -58,13 +58,16 @@ const FeedCard = ({
       <CardIcon>
         <div className="feed-card__icon-column">
           <div className="icon--item">
-            <button type="button" onClick={feed.isLike ? onClickUnlike : onClickLike}>
-              {feed.isLike ? <LIkeIcon like /> : <LIkeIcon />}
+            <button
+              type="button"
+              onClick={feed.isLike ? onClickUnlike(feed.id) : onClickLike(feed.id)}
+            >
+              <LIkeIcon like={feed.isLike} />
             </button>
             <span>{feed.numberOfLikes}</span>
           </div>
           <div className="icon--item">
-            <button type="button" onClick={onClickComment}>
+            <button type="button" onClick={onClickComment(feed.id)}>
               <ComentIcon />
             </button>
             <span>{feed.numberOfComments}</span>
