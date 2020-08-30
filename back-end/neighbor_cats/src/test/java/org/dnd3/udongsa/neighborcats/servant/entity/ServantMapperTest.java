@@ -6,6 +6,7 @@ import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.cat.entity.EGender;
 import org.dnd3.udongsa.neighborcats.cat.entity.ENeutralized;
+import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +38,8 @@ public class ServantMapperTest {
     String encodedPassword = "asdfasdf";
 
     Address address = Address.of(dto.getAddressDepth1(), dto.getAddressDepth2(), dto.getAddressDepth3(), dto.getAddressDepth4());
-
-    Servant servant = ServantMapper.map(dto, role, encodedPassword, address);
+    ImgFile profileImg = ImgFile.of("filePath", "fileName", "ext");
+    Servant servant = ServantMapper.map(dto, role, encodedPassword, address, profileImg);
 
     assertEquals(dto.getPhoneNumber(), servant.getPhoneNumber());
     assertEquals(dto.getName(), servant.getName());

@@ -78,7 +78,7 @@ public class Servant {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  protected static Servant of(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, Role role, Address address){
+  protected static Servant of(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, Role role, Address address, ImgFile profileImg){
     Servant servant = new Servant();
     servant.name = name;
 		servant.email = email;
@@ -88,6 +88,7 @@ public class Servant {
     servant.nickname = nickName;
     if(Objects.nonNull(role)) servant.addRole(role);
     servant.address = address;
+    servant.profileImg = profileImg;
     return servant;
   }
 
@@ -97,6 +98,21 @@ public class Servant {
   
   public void updateAddress(Address address){
     this.address = address;
+  }
+
+  /**
+   * ImgFile 연관관계를 제거한다.
+   * @return 연관된 ImgFile 
+   */
+  public ImgFile detachProfileImg(){
+    ImgFile imgFile = this.profileImg;
+    this.profileImg = null;
+    return imgFile;
+  }
+
+  public boolean attachProfileImg(ImgFile imgFile){
+    this.profileImg = imgFile;
+    return true;
   }
 	
 }

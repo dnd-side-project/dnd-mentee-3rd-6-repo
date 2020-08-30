@@ -59,16 +59,17 @@ public class Cat {
         return this;
     }
 
-    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Double weight, Servant servant){
-        this.name = name;
-        this.features = features;
-        this.kind = catKind;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.neutralized = neutralized;
-        this.weight = weight;
-        this.servant = servant;
-        return this;
+    protected static Cat of(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Double weight, Servant servant){
+      Cat cat = new Cat();
+      cat.name = name;
+      cat.features = features;
+      cat.kind = catKind;
+      cat.gender = gender;
+      cat.birthday = birthday;
+      cat.neutralized = neutralized;
+      cat.weight = weight;
+      cat.servant = servant;
+      return cat;
     }
 
     /**

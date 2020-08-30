@@ -2,9 +2,10 @@ package org.dnd3.udongsa.neighborcats.doc;
 
 import org.dnd3.udongsa.neighborcats.auth.AuthController;
 import org.dnd3.udongsa.neighborcats.auth.service.AuthService;
-import org.dnd3.udongsa.neighborcats.auth.service.SignInService;
 import org.dnd3.udongsa.neighborcats.catkind.CatKindController;
 import org.dnd3.udongsa.neighborcats.catkind.service.CatKindService;
+import org.dnd3.udongsa.neighborcats.imgfile.controller.BasicImgFileController;
+import org.dnd3.udongsa.neighborcats.imgfile.service.BasicImgFileService;
 import org.dnd3.udongsa.neighborcats.security.jwt.JwtUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(controllers = {
   AuthController.class,
   CatKindController.class,
+  BasicImgFileController.class
 })
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
@@ -35,7 +37,7 @@ public class APIDocTest {
   @MockBean protected AuthService authService;
   @MockBean protected JwtUtils jwtUtils;
   @MockBean protected CatKindService catKindService;
-  @MockBean protected SignInService signInService;
+  @MockBean protected BasicImgFileService basicImgFileService;
 
   @Test
   public void init(){}

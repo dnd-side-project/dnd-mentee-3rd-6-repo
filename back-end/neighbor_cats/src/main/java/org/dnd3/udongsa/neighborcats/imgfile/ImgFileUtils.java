@@ -24,5 +24,6 @@ public class ImgFileUtils {
       return "";
     return "/api/imgfiles/"+imgFile.getId();
   }
-  
+
+
 }

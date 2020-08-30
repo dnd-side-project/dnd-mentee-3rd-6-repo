@@ -20,6 +20,7 @@ public class SignInResDto {
   private String addressName = "";
   private String phoneNumber = "";
   private String profileImgUrl = "";
+  private Boolean isServant = false;
   private Set<Role> roles = new HashSet<>(); 
 
 }

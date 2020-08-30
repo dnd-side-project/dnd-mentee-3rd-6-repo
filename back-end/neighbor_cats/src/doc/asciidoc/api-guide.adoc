@@ -17,3 +17,7 @@ operation::AuthDoc/me[snippets='http-request,response-body,response-fields']
 
 === 회원가입
 operation::AuthDoc/signUp[snippets='http-request,request-parameters,response-headers,response-body,response-fields']
+
+== 이미지 파일
+=== 집사 기본 프로필 이미지 업로드
+operation::BasicImgFileDoc/uploadServant[snippets='http-request,response-body,response-fields']
