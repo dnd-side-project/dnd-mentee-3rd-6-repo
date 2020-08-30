@@ -13,8 +13,7 @@ public class CatMapper {
 
   public static Cat map(SignUpReqDto dto, CatKind kind, Servant servant){
     LocalDate birthday = LocalDate.parse(dto.getCatBirthday(), DateTimeFormatter.ISO_LOCAL_DATE);
-    Cat cat = new Cat();
-    cat.signUp(dto.getName(), dto.getCatFeatures(), kind, dto.getCatGender(), birthday, dto.getCatNeutralized(), dto.getCatWeight(), servant);
+    Cat cat = Cat.of(dto.getName(), dto.getCatFeatures(), kind, dto.getCatGender(), birthday, dto.getCatNeutralized(), dto.getCatWeight(), servant);
     return cat;
   }
 

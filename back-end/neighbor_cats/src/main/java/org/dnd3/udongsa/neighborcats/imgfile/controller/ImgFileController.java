@@ -26,4 +26,5 @@ public class ImgFileController {
     headers.set(HttpHeaders.CONTENT_TYPE, "image/jpeg");
     return ResponseEntity.ok().headers(headers).body(imgFile.getBytes());
   }
+
 }

@@ -10,10 +10,10 @@ import org.dnd3.udongsa.neighborcats.role.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Data @AllArgsConstructor @NoArgsConstructor 
-public class LoggedServantDto {
+@Data @AllArgsConstructor @RequiredArgsConstructor 
+public class ServantDto {
 
   private Long id;
   private String name;
@@ -21,6 +21,8 @@ public class LoggedServantDto {
   private String nickName;
   private String addressName;
   private String phoneNumber;
+  private String profileImgUrl;
+  private Boolean isServant;
   private Set<Role> roles = new HashSet<>();
   private List<CatDto> cats = new ArrayList<>();
   

@@ -43,4 +43,10 @@ public class ImgFile {
         imgFile.ext = ext;
         return imgFile;
     }
+
+    public void updateFile(String filePath, String fileName, String ext){
+      this.filePath = filePath;
+      this.fileName = fileName;
+      this.ext = ext;
+    }
 }
