@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.feed.Feed;
+import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
 

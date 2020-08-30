@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.dnd3.udongsa.neighborcats.commnet.Comment;
-import org.dnd3.udongsa.neighborcats.feed.Feed;
+import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 
 @Entity
 public class FeedComment {

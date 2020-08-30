@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.feed;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
 

@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.dnd3.udongsa.neighborcats.question.Question;
-import org.dnd3.udongsa.neighborcats.tag.Tag;
 
 @Entity
 public class QuestionTag {
@@ -17,11 +16,10 @@ public class QuestionTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+    
     @ManyToOne
     @JoinColumn
     private Question question;
 
-    @ManyToOne
-    @JoinColumn
-    private Tag tag;
 }
