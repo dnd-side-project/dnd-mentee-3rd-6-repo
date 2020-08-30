@@ -86,10 +86,11 @@ task appNpmInstall(type: NpmTask) {
 
 task npmBuild(type: NpmTask) {
     workingDir = file("../../front-end")
-    args = ['run', 'build']
+    args = ['run', 'build:prod']
 }
 
 task copyToStatic(type: Copy) {
+    delete "src/main/resources/static"
     from "../../front-end/build"
     into "${project.projectDir}/src/main/resources/static/."
 }

@@ -27,9 +27,9 @@
     "styled-components": "5.1.1"
   },
   "scripts": {
-    "start": "cp ./.env.dev ./.env && react-scripts start",
-    "build:--dev": "cp ./.env.dev ./.env && react-scripts build",
-    "build:-prod": "cp ./.env.prod ./.env && react-scripts build"
+    "start": "cross-env REACT_APP_ENV=local react-scripts start",
+    "build:local": "cross-env REACT_APP_ENV=local react-scripts build",
+    "build:prod": "cross-env REACT_APP_ENV=prod react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -66,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint-config-airbnb": "18.2.0",
     "eslint-config-prettier": "6.11.0"
   }
