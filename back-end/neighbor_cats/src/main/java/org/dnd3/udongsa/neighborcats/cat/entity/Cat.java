@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.dnd3.udongsa.neighborcats.catkind.CatKind;
+import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
 import lombok.Getter;
@@ -48,6 +50,10 @@ public class Cat {
     @JoinColumn
     private Servant servant;
 
+    @OneToOne
+    @JoinColumn
+    private ImgFile profileImg;
+
     public Cat adoptServant(Servant servant){
         this.servant = servant;
         return this;
@@ -63,6 +69,21 @@ public class Cat {
         this.weight = weight;
         this.servant = servant;
         return this;
+    }
+
+    /**
+     * ImgFile 연관관계를 제거한다.
+     * @return 연관된 ImgFile 
+     */
+    public ImgFile detachProfileImg(){
+      ImgFile imgFile = this.profileImg;
+      this.profileImg = null;
+      return imgFile;
+    }
+
+    public boolean attachProfileImg(ImgFile imgFile){
+      this.profileImg = imgFile;
+      return true;
     }
     
 }
