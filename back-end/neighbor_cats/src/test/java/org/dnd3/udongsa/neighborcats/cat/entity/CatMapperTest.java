@@ -41,7 +41,7 @@ public class CatMapperTest {
     Cat cat = CatMapper.map(dto, kind, servant);
 
     // then
-    assertEquals(dto.getName(), cat.getName());
+    assertEquals(dto.getCatName(), cat.getName());
     assertEquals(dto.getCatFeatures(), cat.getFeatures());
     assertEquals(dto.getCatGender(), cat.getGender());
     assertTrue(LocalDate.parse(dto.getCatBirthday(), DateTimeFormatter.ISO_LOCAL_DATE).isEqual(cat.getBirthday()), "생일이 일치해야 합니다.");
