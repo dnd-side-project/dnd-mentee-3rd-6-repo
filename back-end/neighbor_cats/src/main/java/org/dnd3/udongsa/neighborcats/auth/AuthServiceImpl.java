@@ -1,6 +1,7 @@
 package org.dnd3.udongsa.neighborcats.auth;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,17 +70,22 @@ public class AuthServiceImpl implements AuthService {
     if (servantRepo.existsByEmail(reqDto.getEmail())) {
       throw new CustomException(HttpStatus.BAD_REQUEST, "이메일 중복입니다");
     }
-    CatKind kind = findKindByKindId(reqDto.getCatKindId());
     Role role = findRoleByRoleName(ERole.ROLE_USER);
     String encodedPassword = encoder.encode(reqDto.getPassword());
     Address address = findOrSaveAddresByDepths(reqDto.getAddressDepth1(), reqDto.getAddressDepth2(),
-        reqDto.getAddressDepth3(), reqDto.getAddressDepth4());
-
+    reqDto.getAddressDepth3(), reqDto.getAddressDepth4());
+    
     Servant servant = ServantMapper.map(reqDto, role, encodedPassword, address);
     servant = servantRepo.save(servant);
+    String accessToken = generateToken(servant);
+
+    if(!servant.getIsServant()){
+      return AuthMapper.map(servant, accessToken);
+    }
+
+    CatKind kind = findKindByKindId(reqDto.getCatKindId());
     Cat cat = CatMapper.map(reqDto, kind, servant);
     cat = catRepo.save(cat);
-    String accessToken = generateToken(servant);
     String catProfileImgUrl = uploadCatProfileImg(cat, reqDto.getCatProfileImg());
 
     return AuthMapper.map(servant, cat, accessToken, catProfileImgUrl);
@@ -202,7 +208,8 @@ public class AuthServiceImpl implements AuthService {
     dto.setPhoneNumber(servant.getPhoneNumber());
     dto.setRoles(servant.getRoles());
     List<Cat> cats = catRepo.findByServant(servant);
-    List<CatDto> catDtos = cats.stream().map(cat->{
+    List<CatDto> catDtos = new ArrayList<>();
+    catDtos = cats.stream().map(cat->{
       CatProfileImg profile = catProfileRepo.findByCat(cat);
       if(Objects.isNull(profile)){
         return CatMapper.map(cat);

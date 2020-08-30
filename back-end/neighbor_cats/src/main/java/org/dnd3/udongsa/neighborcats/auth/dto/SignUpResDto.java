@@ -31,5 +31,6 @@ public class SignUpResDto {
   private ENeutralized catNeutralized;
   private String catProfileImgUrl;
   private String accessToken;
+  private Double catWeight;
 
 }

@@ -14,7 +14,7 @@ public class CatMapper {
   public static Cat map(SignUpReqDto dto, CatKind kind, Servant servant){
     LocalDate birthday = LocalDate.parse(dto.getCatBirthday(), DateTimeFormatter.ISO_LOCAL_DATE);
     Cat cat = new Cat();
-    cat.signUp(dto.getName(), dto.getCatFeatures(), kind, dto.getCatGender(), birthday, dto.getCatNeutralized(),servant);
+    cat.signUp(dto.getName(), dto.getCatFeatures(), kind, dto.getCatGender(), birthday, dto.getCatNeutralized(), dto.getCatWeight(), servant);
     return cat;
   }
 
@@ -31,6 +31,7 @@ public class CatMapper {
     dto.setGender(cat.getGender());
     dto.setBirthday(cat.getBirthday());
     dto.setNeutralized(cat.getNeutralized());
+    dto.setWeight(cat.getWeight());
     dto.setProfileImgUrl(profileImgUrl);
     return dto;
   }
@@ -48,6 +49,7 @@ public class CatMapper {
     dto.setGender(cat.getGender());
     dto.setBirthday(cat.getBirthday());
     dto.setNeutralized(cat.getNeutralized());
+    dto.setWeight(cat.getWeight());
     return dto;
   }
   

@@ -17,6 +17,7 @@ public class CatDto {
   private EGender gender;
   private LocalDate birthday;
   private ENeutralized neutralized;
+  private Double weight;
   private String profileImgUrl;
   
 }

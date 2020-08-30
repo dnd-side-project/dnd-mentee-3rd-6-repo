@@ -46,22 +46,20 @@ public class SignUpReqDto {
   @NotNull
   private String addressDepth4;
   
-  @NotBlank
   private String catName;
 
   private String catFeatures;
   
-  @NotNull
   private Long catKindId;
   
-  @NotNull
   private EGender catGender;
   
   private String catBirthday;
   
-  @NotNull
   private ENeutralized catNeutralized;
 
   private MultipartFile catProfileImg;
+
+  private Double catWeight;
 
 }

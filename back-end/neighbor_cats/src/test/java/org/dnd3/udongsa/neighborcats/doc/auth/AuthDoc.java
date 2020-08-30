@@ -65,8 +65,8 @@ public class AuthDoc extends APIDocTest {
 
     // When
     ResultActions action = mockMvc.perform(post(api)
-    .content(new ObjectMapper().writeValueAsString(reqDto))
-    .headers(headers));
+                                  .content(new ObjectMapper().writeValueAsString(reqDto))
+                                  .headers(headers));
 
     // Then
     action
@@ -156,6 +156,7 @@ public class AuthDoc extends APIDocTest {
     reqMap.add("catGender", "MALE");
     reqMap.add("catBirthday", "2019-01-02");
     reqMap.add("catNeutralized", "TRUE");
+    reqMap.add("catWeight", "3.5");
 
     SignUpResDto resDto = new SignUpResDto();
     resDto.setServantId(1L);
@@ -174,14 +175,15 @@ public class AuthDoc extends APIDocTest {
     resDto.setCatBirthday(LocalDate.of(2020,1,2));
     resDto.setCatNeutralized(ENeutralized.FALSE);
     resDto.setCatProfileImgUrl("/api/imgfiles/1");
+    resDto.setCatWeight(3.5);
     resDto.setAccessToken("fljadfl352jlfdajsfjad3l5k53l2kl");
 
     when(authService.signUp(any())).thenReturn(resDto);
 
     // When
     ResultActions action = mockMvc.perform(MockMvcRequestBuilders.multipart(api)
-      .file(catProfileImg)
-      .params(reqMap)
+                                    .file(catProfileImg)
+                                    .params(reqMap)
     );
 
     // Then

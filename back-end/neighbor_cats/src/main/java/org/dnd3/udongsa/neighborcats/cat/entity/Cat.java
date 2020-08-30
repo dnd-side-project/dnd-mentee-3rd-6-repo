@@ -41,6 +41,8 @@ public class Cat {
     private LocalDate birthday;
 
     private ENeutralized neutralized;
+
+    private Double weight;
     
     @ManyToOne
     @JoinColumn
@@ -51,13 +53,14 @@ public class Cat {
         return this;
     }
 
-    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Servant servant){
+    public Cat signUp(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Double weight, Servant servant){
         this.name = name;
         this.features = features;
         this.kind = catKind;
         this.gender = gender;
         this.birthday = birthday;
         this.neutralized = neutralized;
+        this.weight = weight;
         this.servant = servant;
         return this;
     }
