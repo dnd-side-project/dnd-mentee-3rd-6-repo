@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.auth;
+package org.dnd3.udongsa.neighborcats.auth.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,10 +12,7 @@ import javax.transaction.Transactional;
 import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.address.repository.AddressRepository;
 import org.dnd3.udongsa.neighborcats.auth.dto.AuthMapper;
-import org.dnd3.udongsa.neighborcats.auth.dto.CatProfileUploadResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.LoggedServantDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
@@ -24,8 +21,6 @@ import org.dnd3.udongsa.neighborcats.cat.entity.CatMapper;
 import org.dnd3.udongsa.neighborcats.cat.repository.CatRepository;
 import org.dnd3.udongsa.neighborcats.catkind.CatKind;
 import org.dnd3.udongsa.neighborcats.catkind.CatKindRepository;
-import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImg;
-import org.dnd3.udongsa.neighborcats.catprofileimg.CatProfileImgRepository;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
@@ -60,7 +55,6 @@ public class AuthServiceImpl implements AuthService {
   private final RoleRepository roleRepository;
   private final CatKindRepository catKindRepo;
   private final CatRepository catRepo;
-  private final CatProfileImgRepository catProfileRepo;
   private final ImgFileService imgFileService;
   private final AddressRepository addressRepo;
 
@@ -92,18 +86,19 @@ public class AuthServiceImpl implements AuthService {
   }
 
   /**
-   * 냥이 이미지 파일 업로드
+   * 냥이 프로필 이미지 업로드
+   * @param cat 고양이 Entity
+   * @param catProfileImg 고양이 프로필이미지 MultipartFile
+   * @return 이미지파일 URL
    */
   private String uploadCatProfileImg(Cat cat, MultipartFile catProfileImg) {
     if(Objects.isNull(catProfileImg)) return "";
-    if (catProfileRepo.existsByCat(cat)) {
-      CatProfileImg catProfile = catProfileRepo.findByCat(cat);
-      ImgFile imgFile = catProfile.getImgFile();
-      catProfileRepo.delete(catProfile);
+    if (Objects.nonNull(cat.getProfileImg())) {
+      ImgFile imgFile = cat.detachProfileImg();
       imgFileService.delete(imgFile);
     }
     ImgFile imgFile = imgFileService.upload(getBytes(catProfileImg));
-    catProfileRepo.save(CatProfileImg.of(cat, imgFile));
+    cat.attachProfileImg(imgFile);
     return ImgFileUtils.generateImgFileUrl(imgFile.getId());
   }
 
@@ -143,17 +138,7 @@ public class AuthServiceImpl implements AuthService {
                                           id));
   }
 
-  @Override
-  public SignInResDto signIn(SignInReqDto reqDto) {
-    Servant servant = servantRepo.findByEmail(reqDto.getEmail())
-        .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "Email이 존재하지 않습니다."));
 
-    if (!encoder.matches(reqDto.getPassword(), servant.getPassword())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, "Password가 틀렸습니다.");
-    }
-
-    return new SignInResDto(generateToken(servant));
-  }
 
   private String generateToken(Servant servant) {
     UserDetails userDetails = userDetailsService.loadUserByUsername(servant.getEmail());
@@ -162,36 +147,6 @@ public class AuthServiceImpl implements AuthService {
     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     String jwt = jwtUtils.generateJwtToken(servant.getEmail());
     return jwt;
-  }
-
-  @Override
-  @Transactional
-  public CatProfileUploadResDto signUpCatProfileImg(byte[] imgBytes) {
-    String userEmail = getLoggedUserEmail();
-    if (imgBytes.length == 0) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, "이미지 파일 사이즈가 0입니다.");
-    }
-    Servant servant = servantRepo.findByEmail(userEmail).orElseThrow();
-
-    List<Cat> cats = catRepo.findByServant(servant);
-    if (cats.size() == 0) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, "고양이 회원가입 정보가 없습니다.");
-    } else if (cats.size() >= 2) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, "고양이가 2마리 이상 가입되어 있습니다. 마이페이지에서 프로필을 추가해보세요.");
-    }
-    Cat cat = cats.get(0);
-    if (catProfileRepo.existsByCat(cat)) {
-      CatProfileImg catProfile = catProfileRepo.findByCat(cat);
-      ImgFile imgFile = catProfile.getImgFile();
-      catProfileRepo.delete(catProfile);
-      imgFileService.delete(imgFile);
-    }
-    ImgFile imgFile = imgFileService.upload(imgBytes);
-    CatProfileImg catProfile = CatProfileImg.of(cat, imgFile);
-    catProfile = catProfileRepo.save(catProfile);
-    CatProfileUploadResDto res = new CatProfileUploadResDto();
-    res.setCatProfileImgUrl(ImgFileUtils.generateImgFileUrl(imgFile.getId()));
-    return res;
   }
 
   @Override
@@ -210,12 +165,11 @@ public class AuthServiceImpl implements AuthService {
     List<Cat> cats = catRepo.findByServant(servant);
     List<CatDto> catDtos = new ArrayList<>();
     catDtos = cats.stream().map(cat->{
-      CatProfileImg profile = catProfileRepo.findByCat(cat);
-      if(Objects.isNull(profile)){
+      ImgFile catProfile = cat.getProfileImg();
+      if(Objects.isNull(catProfile)){
         return CatMapper.map(cat);
       }
-      Long imgFileId = profile.getImgFile().getId();
-      String profileUrl = ImgFileUtils.generateImgFileUrl(imgFileId);
+      String profileUrl = ImgFileUtils.generateImgFileUrl(catProfile.getId());
       return CatMapper.map(cat, profileUrl);
     }).collect(Collectors.toList());
     dto.setCats(catDtos);

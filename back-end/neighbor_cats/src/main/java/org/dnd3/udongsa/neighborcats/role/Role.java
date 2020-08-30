@@ -16,11 +16,20 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class Role {
+  
   @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
-	private ERole name;
+  private ERole name;
+  
+  public static Role of(ERole eRole){
+    Role role = new Role();
+    role.id = 0L;
+    role.name = eRole;
+    return role;
+  }
+
 }

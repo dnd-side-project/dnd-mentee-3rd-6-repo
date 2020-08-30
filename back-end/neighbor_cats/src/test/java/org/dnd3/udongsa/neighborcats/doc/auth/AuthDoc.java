@@ -57,8 +57,8 @@ public class AuthDoc extends APIDocTest {
     reqDto.setEmail(userEmail);
     reqDto.setPassword(password);
 
-    SignInResDto resDto = new SignInResDto("efe8331f-2f30-4c1a-9994-6af08fb3b949");
-    Mockito.when(super.authService.signIn(any())).thenReturn(resDto);
+    SignInResDto resDto = new SignInResDto();
+    Mockito.when(super.signInService.signIn(any())).thenReturn(resDto);
 
     HttpHeaders headers = new HttpHeaders();
     headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -94,7 +94,7 @@ public class AuthDoc extends APIDocTest {
     dto.setAddressName("Busan");
     dto.setNickName("nickName");
     dto.setPhoneNumber("0101234567");
-    Role userRole = new Role(1, ERole.ROLE_ADMIN);
+    Role userRole = Role.of(ERole.ROLE_ADMIN);
     dto.getRoles().add(userRole);
     CatDto catDto = new CatDto();
     catDto.setId(1L);

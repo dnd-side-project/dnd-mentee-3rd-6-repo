@@ -22,6 +22,14 @@ public class AuthFieldDesc {
   public static List<FieldDescriptor> getSignInResDesc(){
     List<FieldDescriptor> fields = new ArrayList<>();
     fields.add(fieldWithPath("accessToken").type(JsonFieldType.STRING).description("인증 토큰"));
+    fields.add(fieldWithPath("id").type(JsonFieldType.NUMBER).description("식별자"));
+    fields.add(fieldWithPath("name").type(JsonFieldType.STRING).description("실명"));
+    fields.add(fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"));
+    fields.add(fieldWithPath("nickName").type(JsonFieldType.STRING).description("별명"));
+    fields.add(fieldWithPath("addressName").type(JsonFieldType.STRING).description("주소지"));
+    fields.add(fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("전화번호"));
+    fields.add(fieldWithPath("profileImgUrl").type(JsonFieldType.STRING).description("프로필 이미지 경로"));
+    fields.add(fieldWithPath("roles[]").type(JsonFieldType.ARRAY).description("Roles: [{id:1, name:admin}]"));
     return fields;
   }
 

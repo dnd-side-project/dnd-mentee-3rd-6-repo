@@ -1,9 +1,9 @@
 package org.dnd3.udongsa.neighborcats.doc;
 
 import org.dnd3.udongsa.neighborcats.auth.AuthController;
-import org.dnd3.udongsa.neighborcats.auth.AuthService;
+import org.dnd3.udongsa.neighborcats.auth.service.AuthService;
+import org.dnd3.udongsa.neighborcats.auth.service.SignInService;
 import org.dnd3.udongsa.neighborcats.catkind.CatKindController;
-import org.dnd3.udongsa.neighborcats.catkind.CatKindRepository;
 import org.dnd3.udongsa.neighborcats.catkind.service.CatKindService;
 import org.dnd3.udongsa.neighborcats.security.jwt.JwtUtils;
 import org.junit.jupiter.api.Test;
@@ -35,6 +35,7 @@ public class APIDocTest {
   @MockBean protected AuthService authService;
   @MockBean protected JwtUtils jwtUtils;
   @MockBean protected CatKindService catKindService;
+  @MockBean protected SignInService signInService;
 
   @Test
   public void init(){}

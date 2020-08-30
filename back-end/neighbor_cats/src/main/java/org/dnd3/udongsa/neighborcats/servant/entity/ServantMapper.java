@@ -7,7 +7,7 @@ import org.dnd3.udongsa.neighborcats.role.Role;
 public class ServantMapper {
   
   public static Servant map(SignUpReqDto dto, Role role, String encodedPassword, Address address) {
-    Servant servant = new Servant(  
+    Servant servant = Servant.of(  
       dto.getName(), 
       dto.getEmail(), 
       encodedPassword, 

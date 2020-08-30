@@ -2,6 +2,7 @@ package org.dnd3.udongsa.neighborcats.servant.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -13,12 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.dnd3.udongsa.neighborcats.address.Address;
+import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -64,23 +67,29 @@ public class Servant {
   @ManyToOne
   @JoinColumn
   private Address address;
+
+  @OneToOne
+  @JoinColumn
+  private ImgFile profileImg;
   
   @CreationTimestamp
   private LocalDateTime createdAt;
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-	
-	protected Servant(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, Role role, Address address){
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.phoneNumber = phoneNumber;
-    this.isServant = isServant;
-    this.nickname = nickName;
-    this.addRole(role);
-    this.address = address;
-	}
+
+  protected static Servant of(String name, String email, String password, String phoneNumber, Boolean isServant, String nickName, Role role, Address address){
+    Servant servant = new Servant();
+    servant.name = name;
+		servant.email = email;
+		servant.password = password;
+		servant.phoneNumber = phoneNumber;
+    servant.isServant = isServant;
+    servant.nickname = nickName;
+    if(Objects.nonNull(role)) servant.addRole(role);
+    servant.address = address;
+    return servant;
+  }
 
 	public void addRole(Role role) {
 		this.roles.add(role);
