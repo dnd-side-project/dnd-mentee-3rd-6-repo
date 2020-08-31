@@ -5,7 +5,46 @@ import produce from 'immer';
 export const initialSate = {
   pageIndex: 1,
   titleIndex: 1,
-  prevPageIndex: null,
+  feedAllTags: {
+    filterTypes: [
+      {
+        id: 1,
+        name: '우리동네',
+      },
+      {
+        id: 2,
+        name: '전체',
+      },
+      {
+        id: 3,
+        name: '내친구',
+      },
+    ],
+    feedTags: [
+      {
+        id: 1,
+        name: '일상',
+      },
+      {
+        id: 2,
+        name: '나눔',
+      },
+      {
+        id: 3,
+        name: '탁묘',
+      },
+    ],
+    sortTypes: [
+      {
+        id: 1,
+        name: '인기글',
+      },
+      {
+        id: 2,
+        name: '전체글',
+      },
+    ],
+  },
   Feeds: {
     pageNumber: 0,
     pageSize: 10,
@@ -74,15 +113,12 @@ export const initialSate = {
     ],
   },
   feedId: null,
-  hometownPageLoading: false, // 우리동네 페이지 불러오기 1
-  hometownPageDone: false,
-  hometownPageError: null,
-  allPageLoading: false, // 전체 페이지 불러오기 2
-  allPageDone: false,
-  allPageError: null,
-  myFriendLoading: false, // 내 친구 페이지 불러오기 3
-  myFriendDone: false,
-  myFriendError: null,
+  getFeedTagLoading: false, // 피드 태그 불러오기
+  getFeedTagDone: false,
+  getFeedTagError: null,
+  filterTypeLoading: false, // 필터 타입 불러오기
+  filterTypeDone: false,
+  filterTypeError: null,
   likeFeedLoading: false, // 좋아요
   likeFeedDone: false,
   likeFeedError: null,
@@ -91,19 +127,13 @@ export const initialSate = {
   unLikeFeedError: null,
 };
 
-const headers = (token) => ({ Authorization: `${token}` });
+export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
+export const GET_FEED_TAG_SUCCESS = 'feed/GET_FEED_TAG_SUCCESS';
+export const GET_FEED_TAG_FAILURE = 'feed/GET_FEED_TAG_FAILURE';
 
-export const HOMETOWN_PAGE_REQUEST = 'feed/HOMETOWN_PAGE_REQUEST';
-export const HOMETOWN_PAGE_SUCCESS = 'feed/HOMETOWN_PAGE_SUCCESS';
-export const HOMETOWN_PAGE_FAILURE = 'feed/HOMETOWN_PAGE_FAILURE';
-
-export const ALL_PAGE_REQUEST = 'feed/ALL_PAGE_REQUEST';
-export const ALL_PAGE_SUCCESS = 'feed/ALL_PAGE_SUCCESS';
-export const ALL_PAGE_FAILURE = 'feed/ALL_PAGE_FAILURE';
-
-export const MY_FRIEND_PAGE_REQUEST = 'feed/MY_FRIEND_PAGE_REQUEST';
-export const MY_FRIEND_PAGE_SUCCESS = 'feed/MY_FRIEND_PAGE_SUCCESS';
-export const MY_FRIEND_PAGE_FAILURE = 'feed/MY_FRIEND_PAGE_FAILURE';
+export const FILTER_TYPE_REQUEST = 'feed/FILTER_TYPE_REQUEST';
+export const FILTER_TYPE_SUCCESS = 'feed/FILTER_TYPE_SUCCESS';
+export const FILTER_TYPE_FAILURE = 'feed/FILTER_TYPE_FAILURE';
 
 export const LIKE_FEED_REQUEST = 'feed/LIKE_FEED_REQUEST';
 export const LIKE_FEED_SUCCESS = 'feed/LIKE_FEED_SUCCESS';
@@ -138,62 +168,44 @@ function* goBackLoginPage() {
   history.push('/');
 }
 
-const hometownPageAPI = ({ accessToken }) => {
+const getFeedTagAPI = () => {
+  return axios.get('/feed-all-tags');
+};
+
+function* getFeedTag(action) {
+  try {
+    const result = yield call(getFeedTagAPI, action);
+    yield put({
+      type: GET_FEED_TAG_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: GET_FEED_TAG_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+const filterTypeAPI = () => {
   const params = {};
-  return axios.get('', { params, headers: headers(accessToken) });
+  return axios.get('', { params });
 };
 
-function* hometownPage(action) {
+function* filterType(action) {
   try {
-    // const result = yield call(hometownPageAPI, action);
-    yield delay(1000);
+    // const result = yield call(filterTypeAPI, action);
     yield put({
-      type: HOMETOWN_PAGE_SUCCESS,
+      type: FILTER_TYPE_SUCCESS,
+      data: {
+        pageIndex: action.data,
+      },
     });
   } catch (error) {
     console.error(error);
     yield put({
-      type: HOMETOWN_PAGE_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
-const allPageAPI = (data) => {
-  return axios.get();
-};
-
-function* allPage(action) {
-  try {
-    // const result = yield call(allPageAPI, action);
-    yield delay(1000);
-    yield put({
-      type: ALL_PAGE_SUCCESS,
-    });
-  } catch (error) {
-    console.error(error);
-    yield put({
-      type: ALL_PAGE_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
-const myFriendPageAPI = (data) => {
-  return axios.get();
-};
-
-function* myFriendPage(action) {
-  try {
-    // const result = yield call(myFriendPageAPI, action);
-    yield delay(1000);
-    yield put({
-      type: MY_FRIEND_PAGE_SUCCESS,
-    });
-  } catch (error) {
-    console.error(error);
-    yield put({
-      type: MY_FRIEND_PAGE_FAILURE,
+      type: FILTER_TYPE_FAILURE,
       error: error.response.data,
     });
   }
@@ -326,16 +338,12 @@ function* watchGoBackLoginPage() {
   yield takeLatest(GO_BACK_LOGIN_PAGE, goBackLoginPage);
 }
 
-function* watchHometownPage() {
-  yield takeLatest(HOMETOWN_PAGE_REQUEST, hometownPage);
+function* watchGetFeedTag() {
+  yield takeLatest(GET_FEED_TAG_REQUEST, getFeedTag);
 }
 
-function* watchAllPage() {
-  yield takeLatest(ALL_PAGE_REQUEST, allPage);
-}
-
-function* watchMyFriendPage() {
-  yield takeLatest(MY_FRIEND_PAGE_REQUEST, myFriendPage);
+function* watchFilterType() {
+  yield takeLatest(FILTER_TYPE_REQUEST, filterType);
 }
 
 function* watchLikeFeed() {
@@ -364,9 +372,8 @@ function* watchUnlikeReple() {
 
 export function* feedSaga() {
   yield all([
-    fork(watchHometownPage),
-    fork(watchAllPage),
-    fork(watchMyFriendPage),
+    fork(watchGetFeedTag),
+    fork(watchFilterType),
     fork(watchGoBackLoginPage),
     fork(watchLikeFeed),
     fork(watchUnlikeFeed),
@@ -381,56 +388,36 @@ export function* feedSaga() {
 const feed = (state = initialSate, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      /* 우리동네 페이지 화면 이동 */
-      case HOMETOWN_PAGE_REQUEST:
-        draft.hometownPageLoading = true;
-        draft.hometownPageDone = false;
-        draft.hometownPageError = null;
+      /*  피드 태그 가져오기 */
+      case GET_FEED_TAG_REQUEST:
+        draft.getFeedTagLoading = true;
+        draft.getFeedTagDone = false;
+        draft.getFeedTagError = null;
         break;
-      case HOMETOWN_PAGE_SUCCESS:
-        draft.pageIndex = 1;
-        draft.titleIndex = 1;
-        draft.prevPageIndex = 1;
-        draft.hometownPageLoading = false;
-        draft.hometownPageDone = true;
+      case GET_FEED_TAG_SUCCESS:
+        draft.feedAllTags = action.data;
+        draft.getFeedTagLoading = false;
+        draft.getFeedTagDone = true;
         break;
-      case HOMETOWN_PAGE_FAILURE:
-        draft.hometownPageLoading = false;
-        draft.hometownPageError = action.error;
+      case GET_FEED_TAG_FAILURE:
+        draft.getFeedTagLoading = false;
+        draft.getFeedTagError = action.error;
         break;
-      /* 전체 페이지 화면 이동 */
-      case ALL_PAGE_REQUEST:
-        draft.allPageLoading = true;
-        draft.allPageDone = false;
-        draft.allPageError = null;
+      /* 필터 타입  화면 이동 */
+      case FILTER_TYPE_REQUEST:
+        draft.filterTypeLoading = true;
+        draft.filterTypeDone = false;
+        draft.filterTypeError = null;
         break;
-      case ALL_PAGE_SUCCESS:
-        draft.pageIndex = 2;
-        draft.titleIndex = 2;
-        draft.prevPageIndex = 2;
-        draft.allPageLoading = false;
-        draft.allPageDone = true;
+      case FILTER_TYPE_SUCCESS:
+        draft.pageIndex = action.data.pageIndex;
+        draft.titleIndex = action.data.pageIndex;
+        draft.filterTypeLoading = false;
+        draft.filterTypeDone = true;
         break;
-      case ALL_PAGE_FAILURE:
-        draft.allPageLoading = false;
-        draft.allPageError = action.error;
-        break;
-      /* 내 친구 페이지 화면 이동 */
-      case MY_FRIEND_PAGE_REQUEST:
-        draft.myFriendPageLoading = true;
-        draft.myFriendPageDone = false;
-        draft.myFriendPageError = null;
-        break;
-      case MY_FRIEND_PAGE_SUCCESS:
-        draft.pageIndex = 3;
-        draft.titleIndex = 3;
-        draft.prevPageIndex = 3;
-        draft.myFriendPageLoading = false;
-        draft.myFriendPageDone = true;
-        break;
-      case MY_FRIEND_PAGE_FAILURE:
-        draft.myFriendPageLoading = false;
-        draft.myFriendPageError = action.error;
+      case FILTER_TYPE_FAILURE:
+        draft.filterTypeLoading = false;
+        draft.filterTypeError = action.error;
         break;
       /* 좋아요 */
       case LIKE_FEED_REQUEST:

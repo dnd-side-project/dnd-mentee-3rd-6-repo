@@ -1,11 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Applayout from '../components/common/AppLayout';
-import FeedContainer from '../containers/Feed/FeedContainer';
-import CommentContainer from '../containers/Feed/CommentContainer';
 import MessageIcon from '../lib/style/menuIcon/MessageIcon';
 import NullIcon from '../lib/style/NullIcon';
+import AppLayout from '../components/common/AppLayout';
+import FeedHeadContainer from '../containers/Feed/FeedHeadContainer';
+import FeedCardListContainer from '../containers/Feed/FeedCardListContainer';
+import CommentHeadContainer from '../containers/Feed/Comment/CommentHeadContainer';
+import CommentListContainer from '../containers/Feed/Comment/CommentListContainer';
+import CommentFormContainer from '../containers/Feed/Comment/CommentFormContainer';
+import { FeedWrapper, CommentWrapper, CommentSection } from '../components/Feed/styles';
 
 const FeedPage = () => {
   const { pageIndex } = useSelector((state) => state.feed);
@@ -14,28 +18,41 @@ const FeedPage = () => {
   const botttomMenu = [true, true, true, false];
   const pageCheck = [false, false, false, true];
   const topRightComponents = [MessageIcon, MessageIcon, MessageIcon, NullIcon];
-  const stepContents = [FeedContainer, FeedContainer, FeedContainer, CommentContainer];
 
   const currentStepIcon = () => {
     const IconName = topRightComponents[pageIndex - 1];
     return <IconName />;
   };
 
-  const currentStepContent = () => {
-    const ComponentName = stepContents[pageIndex - 1];
-    return <ComponentName />;
-  };
-
   return (
-    <Applayout
+    <AppLayout
       pageCheck={pageCheck[pageIndex - 1]}
       page={2}
       topRightIcon={currentStepIcon()}
       botttomMenu={botttomMenu[pageIndex - 1]}
       title={titles[pageIndex - 1]}
     >
-      {currentStepContent()}
-    </Applayout>
+      {pageIndex === 4 ? (
+        <>
+          <CommentSection>
+            <CommentWrapper>
+              <CommentHeadContainer />
+              <CommentListContainer />
+            </CommentWrapper>
+          </CommentSection>
+          <CommentFormContainer />
+        </>
+      ) : (
+        <>
+          <FeedWrapper>
+            <div className="feed-content">
+              <FeedHeadContainer />
+              <FeedCardListContainer />
+            </div>
+          </FeedWrapper>
+        </>
+      )}
+    </AppLayout>
   );
 };
 

@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { pallete } from '../../../../lib/style/pallete';
 
 export const Wrapper = styled.div`
@@ -8,9 +8,32 @@ export const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const ImageBox = styled.div`
+export const SliderWrapper = styled.div`
   width: 218px;
   height: 270px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 14px;
+
+  .slick-list {
+    width: 218px;
+    height: 270px;
+  }
+
+  .slick-slide {
+    width: 218px;
+    height: 270px;
+  }
+`;
+
+export const ImageBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 218px;
+  height: 270px;
+
+  overflow: hidden;
 
   ${({ choice }) => {
     return choice
@@ -22,8 +45,6 @@ export const ImageBox = styled.div`
             height: 100%;
             margin: 0 auto;
             background: ${pallete.white};
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
-            border-radius: 14px;
           }
           .dot2-img {
             transform: scale(0.7);
@@ -34,7 +55,6 @@ export const ImageBox = styled.div`
             height: 100%;
             margin: 0 auto;
             background: ${pallete.white};
-            border-radius: 14px;
           }
         `
       : css`
@@ -56,7 +76,6 @@ export const ImageBox = styled.div`
             height: 100%;
             margin: 0 auto;
             background: ${pallete.white};
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
             border-radius: 14px;
           }
         `;
@@ -131,29 +150,4 @@ export const DotsIndicator = styled.div`
             background: ${pallete.orange};
           }
         `};
-`;
-
-export const Global = createGlobalStyle`
-  .slick-slide {
-    display: inline-flexbox;
-    justify-content: center;
-  }
-
-  .slick-list {
-    width: 218px;
-    height: 270px;
-    touch-action: pan-x;
-
-  }
-
-  .slick-trak {
-    width: 218px;
-    height: 270px;
-    touch-action: pan-x;
-
-
-    div {
-      margin: 0 auto;
-    }
-  }
 `;
