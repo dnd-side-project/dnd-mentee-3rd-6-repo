@@ -56,7 +56,7 @@ export const InputForm = styled(Input)`
     }
 
     & input {
-      flex: 0.71;
+      flex: 0.7;
       padding: 0;
       border: none;
       &:focus {
@@ -97,10 +97,10 @@ export const InputForm = styled(Input)`
 
         border: none;
 
-        width: 100px;
+        width: 104px;
         height: 30px;
 
-        border-radius: 14px;
+        border-radius: 15px;
 
         &:focus {
           outline: none;
