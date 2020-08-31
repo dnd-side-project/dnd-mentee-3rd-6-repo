@@ -276,6 +276,7 @@ const auth = (state = initialSate, action) => {
         draft.authInfo = null;
         draft.previewPath = null;
         draft.EmailValidData = null;
+        draft.pageIndex = 1;
         break;
       default:
         break;

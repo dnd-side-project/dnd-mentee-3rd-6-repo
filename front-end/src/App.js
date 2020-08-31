@@ -27,7 +27,7 @@ const StatusBar = styled.div`
 function App() {
   return (
     <>
-      {process.env.REACT_APP_ENV === 'development' && <StatusBar>상태 바(아아폰x 기준)</StatusBar>}
+      {process.env.NODE_ENV === 'development' && <StatusBar>상태 바(아아폰x 기준)</StatusBar>}
       <Route path="/" component={Home} exact />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />

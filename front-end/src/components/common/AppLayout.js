@@ -88,8 +88,8 @@ const Applayout = ({
           {topRightIcon}
         </TopCol>
         <Col xs={24}>{children}</Col>
-        <Col xs={24}>
-          {botttomMenu && (
+        {botttomMenu && (
+          <Col xs={24}>
             <Menu>
               <li>
                 <NavLink to="/feed" activeClassName="selected">
@@ -117,8 +117,8 @@ const Applayout = ({
                 </NavLink>
               </li>
             </Menu>
-          )}
-        </Col>
+          </Col>
+        )}
       </Row>
     </div>
   );

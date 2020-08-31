@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CommentBlock } from './styles';
-import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
 import CommentReple from './CommentReple';
+import { CommentItem } from '../styles';
+import LIkeIcon from '../../../lib/style/feedIcon/LIkeIcon';
 
-const CommentList = ({
+const CommentItemId = ({
   comment,
   onClickLikeComment,
   onClickUnlikeComment,
@@ -14,7 +14,7 @@ const CommentList = ({
 }) => {
   return (
     <>
-      <CommentBlock>
+      <CommentItem>
         <dl>
           <dt>
             <div className="comment-block__img">
@@ -46,7 +46,7 @@ const CommentList = ({
             </div>
           </dd>
         </dl>
-      </CommentBlock>
+      </CommentItem>
       {comment.replies.map((reple) => (
         <CommentReple
           key={reple.id}
@@ -59,7 +59,31 @@ const CommentList = ({
   );
 };
 
-CommentList.prototype = {
+const CommentList = ({
+  comments,
+  onClickLikeComment,
+  onClickUnlikeComment,
+  onClickLikeReple,
+  onClickUnlikeReple,
+}) => {
+  return (
+    <ul>
+      {comments.map((comment) => (
+        <CommentItemId
+          key={comment.id}
+          comment={comment}
+          onClickLikeComment={onClickLikeComment}
+          onClickUnlikeComment={onClickUnlikeComment}
+          onClickLikeReple={onClickLikeReple}
+          onClickUnlikeReple={onClickUnlikeReple}
+        />
+      ))}
+    </ul>
+  );
+};
+
+CommentItemId.prototype = {
+  children: PropTypes.element.isRequired,
   comment: PropTypes.shape({
     id: PropTypes.number,
     content: PropTypes.string,
@@ -71,6 +95,14 @@ CommentList.prototype = {
     author: PropTypes.object,
     replies: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
+  onClickLikeComment: PropTypes.func.isRequired,
+  onClickUnlikeComment: PropTypes.func.isRequired,
+  onClickLikeReple: PropTypes.func.isRequired,
+  onClickUnlikeReple: PropTypes.func.isRequired,
+};
+
+CommentList.prototype = {
+  comments: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClickLikeComment: PropTypes.func.isRequired,
   onClickUnlikeComment: PropTypes.func.isRequired,
   onClickLikeReple: PropTypes.func.isRequired,

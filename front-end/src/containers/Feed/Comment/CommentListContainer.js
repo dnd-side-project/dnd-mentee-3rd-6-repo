@@ -1,44 +1,20 @@
-import React, { useEffect, useCallback, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommentList from '../../../components/Feed/Comment/CommentList';
+import { PREV_FEED_PAGE } from '../../../modules/feed';
 
-import Comment from '../../components/Feed/Comment';
-import {
-  PREV_FEED_PAGE,
-  LIKE_COMMENT_REQUEST,
-  UNLIKE_COMMENT_REQUEST,
-  LIKE_REPLE_REQUEST,
-  UNLIKE_REPLE_REQUEST,
-} from '../../modules/feed';
-import useInput from '../../hooks/useInput';
-
-const CommentContainer = () => {
-  const [commentText, onChangeCommentText, setCommentText] = useInput('');
-
-  const commentRef = useRef();
-
+const CommentListContainer = () => {
   const dispatch = useDispatch();
+
   const {
     Feeds: { contents },
-    prevPageIndex,
-    titleIndex,
     feedId,
   } = useSelector((state) => state.feed);
   const {
     userInfo: { accessToken },
   } = useSelector((state) => state.user);
 
-  const { comments, content, author, timeDesc } = contents.find((v) => v.id === feedId);
-
-  /* 댓글 아이콘을 눌러야지만 접근할 수 있게 */
-  useEffect(() => {
-    if (prevPageIndex === null) {
-      dispatch({
-        type: PREV_FEED_PAGE,
-        data: titleIndex,
-      });
-    }
-    commentRef.current.focus();
-  }, [dispatch, prevPageIndex, titleIndex]);
+  const { comments } = contents.find((v) => v.id === feedId);
 
   const onClickLikeComment = useCallback(
     (id) => () => {
@@ -84,28 +60,15 @@ const CommentContainer = () => {
     [],
   );
 
-  const onFinishComment = useCallback(() => {
-    console.log(commentText);
-    setCommentText('');
-  }, [commentText, setCommentText]);
-
   return (
-    <Comment
+    <CommentList
       comments={comments}
-      feedId={feedId}
-      content={content}
-      author={author}
-      timeDesc={timeDesc}
-      commentText={commentText}
-      onChangeCommentText={onChangeCommentText}
-      commentRef={commentRef}
       onClickLikeComment={onClickLikeComment}
       onClickUnlikeComment={onClickUnlikeComment}
       onClickLikeReple={onClickLikeReple}
       onClickUnlikeReple={onClickUnlikeReple}
-      onFinishComment={onFinishComment}
     />
   );
 };
 
-export default CommentContainer;
+export default CommentListContainer;

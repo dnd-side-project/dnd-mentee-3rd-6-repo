@@ -25,7 +25,7 @@ const sagaMiddleware = createSagaMiddleware({
 const middlewares = [sagaMiddleware];
 
 const enhancer =
-  process.env.REACT_APP_ENV === 'production'
+  process.env.NODE_ENV === 'production'
     ? compose(applyMiddleware(...middlewares)) // 배포용
     : composeWithDevTools(applyMiddleware(...middlewares)); // 개발용
 

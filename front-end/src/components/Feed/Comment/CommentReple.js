@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
-import { CommentBlock } from './styles';
-import RepleIcon from '../../lib/style/feedIcon/RepleIcon';
+import LIkeIcon from '../../../lib/style/feedIcon/LIkeIcon';
+import { CommentItem } from '../styles';
+import RepleIcon from '../../../lib/style/feedIcon/RepleIcon';
 
 const CommentReple = ({ reple, onClickLikeReple, onClickUnlikeReple }) => {
   return (
-    <CommentBlock reple>
+    <CommentItem reple>
       <span className="comment-reple">
         <RepleIcon />
       </span>
@@ -38,7 +38,7 @@ const CommentReple = ({ reple, onClickLikeReple, onClickUnlikeReple }) => {
           </div>
         </dd>
       </dl>
-    </CommentBlock>
+    </CommentItem>
   );
 };
 

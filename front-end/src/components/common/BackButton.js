@@ -25,9 +25,9 @@ const BackButton = ({ history, page }) => {
   // 회원가입 1, 피드 2, 글쓰기 3,
   const dispatch = useDispatch();
   const { pageIndex: registerIndex, isServant } = useSelector((state) => state.auth);
-  const { prevPageIndex: feedIndex } = useSelector((state) => state.feed);
+  const { titleIndex: feedIndex } = useSelector((state) => state.feed);
 
-  /* 회원가입 */
+  /* 1. 회원가입 */
   const onClickRegister = useCallback(() => {
     if (registerIndex <= 1) {
       return history.goBack();
@@ -42,7 +42,7 @@ const BackButton = ({ history, page }) => {
     });
   }, [dispatch, history, isServant, registerIndex]);
 
-  /* 피드 */
+  /* 2. 피드 */
   const onClickFeed = useCallback(() => {
     if (feedIndex) {
       dispatch({

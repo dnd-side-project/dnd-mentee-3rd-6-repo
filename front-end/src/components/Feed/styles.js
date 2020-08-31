@@ -1,7 +1,7 @@
-import styled, { css, createGlobalStyle } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
-export const Wrapper = styled.main`
+export const FeedWrapper = styled.main`
   position: relative;
   width: 100vw;
   height: 645px;
@@ -10,12 +10,12 @@ export const Wrapper = styled.main`
 
   transform: translateX(-16px);
 
-  .feed-list {
+  .feed-content {
     position: absolute;
     top: 0;
 
     width: 100%;
-    height: 645px;
+    height: 80vh;
 
     overflow-x: hidden;
     overflow-y: scroll;
@@ -242,6 +242,16 @@ export const CardImage = styled.div`
 
   overflow: hidden;
 
+  .slick-list {
+    width: 375px;
+    height: 319px;
+  }
+
+  .slick-slide {
+    width: 375px;
+    height: 319px;
+  }
+
   .feed-card__img-index {
     position: absolute;
     top: 18px;
@@ -398,25 +408,25 @@ export const CommentSection = styled.section`
   transform: translateX(-16px);
 
   margin-top: 18px;
-
-  & > div {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    min-height: 126px;
-    background: ${pallete.gray[1]};
-  }
 `;
 
-export const CommentBlock = styled.li`
+export const CommentWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+export const CommentHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-height: 126px;
+  background: ${pallete.gray[1]};
+`;
+
+export const CommentItem = styled.li`
   display: flex;
 
   .comment-reple {
@@ -605,17 +615,4 @@ export const CommentInput = styled.div`
       color: ${pallete.gray[3]};
     }
   }
-`;
-
-export const FeedSlickStyle = createGlobalStyle`
-  .slick-list {
-    width: 375px;
-    height: 319px;
-  }
-
-  .slick-slide {
-    width: 375px;
-    height: 319px;
-  }
-
 `;

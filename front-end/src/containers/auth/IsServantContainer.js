@@ -7,7 +7,7 @@ const IsServantContainer = () => {
   const [isServant, setIsServant] = useState(true);
 
   const dispatch = useDispatch();
-  const { username } = useSelector((state) => state.user);
+  const { name } = useSelector((state) => state.auth.authInfo);
 
   /* 페이지 3 - 집사 확인 후 다음 페이지 이동 */
   const onSubmitSignUp = useCallback(() => {
@@ -28,7 +28,7 @@ const IsServantContainer = () => {
   return (
     <>
       <IsServantForm
-        username={username}
+        name={name}
         isServant={isServant}
         setIsServant={setIsServant}
         onSubmitSignUp={onSubmitSignUp}
