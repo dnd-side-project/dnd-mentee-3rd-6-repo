@@ -1,6 +1,6 @@
 package org.dnd3.udongsa.neighborcats.imgfile.controller;
 
-import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
+import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileByteDto;
 import org.dnd3.udongsa.neighborcats.imgfile.service.ImgFileService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class ImgFileController {
   
   @GetMapping("/{id}")
   public ResponseEntity<byte[]> getImg(@PathVariable Long id){
-    ImgFileDto imgFile = service.findById(id);
+    ImgFileByteDto imgFile = service.findById(id);
 
     HttpHeaders headers = new HttpHeaders();
     headers.set(HttpHeaders.CONTENT_TYPE, "image/jpeg");

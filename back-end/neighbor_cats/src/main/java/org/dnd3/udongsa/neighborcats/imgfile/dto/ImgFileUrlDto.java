@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class ImgFileDto {
+public class ImgFileUrlDto {
 
-  private Long id;
-  private String url;
+  String imgFileUrl = "";
   
 }

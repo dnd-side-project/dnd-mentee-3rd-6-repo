@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.feedactivity;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 public enum FeedActivityType {
 

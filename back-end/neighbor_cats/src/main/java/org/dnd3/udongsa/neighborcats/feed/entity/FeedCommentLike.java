@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.commnet;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
 
@@ -16,21 +16,24 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Getter;
 
 @Entity @Getter
-public class Comment {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class FeedCommentLike {
+  
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String content;
+  @ManyToOne
+  @JoinColumn
+  private FeedComment feedComment;
 
-    @ManyToOne
-    @JoinColumn
-    private Servant author;
+  @ManyToOne
+  @JoinColumn
+  private Servant servant;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+  @CreationTimestamp
+  private LocalDateTime createdDateTime;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+  @UpdateTimestamp
+  private LocalDateTime updatedDateTime;
+
 }

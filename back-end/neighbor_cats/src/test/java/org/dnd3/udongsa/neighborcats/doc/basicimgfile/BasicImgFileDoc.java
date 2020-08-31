@@ -14,7 +14,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.dnd3.udongsa.neighborcats.doc.APIDocTest;
-import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileResDto;
+import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileUrlDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
@@ -30,7 +30,7 @@ public class BasicImgFileDoc extends APIDocTest {
     String api = "/api/base-img-files/servant";
     MockMultipartFile baseImgFile = new MockMultipartFile("baseImgFile", new byte[1]);
     String imgfileUrl = "/api/imgfiles/1";
-    ImgFileResDto resDto = new ImgFileResDto(imgfileUrl);
+    ImgFileUrlDto resDto = new ImgFileUrlDto(imgfileUrl);
     when(basicImgFileService.uploadServant(any())).thenReturn(resDto);
 
     HttpHeaders headers = new HttpHeaders();

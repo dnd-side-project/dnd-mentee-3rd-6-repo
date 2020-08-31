@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.feedtag;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,9 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
+import lombok.Getter;
 
-@Entity
+@Entity @Getter
 public class FeedTag {
 
     @Id

@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.reply.dto;
+package org.dnd3.udongsa.neighborcats.feed.dto;
 
 import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
 
@@ -16,4 +16,5 @@ public class ReplyDto {
   private String createdDateTime = "";
   private String timeDesc = "";
   private AuthorDto author = new AuthorDto();
+  
 }

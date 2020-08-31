@@ -23,5 +23,11 @@ public class SecurityContextServiceImpl implements SecurityContextService{
     return true;
   }
 
+  @Override
+  public String getLoggedUserEmail() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   
 }

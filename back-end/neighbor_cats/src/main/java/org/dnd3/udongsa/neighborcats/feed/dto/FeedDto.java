@@ -1,11 +1,8 @@
 package org.dnd3.udongsa.neighborcats.feed.dto;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dnd3.udongsa.neighborcats.commnet.dto.CommentDto;
-import org.dnd3.udongsa.neighborcats.feedtag.dto.FeedTagDto;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
 
@@ -21,11 +18,11 @@ public class FeedDto {
   private List<FeedTagDto> feedTags = new ArrayList<>(); 
   private List<ImgFileDto> images = new ArrayList<>();
   private AuthorDto author = new AuthorDto();
-  private List<CommentDto> comments = new ArrayList<>(); 
+  private List<FeedCommentDto> comments = new ArrayList<>(); 
   private Boolean isLike = false;
-  private int numberOfLikes = 0;
+  private long numberOfLikes = 0L;
   private int numberOfComments = 0;
-  private LocalDateTime createdDateTime;
+  private String createdDateTime;
   private String timeDesc = "0분전";
 
 }

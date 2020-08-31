@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
-import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
+import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileByteDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.ImgFileRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -67,7 +67,7 @@ public class ImgFileServiceImpl implements ImgFileService {
   }
 
   @Override
-  public ImgFileDto findById(Long id) {
+  public ImgFileByteDto findById(Long id) {
     ImgFile imgFile = repo.findById(id).orElseThrow();
     byte[] bytes = new byte[0];
     try {
@@ -75,7 +75,7 @@ public class ImgFileServiceImpl implements ImgFileService {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    ImgFileDto dto = new ImgFileDto(imgFile.getFileName(), bytes);
+    ImgFileByteDto dto = new ImgFileByteDto(imgFile.getFileName(), bytes);
     return dto;
   }
 

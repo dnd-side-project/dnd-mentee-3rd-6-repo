@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.like;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
 
@@ -9,29 +9,32 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Entity @Getter @NoArgsConstructor
-public class Like {
-
+@Entity @Getter
+public class FeedComment {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String content;
+
     @ManyToOne
-    @JoinColumn
-    private Servant servant;
+    @JoinColumn 
+    private Feed feed;
 
     @ManyToOne
     @JoinColumn
-    private Feed feed; 
+    private Servant author;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDateTime;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedDateTime;
 }

@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.feedtag.dto;
+package org.dnd3.udongsa.neighborcats.feed.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

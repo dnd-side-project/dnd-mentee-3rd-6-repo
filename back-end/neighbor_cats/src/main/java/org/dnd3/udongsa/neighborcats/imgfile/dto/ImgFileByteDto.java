@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class ImgFileDto {
+public class ImgFileByteDto {
 
-  private Long id;
-  private String url;
+  private String fileName;
+  private byte[] bytes;
   
 }

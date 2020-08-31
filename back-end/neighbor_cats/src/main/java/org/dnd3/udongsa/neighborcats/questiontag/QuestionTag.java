@@ -9,7 +9,9 @@ import javax.persistence.ManyToOne;
 
 import org.dnd3.udongsa.neighborcats.question.Question;
 
-@Entity
+import lombok.Getter;
+
+@Entity @Getter
 public class QuestionTag {
     
     @Id

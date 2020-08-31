@@ -91,6 +91,11 @@ public class ServantServiceImpl implements ServantService {
     return !encoder.matches(password, repo.findById(id).get().getPassword());
   }
 
+  @Override
+  public Servant findServantByEmail(String loggedUserEmail) {
+    return repo.findByEmail(loggedUserEmail).orElseThrow();
+  }
+
 	// @Override
 	// @Transactional
 	// public ProfileImgDto uploadProfileForSignup(ProfileUploadDto uploadDto, String userEmail) {
