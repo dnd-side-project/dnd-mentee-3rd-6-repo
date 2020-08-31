@@ -122,9 +122,7 @@ export const TextArea = styled.textarea`
 export const Image = styled.div`
   position: relative;
   width: 100vw;
-  height: 123px;
-
-  display: flex;
+  height: 100px;
 
   padding: 0 16px;
 
@@ -138,11 +136,15 @@ export const Image = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 
+  background: lightgray;
+
   ul {
     position: absolute;
     top: 0;
 
     display: flex;
+    align-items: center;
+    justify-content: center;
 
     width: auto;
     height: 100%;
@@ -157,8 +159,6 @@ export const ImageBox = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  margin-top: 24px;
 
   span {
     position: relative;
@@ -176,6 +176,7 @@ export const ImageBox = styled.li`
       top: 0;
       width: auto;
       height: 80px;
+      background: ${pallete.white};
     }
   }
 
@@ -206,6 +207,31 @@ export const ImageBox = styled.li`
   }
 `;
 
+export const ButtonsWrapper = styled.div`
+  display: flex;
+  width: 100vw;
+
+  padding-left: 27px;
+
+  margin-bottom: 15px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    outline: none;
+    background: none;
+
+    border: none;
+    padding: 5px;
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+`;
+
 export const CatTag = styled.section`
   display: flex;
   flex-direction: column;
@@ -226,27 +252,5 @@ export const CatTag = styled.section`
     color: ${pallete.gray[6]};
 
     margin-left: 23px;
-  }
-`;
-
-export const ButtonsWrapper = styled.div`
-  display: flex;
-  width: 100vw;
-
-  padding-left: 27px;
-
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    outline: none;
-
-    border: none;
-    padding: 5px;
-
-    &:last-child {
-      margin-left: 10px;
-    }
   }
 `;

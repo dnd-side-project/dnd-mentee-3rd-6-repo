@@ -52,7 +52,7 @@ const BackButton = ({ history, page }) => {
     }
   }, [dispatch, feedIndex]);
 
-  /* 글쓰기 */
+  /* 3. 글쓰기 */
   const onClickWrite = useCallback(() => {
     return history.goBack('/feed');
   }, [history]);

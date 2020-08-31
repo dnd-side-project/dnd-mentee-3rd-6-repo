@@ -1,33 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { WriteForm, ImageBox, TextArea, WriteTag, Image, ButtonsWrapper } from './styles';
 import CancelIcon from '../../lib/style/button/CancelIcon';
 import BottomCol from '../common/BottomCol';
 import ImageIcon from '../../lib/style/button/ImageIcon';
 import VideoIcon from '../../lib/style/button/VideoIcon';
 
-const Write = () => {
+const Write = ({
+  feedTags,
+  onFinishFeed,
+  imageInputRef,
+  videoInputRef,
+  onChangeImage,
+  onChangeVideo,
+  onClickImage,
+  onClickVideo,
+  previewPath,
+  onClickClose,
+}) => {
+  console.log(previewPath);
   return (
-    <WriteForm>
+    <WriteForm onFinish={onFinishFeed}>
       <div>
         <WriteTag>
           <span>어떤 주제의 글인가요?</span>
           <div className="write-tag">
             <ul>
-              <li>
-                <button type="button">#일상</button>
-              </li>
-              <li>
-                <button type="button">#나눔</button>
-              </li>
-              <li>
-                <button type="button">#구조</button>
-              </li>
-              <li>
-                <button type="button">#탁묘</button>
-              </li>
-              <li>
-                <button type="button">#냥이 찾아요</button>
-              </li>
+              {feedTags.map((feedTag) => (
+                <li key={feedTag.id}>
+                  <button type="button">{feedTag.name}</button>
+                </li>
+              ))}
             </ul>
           </div>
         </WriteTag>
@@ -38,81 +42,42 @@ const Write = () => {
       <div>
         <Image>
           <ul>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
-            <ImageBox>
-              <button type="button">
-                <CancelIcon />
-              </button>
-              <span>
-                <img
-                  src="https://pds.joins.com/news/component/htmlphoto_mmdata/201904/08/1d956ae6-eb9c-4a04-8f1f-d1a9e719cde5.jpg"
-                  alt=""
-                />
-              </span>
-            </ImageBox>
+            {previewPath.map((path) => (
+              <ImageBox key={path.id}>
+                <button type="button" onClick={onClickClose(path.id)}>
+                  <CancelIcon />
+                </button>
+                <span>
+                  <img src={path.url} alt="고양이 사진" />
+                </span>
+              </ImageBox>
+            ))}
           </ul>
         </Image>
       </div>
       <div>
+        <input
+          type="file"
+          accept="image/jpg,image/png,image/jpeg"
+          name=""
+          multiple
+          hidden
+          ref={imageInputRef}
+          onChange={onChangeImage}
+        />
+        <input
+          type="file"
+          accept="video/*"
+          name=""
+          hidden
+          ref={videoInputRef}
+          onChange={onChangeVideo}
+        />
         <ButtonsWrapper>
-          <button type="button">
+          <button type="button" onClick={onClickImage}>
             <ImageIcon />
           </button>
-          <button type="button">
+          <button type="button" onClick={onClickVideo}>
             <VideoIcon />
           </button>
         </ButtonsWrapper>
@@ -122,6 +87,19 @@ const Write = () => {
       </div>
     </WriteForm>
   );
+};
+
+Write.prototype = {
+  feedTags: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onFinishFeed: PropTypes.func.isRequired,
+  imageInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  videoInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  onChangeImage: PropTypes.func.isRequired,
+  onChangeVideo: PropTypes.func.isRequired,
+  onClickImage: PropTypes.func.isRequired,
+  onClickVideo: PropTypes.func.isRequired,
+  previewPath: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onClickClose: PropTypes.func.isRequired,
 };
 
 export default Write;
