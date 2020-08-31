@@ -10,7 +10,7 @@ import MyPage from './pages/MyPage';
 import NotificationPage from './pages/NotificationPage';
 import QnAPage from './pages/QnAPage';
 import ChatPage from './pages/ChatPage';
-// import WritePage from './pages/WritePage';
+import WritePage from './pages/WritePage';
 
 const StatusBar = styled.div`
   width: 100vw;
@@ -32,7 +32,7 @@ function App() {
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/feed" exact component={FeedPage} />
-      {/* <Route path="/feed/write" component={WritePage} /> */}
+      <Route path="/feed/write" component={WritePage} />
       <Route path="/qna" component={QnAPage} />
       <Route path="/notification" component={NotificationPage} />
       <Route path="/mypage" component={MyPage} />
