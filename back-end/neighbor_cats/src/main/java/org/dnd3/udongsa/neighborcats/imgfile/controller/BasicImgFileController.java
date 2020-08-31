@@ -1,6 +1,6 @@
 package org.dnd3.udongsa.neighborcats.imgfile.controller;
 
-import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileResDto;
+import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileUrlDto;
 import org.dnd3.udongsa.neighborcats.imgfile.service.BasicImgFileService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ public class BasicImgFileController {
 
   @Secured("ROLE_ADMIN")
   @PostMapping("/servant")
-  public ImgFileResDto saveServantBasicImg(MultipartFile baseImgFile){
+  public ImgFileUrlDto saveServantBasicImg(MultipartFile baseImgFile){
 
     return service.uploadServant(baseImgFile);
 

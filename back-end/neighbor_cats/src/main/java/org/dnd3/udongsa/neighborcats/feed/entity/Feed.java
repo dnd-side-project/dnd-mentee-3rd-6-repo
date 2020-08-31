@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.keep;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
 
@@ -9,26 +9,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
-public class Keep {
+import lombok.Getter;
 
+@Entity @Getter
+public class Feed {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn
-    private Servant servant;
+    private String content;
 
     @ManyToOne
     @JoinColumn
-    private Feed feed;
+    private Servant author;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-    
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
 }

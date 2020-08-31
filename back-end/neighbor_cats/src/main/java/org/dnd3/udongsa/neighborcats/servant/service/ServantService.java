@@ -14,5 +14,7 @@ public interface ServantService {
   ServantDto findByEmail(String email);
 
   boolean isMatchPassword(String password, Long id);
+
+  Servant findServantByEmail(String loggedUserEmail);
    
 }

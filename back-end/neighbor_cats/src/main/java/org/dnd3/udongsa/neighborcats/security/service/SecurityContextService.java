@@ -8,5 +8,7 @@ public interface SecurityContextService {
    * @return 성공 시 True. 실패 시 false
    */
   public boolean setAuthentication(String userEmail);
+
+  public String getLoggedUserEmail();
   
 }

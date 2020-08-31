@@ -1,4 +1,4 @@
-package org.dnd3.udongsa.neighborcats.feedimg;
+package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,22 +7,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.dnd3.udongsa.neighborcats.feed.Feed;
-import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
+import lombok.Getter;
 
-@Entity
-public class FeedImg {
+@Entity @Getter
+public class FeedTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private String name;
 
     @ManyToOne
     @JoinColumn
     private Feed feed;
-
-    @ManyToOne
-    @JoinColumn
-    private ImgFile imgFile;
     
 }

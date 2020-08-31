@@ -4,7 +4,7 @@ import org.dnd3.udongsa.neighborcats.imgfile.BasicImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.EBasicImgType;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
-import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileResDto;
+import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileUrlDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.BasicImgFileRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class BasicImgFileServiceImpl implements BasicImgFileService {
 
   @Override
   @Transactional
-  public ImgFileResDto uploadServant(MultipartFile multipartFile) {
+  public ImgFileUrlDto uploadServant(MultipartFile multipartFile) {
 
     BasicImgFile basicImgFile = null;
     if(repo.existsByType(EBasicImgType.SERVANT)){
@@ -33,7 +33,7 @@ public class BasicImgFileServiceImpl implements BasicImgFileService {
       repo.save(basicImgFile);
     }
     String url = ImgFileUtils.generateImgFileUrl(basicImgFile.getImgFile().getId());
-    return new ImgFileResDto(url);
+    return new ImgFileUrlDto(url);
   }
   
   

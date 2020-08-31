@@ -1,13 +1,14 @@
-package org.dnd3.udongsa.neighborcats.imgfile.dto;
+package org.dnd3.udongsa.neighborcats.feed.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class ImgFileDto {
+public class FeedTagDto {
 
   private Long id;
-  private String url;
+
+  private String name;
   
 }

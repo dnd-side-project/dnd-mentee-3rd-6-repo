@@ -7,7 +7,9 @@ import org.dnd3.udongsa.neighborcats.auth.dto.ServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
+import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
 import org.dnd3.udongsa.neighborcats.role.Role;
+import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
 
 public class ServantMapper {
   
@@ -38,6 +40,15 @@ public class ServantMapper {
       servant.getRoles(), 
       cats);
     return servantDto;
+  }
+
+  public static AuthorDto map(Servant author) {
+    AuthorDto dto = new AuthorDto();
+    dto.setId(author.getId());
+    dto.setNickName(author.getNickname());
+    dto.setProfileImg(ImgFileUtils.generateImgFileUrl(author.getProfileImg()));
+    dto.setAddressName(author.getAddress().getName());
+    return dto;
   }
 
 }
