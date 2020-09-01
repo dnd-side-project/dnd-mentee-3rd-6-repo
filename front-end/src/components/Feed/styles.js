@@ -2,29 +2,15 @@ import styled, { css } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
 export const FeedWrapper = styled.main`
-  position: relative;
   width: 100vw;
-  height: 645px;
 
-  margin-top: 14px;
+  margin-top: 98px;
 
   transform: translateX(-16px);
 
   .feed-content {
-    position: absolute;
-    top: 0;
-
     width: 100%;
-    height: 80vh;
-
     overflow-x: hidden;
-    overflow-y: scroll;
-
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera*/
-    }
   }
 `;
 
@@ -34,14 +20,13 @@ export const Header = styled.header`
   align-items: center;
 
   width: 100%;
-  /* height: 122px; */
 
   .feed-head__title {
     display: flex;
     justify-content: space-between;
 
     width: 100%;
-    height: 58px;
+    height: 37px;
 
     li {
       display: flex;
@@ -87,28 +72,6 @@ export const Header = styled.header`
       li {
         margin-left: 9px;
 
-        button {
-          height: 28px;
-          min-width: 71px;
-
-          border: none;
-          outline: none;
-          background: ${pallete.white};
-
-          border: 1px solid ${pallete.orange};
-          border-radius: 14px;
-
-          font-style: normal;
-          font-weight: bold;
-          font-size: 12px;
-          line-height: 16px;
-          text-align: center;
-
-          white-space: nowrap;
-
-          color: ${pallete.orange};
-        }
-
         &:first-child {
           margin-left: 16px;
         }
@@ -139,14 +102,45 @@ export const HeaderButton = styled.button`
 
   background: ${pallete.white};
 
-  ${({ value, titleIndex }) => {
-    return value === parseInt(titleIndex, 10)
+  ${({ value, check }) => {
+    return value === check
       ? css`
           color: ${pallete.gray[6]};
           border-bottom: 2px solid ${pallete.gray[5]};
         `
       : css`
           color: ${pallete.gray[4]};
+        `;
+  }}
+`;
+
+export const TagButton = styled.button`
+  height: 28px;
+  min-width: 71px;
+
+  border: none;
+  outline: none;
+  background: ${pallete.white};
+
+  border-radius: 14px;
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+
+  white-space: nowrap;
+
+  ${({ check, checkId }) => {
+    return check === checkId
+      ? css`
+          border: 1px solid ${pallete.orange};
+          color: ${pallete.orange};
+        `
+      : css`
+          border: 1px solid ${pallete.gray[3]};
+          color: ${pallete.gray[3]};
         `;
   }}
 `;
@@ -175,7 +169,7 @@ export const CardItem = styled.li`
   }
 
   &:last-child {
-    margin-bottom: 40px;
+    margin-bottom: 90px;
   }
 `;
 
@@ -399,22 +393,12 @@ export const CardContentButton = styled.button`
 `;
 
 export const CommentSection = styled.section`
-  position: relative;
   width: 100vw;
-  height: 77.5vh;
 
-  overflow-y: scroll;
   overflow-x: hidden;
   transform: translateX(-16px);
 
-  margin-top: 18px;
-`;
-
-export const CommentWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  margin-top: 98px;
 `;
 
 export const CommentHeader = styled.header`
@@ -558,6 +542,10 @@ export const CommentItem = styled.li`
         }
       }
     }
+  }
+
+  &:last-child {
+    margin-bottom: 80px;
   }
 `;
 

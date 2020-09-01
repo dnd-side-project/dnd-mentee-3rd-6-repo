@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import CommentForm from '../../../components/Feed/Comment/CommentForm';
 import useInput from '../../../hooks/useInput';
-import { PREV_FEED_PAGE } from '../../../modules/feed';
 
 const CommentFormContainer = () => {
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
@@ -11,20 +10,20 @@ const CommentFormContainer = () => {
 
   const dispatch = useDispatch();
 
-  /* 댓글 아이콘을 눌러야지만 접근할 수 있게 */
   useEffect(() => {
-    // if (prevPageIndex === null) {
-    //   dispatch({
-    //     type: PREV_FEED_PAGE,
-    //     data: titleIndex,
-    //   });
-    // }
     commentRef.current.focus();
   }, [dispatch]);
 
   const onFinishComment = useCallback(() => {
     console.log(commentText);
     setCommentText('');
+    // dispatch({
+    //   type: ADD_COMMENT_REQUEST,
+    //   data: {
+    //     commentText,
+    //     reple,
+    //   },
+    // });
   }, [commentText, setCommentText]);
 
   return (

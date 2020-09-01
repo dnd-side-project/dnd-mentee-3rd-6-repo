@@ -19,7 +19,6 @@ const Write = ({
   previewPath,
   onClickClose,
 }) => {
-  console.log(previewPath);
   return (
     <WriteForm onFinish={onFinishFeed}>
       <div>

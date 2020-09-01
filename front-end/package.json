@@ -47,7 +47,8 @@
       "no-unused-expressions": "off",
       "consistent-return": "off",
       "react/jsx-wrap-multilines": "off",
-      "no-nested-ternary": "off"
+      "no-nested-ternary": "off",
+      "react/jsx-indent": "off"
     },
     "env": {
       "browser": true

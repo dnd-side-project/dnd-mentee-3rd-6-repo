@@ -38,7 +38,7 @@ const FeedCardList = ({
   return (
     <CardList>
       {contents.map((feed) => (
-        <CardItem key={feed}>
+        <CardItem key={feed.id}>
           <CardTitle>
             <dl className="feed-card__title-column">
               <dt>

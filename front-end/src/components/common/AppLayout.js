@@ -13,12 +13,26 @@ import QnAIcon from '../../lib/style/menuIcon/QnAIcon';
 import BackButton from './BackButton';
 
 const TopCol = styled(Col)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  /* 상태바 포함 (아이폰 x: 44px) */
+  height: 98px;
+
+  /* 상태바 x */
+  /* height: 54px; */
+
+  padding: 0 16px;
+  padding-bottom: 18px;
+  background: ${pallete.white};
+
+  z-index: 999;
+
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 28px;
-
-  margin-top: 10px;
+  align-items: flex-end;
 
   h1 {
     font-weight: bold;
@@ -80,47 +94,45 @@ const Applayout = ({
   location: { pathname },
 }) => {
   return (
-    <div>
-      <Row gutter={[0, 0]}>
-        <TopCol xs={24}>
-          {pageCheck ? <BackButton page={page} /> : <span />}
-          <h1>{title}</h1>
-          {topRightIcon}
-        </TopCol>
-        <Col xs={24}>{children}</Col>
-        {botttomMenu && (
-          <Col xs={24}>
-            <Menu>
-              <li>
-                <NavLink to="/feed" activeClassName="selected">
-                  <FeedIcon pathname={pathname} />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/qna" activeClassName="selected">
-                  <QnAIcon pathname={pathname} />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/feed/write" activeClassName="selected">
-                  <WriteIcon />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/notification" activeClassName="selected">
-                  <NotificationIcon pathname={pathname} />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/mypage" activeClassName="selected">
-                  <MyPageIcon pathname={pathname} />
-                </NavLink>
-              </li>
-            </Menu>
-          </Col>
-        )}
-      </Row>
-    </div>
+    <Row gutter={[0, 0]}>
+      <TopCol xs={24}>
+        {pageCheck ? <BackButton page={page} /> : <span />}
+        <h1>{title}</h1>
+        {topRightIcon}
+      </TopCol>
+      <Col xs={24}>{children}</Col>
+      {botttomMenu && (
+        <Col xs={24}>
+          <Menu>
+            <li>
+              <NavLink to="/feed" activeClassName="selected">
+                <FeedIcon pathname={pathname} />
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/qna" activeClassName="selected">
+                <QnAIcon pathname={pathname} />
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/feed/write" activeClassName="selected">
+                <WriteIcon />
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/notification" activeClassName="selected">
+                <NotificationIcon pathname={pathname} />
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/mypage" activeClassName="selected">
+                <MyPageIcon pathname={pathname} />
+              </NavLink>
+            </li>
+          </Menu>
+        </Col>
+      )}
+    </Row>
   );
 };
 
