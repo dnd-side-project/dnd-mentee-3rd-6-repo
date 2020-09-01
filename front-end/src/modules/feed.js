@@ -5,6 +5,8 @@ import produce from 'immer';
 export const initialSate = {
   pageIndex: 1,
   titleIndex: 1,
+  tagIndex: 1,
+  hotIndex: 1,
   feedAllTags: {
     filterTypes: [
       {
@@ -110,6 +112,126 @@ export const initialSate = {
         createdDateTime: '2020-01-02T21:23:00',
         timeDesc: '6시간전',
       },
+      {
+        id: 2,
+        content: '연탄이는 오늘도 식빵 굽굽',
+        images: [
+          {
+            id: 1,
+            url: 'https://cdn.pixabay.com/photo/2014/11/30/14/11/kitty-551554_1280.jpg',
+          },
+          {
+            id: 2,
+            url: 'https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg',
+          },
+        ],
+        author: {
+          id: 1,
+          nickName: '연탄범벅 연탄이네',
+          profileImg: 'https://i.ytimg.com/vi/IMaRld3s0CY/maxresdefault.jpg',
+          addressName: '분당구 정자 2동',
+        },
+        comments: [
+          {
+            id: 1,
+            content: '넘 귀여운거 아닌가요?!',
+            numberOfLikes: 10,
+            isLike: false,
+            numberOfReplies: 1,
+            createdDateTime: '2020-01-02T21:23:00',
+            timeDesc: '3시간 전',
+            author: {
+              id: 1,
+              nickName: '연탄범벅 연탄이네',
+              profileImg: 'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
+              addressName: '수지구 풍덕천동',
+            },
+            replies: [
+              {
+                id: 3,
+                content: '까미랑 보리랑',
+                numberOfLikes: 3,
+                isLike: false,
+                createdDateTime: '2020-01-02T21:23:00',
+                timeDesc: '5시간 전',
+                author: {
+                  id: 1,
+                  nickName: '연탄범벅 연탄이네',
+                  profileImg: 'https://cdn.pixabay.com/photo/2016/01/20/13/05/cat-1151519_1280.jpg',
+                  addressName: '수지구 풍덕천동',
+                },
+              },
+            ],
+          },
+          {
+            id: 2,
+            content: '넘 귀여운거 아닌가요?!',
+            numberOfLikes: 10,
+            isLike: false,
+            numberOfReplies: 1,
+            createdDateTime: '2020-01-02T21:23:00',
+            timeDesc: '3시간 전',
+            author: {
+              id: 1,
+              nickName: '연탄범벅 연탄이네',
+              profileImg: 'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
+              addressName: '수지구 풍덕천동',
+            },
+            replies: [
+              {
+                id: 3,
+                content: '까미랑 보리랑',
+                numberOfLikes: 3,
+                isLike: false,
+                createdDateTime: '2020-01-02T21:23:00',
+                timeDesc: '5시간 전',
+                author: {
+                  id: 1,
+                  nickName: '연탄범벅 연탄이네',
+                  profileImg: 'https://cdn.pixabay.com/photo/2016/01/20/13/05/cat-1151519_1280.jpg',
+                  addressName: '수지구 풍덕천동',
+                },
+              },
+            ],
+          },
+          {
+            id: 3,
+            content: '넘 귀여운거 아닌가요?!',
+            numberOfLikes: 10,
+            isLike: false,
+            numberOfReplies: 1,
+            createdDateTime: '2020-01-02T21:23:00',
+            timeDesc: '3시간 전',
+            author: {
+              id: 1,
+              nickName: '연탄범벅 연탄이네',
+              profileImg: 'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
+              addressName: '수지구 풍덕천동',
+            },
+            replies: [
+              {
+                id: 3,
+                content: '까미랑 보리랑',
+                numberOfLikes: 3,
+                isLike: false,
+                createdDateTime: '2020-01-02T21:23:00',
+                timeDesc: '5시간 전',
+                author: {
+                  id: 1,
+                  nickName: '연탄범벅 연탄이네',
+                  profileImg: 'https://cdn.pixabay.com/photo/2016/01/20/13/05/cat-1151519_1280.jpg',
+                  addressName: '수지구 풍덕천동',
+                },
+              },
+            ],
+          },
+        ],
+        isLike: true,
+        numberOfLikes: 15,
+        numberOfComments: 6,
+        createdDateTime: '2020-01-02T21:23:00',
+        timeDesc: '6시간전',
+      },
     ],
   },
   feedId: null,
@@ -131,9 +253,17 @@ export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
 export const GET_FEED_TAG_SUCCESS = 'feed/GET_FEED_TAG_SUCCESS';
 export const GET_FEED_TAG_FAILURE = 'feed/GET_FEED_TAG_FAILURE';
 
-export const FILTER_TYPE_REQUEST = 'feed/FILTER_TYPE_REQUEST';
-export const FILTER_TYPE_SUCCESS = 'feed/FILTER_TYPE_SUCCESS';
-export const FILTER_TYPE_FAILURE = 'feed/FILTER_TYPE_FAILURE';
+export const FILTER_TYPE_1_REQUEST = 'feed/FILTER_TYPE_1_REQUEST';
+export const FILTER_TYPE_1_SUCCESS = 'feed/FILTER_TYPE_1_SUCCESS';
+export const FILTER_TYPE_1_FAILURE = 'feed/FILTER_TYPE_1_FAILURE';
+
+export const FILTER_TYPE_2_REQUEST = 'feed/FILTER_TYPE_2_REQUEST';
+export const FILTER_TYPE_2_SUCCESS = 'feed/FILTER_TYPE_2_SUCCESS';
+export const FILTER_TYPE_2_FAILURE = 'feed/FILTER_TYPE_2_FAILURE';
+
+export const FILTER_TYPE_3_REQUEST = 'feed/FILTER_TYPE_3_REQUEST';
+export const FILTER_TYPE_3_SUCCESS = 'feed/FILTER_TYPE_3_SUCCESS';
+export const FILTER_TYPE_3_FAILURE = 'feed/FILTER_TYPE_3_FAILURE';
 
 export const LIKE_FEED_REQUEST = 'feed/LIKE_FEED_REQUEST';
 export const LIKE_FEED_SUCCESS = 'feed/LIKE_FEED_SUCCESS';
@@ -188,24 +318,86 @@ function* getFeedTag(action) {
   }
 }
 
-const filterTypeAPI = () => {
-  const params = {};
+const filterType1API = ({ filterTypeId, feedTagId }) => {
+  const params = {
+    filterTypeId,
+    feedTagId,
+  };
   return axios.get('', { params });
 };
 
-function* filterType(action) {
+function* filterType1(action) {
   try {
     // const result = yield call(filterTypeAPI, action);
     yield put({
-      type: FILTER_TYPE_SUCCESS,
+      type: FILTER_TYPE_1_SUCCESS,
       data: {
-        pageIndex: action.data,
+        pageIndex: action.data.filterTypeId,
+        titleIndex: action.data.filterTypeId,
+        tagIndex: action.data.feedTagId,
+        // Feeds: result.data,
       },
     });
   } catch (error) {
     console.error(error);
     yield put({
-      type: FILTER_TYPE_FAILURE,
+      type: FILTER_TYPE_1_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+const filterType2API = ({ filterTypeId, sortTypes }) => {
+  const params = {
+    filterTypeId,
+    sortTypes,
+  };
+  return axios.get('', { params });
+};
+
+function* filterType2(action) {
+  try {
+    // const result = yield call(filterTypeAPI, action);
+    yield put({
+      type: FILTER_TYPE_2_SUCCESS,
+      data: {
+        pageIndex: action.data.filterTypeId,
+        titleIndex: action.data.filterTypeId,
+        hotIndex: action.data.sortTypes,
+        // Feeds: result.data,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: FILTER_TYPE_2_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+const filterType3API = ({ filterTypeId }) => {
+  const params = {
+    filterTypeId,
+  };
+  return axios.get('', { params });
+};
+
+function* filterType3(action) {
+  try {
+    // const result = yield call(filterTypeAPI, action);
+    yield put({
+      type: FILTER_TYPE_3_SUCCESS,
+      data: {
+        pageIndex: action.data.filterTypeId,
+        titleIndex: action.data.filterTypeId,
+        // Feeds: result.data,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: FILTER_TYPE_3_FAILURE,
       error: error.response.data,
     });
   }
@@ -342,8 +534,16 @@ function* watchGetFeedTag() {
   yield takeLatest(GET_FEED_TAG_REQUEST, getFeedTag);
 }
 
-function* watchFilterType() {
-  yield takeLatest(FILTER_TYPE_REQUEST, filterType);
+function* watchFilterType1() {
+  yield takeLatest(FILTER_TYPE_1_REQUEST, filterType1);
+}
+
+function* watchFilterType2() {
+  yield takeLatest(FILTER_TYPE_2_REQUEST, filterType2);
+}
+
+function* watchFilterType3() {
+  yield takeLatest(FILTER_TYPE_3_REQUEST, filterType3);
 }
 
 function* watchLikeFeed() {
@@ -373,7 +573,9 @@ function* watchUnlikeReple() {
 export function* feedSaga() {
   yield all([
     fork(watchGetFeedTag),
-    fork(watchFilterType),
+    fork(watchFilterType1),
+    fork(watchFilterType2),
+    fork(watchFilterType3),
     fork(watchGoBackLoginPage),
     fork(watchLikeFeed),
     fork(watchUnlikeFeed),
@@ -403,19 +605,56 @@ const feed = (state = initialSate, action) => {
         draft.getFeedTagLoading = false;
         draft.getFeedTagError = action.error;
         break;
-      /* 필터 타입  화면 이동 */
-      case FILTER_TYPE_REQUEST:
+      /* 필터 타입1 화면 이동 */
+      case FILTER_TYPE_1_REQUEST:
         draft.filterTypeLoading = true;
         draft.filterTypeDone = false;
         draft.filterTypeError = null;
         break;
-      case FILTER_TYPE_SUCCESS:
+      case FILTER_TYPE_1_SUCCESS:
         draft.pageIndex = action.data.pageIndex;
         draft.titleIndex = action.data.pageIndex;
+        draft.tagIndex = action.data.tagIndex;
+        // draft.Feeds = action.data.Feeds;
         draft.filterTypeLoading = false;
         draft.filterTypeDone = true;
         break;
-      case FILTER_TYPE_FAILURE:
+      case FILTER_TYPE_1_FAILURE:
+        draft.filterTypeLoading = false;
+        draft.filterTypeError = action.error;
+        break;
+      /* 필터 타입2 화면 이동 */
+      case FILTER_TYPE_2_REQUEST:
+        draft.filterTypeLoading = true;
+        draft.filterTypeDone = false;
+        draft.filterTypeError = null;
+        break;
+      case FILTER_TYPE_2_SUCCESS:
+        draft.pageIndex = action.data.pageIndex;
+        draft.titleIndex = action.data.pageIndex;
+        draft.hotIndex = action.data.hotIndex;
+        // draft.Feeds = action.data.Feeds;
+        draft.filterTypeLoading = false;
+        draft.filterTypeDone = true;
+        break;
+      case FILTER_TYPE_2_FAILURE:
+        draft.filterTypeLoading = false;
+        draft.filterTypeError = action.error;
+        break;
+      /* 필터 타입3 화면 이동 */
+      case FILTER_TYPE_3_REQUEST:
+        draft.filterTypeLoading = true;
+        draft.filterTypeDone = false;
+        draft.filterTypeError = null;
+        break;
+      case FILTER_TYPE_3_SUCCESS:
+        draft.pageIndex = action.data.pageIndex;
+        draft.titleIndex = action.data.pageIndex;
+        // draft.Feeds = action.data.Feeds;
+        draft.filterTypeLoading = false;
+        draft.filterTypeDone = true;
+        break;
+      case FILTER_TYPE_3_FAILURE:
         draft.filterTypeLoading = false;
         draft.filterTypeError = action.error;
         break;

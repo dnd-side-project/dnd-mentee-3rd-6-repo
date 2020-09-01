@@ -10,13 +10,13 @@ export const WriteForm = styled(Form)`
   width: 100vw;
 
   transform: translateX(-16px);
+
+  margin-top: 98px;
 `;
 
 export const WriteTag = styled.section`
   width: 100vw;
   height: 107px;
-
-  margin-top: 19px;
 
   border-top: 1px solid ${pallete.gray[3]};
 
