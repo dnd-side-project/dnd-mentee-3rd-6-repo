@@ -1,100 +1,84 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from 'antd';
 
-import logo from '../logo.svg';
 import { pallete } from '../lib/style/pallete';
+import Logo from '../lib/style/Logo';
 
 const HomeLayout = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-
-  div {
-    display: flex;
-    flex-direction: column;
-  }
+  justify-content: space-around;
+  height: 90vh;
 `;
 
 const HomeHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-content: center;
-  margin-top: 148px;
+  margin-top: 20vh;
 
   h1 {
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 22px;
     line-height: 155%;
 
     text-align: center;
     margin-bottom: 88px;
+
+    strong {
+      font-weight: bold;
+    }
+
+    color: ${pallete.primary[1]};
   }
 
   .logo {
-    width: 163px;
-    height: auto;
-    margin: 0 auto;
-    margin-bottom: 55px;
-  }
-
-  .bubble-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
 
-    position: relative;
-    right: 105px;
-    top: 40px;
+    width: 100vw;
+    transform: translateX(-16px);
 
-    & img {
-      position: absolute;
-    }
+    border-bottom: 7px solid ${pallete.primary[1]};
 
-    & .bubble-text {
-      position: absolute;
-      font-family: BM JUA_OTF;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 18px;
-      line-height: 19px;
+    svg {
+      transform: translateY(20px);
     }
   }
 `;
 
-const AuthButton = styled(Button)`
-  width: 315px;
-  height: 55px;
-  margin: 0 auto;
-  border-radius: 14px;
-  color: ${pallete.gray[6]};
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  font-style: normal;
-  font-weight: bold;
-  font-size: 15px;
-  line-height: 20px;
-  text-align: center;
-
-  background: ${pallete.gray[3]};
-  border: none;
-
-  transition: all 0.125s;
-
-  &:hover {
-    background: ${pallete.gray[3]};
-    border: none;
-  }
-
-  &:active {
-    background: ${pallete.orange};
-    border: none;
-  }
-
-  & + & {
+  button {
+    width: 315px;
+    height: 55px;
     margin-top: 20px;
+    border-radius: 14px;
+    color: ${pallete.primary[1]};
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+
+    background: ${pallete.primary[3]};
+    border: none;
+    outline: none;
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.15);
+
+    transition: all 0.125s;
+
+    &:active {
+      background: ${pallete.primary[2]};
+      color: ${pallete.primary[3]};
+      border: none;
+    }
   }
 `;
 
@@ -103,22 +87,20 @@ const Home = () => {
     <HomeLayout>
       <HomeHeader>
         <h1>
-          안녕하세요 집사님! <br /> 우동집에 오신걸 환영합니다 'ᴗ'
+          안녕하세요 집사님! <br /> <strong>우동집에 오신걸 환영합니다 'ᴗ'</strong>
         </h1>
-        <span className="bubble-wrapper">
-          <img src="/images/bubble/speech.svg" alt="말풍선 안냥!" />
-          <span className="bubble-text">안냥!</span>
-        </span>
-        <img className="logo" src={logo} alt="우동집 로고" />
+        <div className="logo">
+          <Logo />
+        </div>
       </HomeHeader>
-      <div>
-        <AuthButton type="primary" shape="round">
-          <Link to="/login">로그인</Link>
-        </AuthButton>
-        <AuthButton type="primary" shape="round">
-          <Link to="/register">회원가입</Link>
-        </AuthButton>
-      </div>
+      <ButtonWrapper>
+        <Link to="/login">
+          <button type="button">로그인</button>
+        </Link>
+        <Link to="/register">
+          <button type="button">회원가입</button>
+        </Link>
+      </ButtonWrapper>
     </HomeLayout>
   );
 };

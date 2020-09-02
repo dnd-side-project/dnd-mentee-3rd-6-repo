@@ -4,7 +4,7 @@ import produce from 'immer';
 
 /* 초기 상태 */
 export const initialSate = {
-  pageIndex: 1,
+  pageIndex: 3,
   authInfo: {
     // 1
     phoneNumber: '',
@@ -116,7 +116,6 @@ const emailValidAPI = (data) => {
 function* emailValid(action) {
   try {
     const result = yield call(emailValidAPI, action.data);
-    console.log(result);
     yield put({
       type: EMAIL_VALID_SUCCESS,
       data: result.data,

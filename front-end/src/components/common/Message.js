@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
 export const ErrorMessage = styled.p`
-  color: ${pallete.red};
+  color: ${pallete.ui[1]};
   font-style: normal;
   font-weight: 500;
   font-size: 10px;
