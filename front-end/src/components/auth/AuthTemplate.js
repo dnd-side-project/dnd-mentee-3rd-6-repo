@@ -11,7 +11,8 @@ const TopCol = styled(Col)`
   display: flex;
   flex-direction: column;
 
-  margin-top: 16px;
+  /* margin-top: 16px; */
+  margin-top: 60px; /* 상태바 포함 */
 
   h1 {
     font-style: normal;
@@ -37,7 +38,7 @@ const TopCol = styled(Col)`
 `;
 
 const MiddleCol = styled(Col)`
-  min-height: 80vh;
+  min-height: 73vh;
 
   form {
     height: 100%;
@@ -60,14 +61,18 @@ const AuthTemplate = ({ children, line, highLightTitle, title, subTitle }) => {
     <Row gutter={[0, 0]}>
       <TopCol xs={24}>
         <BackButton page={1} />
-        <h1>
-          <HighLight line={line}>
-            {highLightTitle} <span className="line" />
-          </HighLight>
-          <br />
-          {title}
-        </h1>
-        <h2>{subTitle}</h2>
+        {title && (
+          <>
+            <h1>
+              <HighLight line={line}>
+                {highLightTitle} <span className="line" />
+              </HighLight>
+              <br />
+              {title}
+            </h1>
+            <h2>{subTitle}</h2>
+          </>
+        )}
       </TopCol>
       <MiddleCol xs={24}>{children}</MiddleCol>
     </Row>

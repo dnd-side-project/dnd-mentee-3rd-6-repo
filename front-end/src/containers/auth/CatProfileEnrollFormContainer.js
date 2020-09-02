@@ -19,7 +19,7 @@ const CatProfileEnrollFormContainer = () => {
   const dispatch = useDispatch();
 
   const { previewPath, CatKindId, authInfo } = useSelector((state) => state.auth);
-  const { catName } = authInfo;
+  const { catName, catFeatures } = authInfo;
 
   /* 페이지 6 - 냥이 품종 가져오기 */
   // useEffect(() => {
@@ -88,6 +88,7 @@ const CatProfileEnrollFormContainer = () => {
     <>
       <CatProfileEnrollForm
         catName={catName}
+        catFeatures={catFeatures}
         previewPath={previewPath}
         onSelectCatKindId={onSelectCatKindId}
         selectCheck={selectCheck}

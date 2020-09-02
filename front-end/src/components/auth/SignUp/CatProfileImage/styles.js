@@ -22,8 +22,8 @@ export const PrevImageBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   background: ${pallete.gray[2]};
 
   border-radius: 50%;
@@ -47,9 +47,7 @@ export const ProfileHeader = styled.h3`
 
   text-align: center;
 
-  strong {
-    font-weight: bold;
-  }
+  color: ${pallete.primary[1]};
 `;
 
 export const ImageBox = styled.div`
@@ -75,20 +73,24 @@ export const ImageBox = styled.div`
 `;
 
 export const Imagebutton = styled.button`
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  transform: translate(80px, -60px);
+  /* transform: translate(80px, -60px); */
   width: 45px;
   height: 45px;
 
-  color: ${pallete.white};
+  color: ${pallete.primary[3]};
   font-size: 18px;
   outline: none;
 
-  border: 2px solid ${pallete.white};
-  background: ${pallete.orange};
+  border: 3px solid ${pallete.primary[3]};
+  background: ${pallete.secondary[1]};
   border-radius: 50%;
   transition: all 0.25s;
 
@@ -104,9 +106,13 @@ export const EnrollImageBox = styled.div`
 
   margin-bottom: 34px;
 
-  span {
-    width: 120px;
-    height: 120px;
+  .img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100px;
+    height: 100px;
     background: ${pallete.gray[2]};
     border-radius: 50%;
     overflow: hidden;
@@ -114,6 +120,33 @@ export const EnrollImageBox = styled.div`
     img {
       max-width: 100%;
       height: auto;
+    }
+  }
+
+  .info-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    color: ${pallete.primary[1]};
+    margin-left: 22px;
+
+    dt {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 25px;
+
+      padding: 0 20px;
+    }
+
+    dd {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 19px;
+
+      padding: 0 20px;
+      margin-top: 20px;
     }
   }
 `;
@@ -139,17 +172,24 @@ export const CatKindModal = styled.div`
     width: 288px;
     height: 582px;
 
-    background: ${pallete.white};
+    background: ${pallete.primary[3]};
     border-radius: 14px;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     ul {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 530px;
+      margin: 0 auto;
+
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
 
-      height: 530px;
       overflow-y: scroll;
 
       li {
@@ -166,11 +206,13 @@ export const CatKindModal = styled.div`
         color: ${pallete.gray[6]};
       }
     }
+
     .modal-btn {
-      position: sticky;
+      position: absolute;
       bottom: 0;
       left: 0;
       margin: 0 auto;
+
       width: 288px;
       height: 52px;
 
@@ -180,12 +222,12 @@ export const CatKindModal = styled.div`
       line-height: 19px;
       text-align: center;
 
-      color: ${pallete.orange};
-      background: ${pallete.white};
+      color: ${pallete.primary[2]};
+      background: ${pallete.primary[3]};
 
       outline: none;
       border: none;
-      border-top: 1px solid ${pallete.gray[3]};
+      border-top: 1px solid ${pallete.gray[2]};
     }
   }
 `;
@@ -197,18 +239,23 @@ export const CheckButton = styled.button`
 
   width: 254px;
   height: 45px;
-  background: ${pallete.white};
   outline: none;
   border: none;
 
-  cursor: pointer;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19px;
+
+  color: ${pallete.primary[1]};
+
   ${({ catKindCheck, checkId }) => {
     return catKindCheck === checkId
       ? css`
-          background: ${pallete.orange};
+          background: ${pallete.secondary[2]};
         `
       : css`
-          background: ${pallete.white};
+          background: ${pallete.primary[3]};
         `;
   }}
 `;
@@ -218,6 +265,13 @@ const ProfileImageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 
+  .second {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+  }
+
   p {
     font-style: normal;
     font-weight: 500;
@@ -225,9 +279,9 @@ const ProfileImageWrapper = styled.div`
     line-height: 16px;
     text-align: center;
 
-    margin-top: 22px;
+    margin-top: 27px;
 
-    color: ${pallete.gray[4]};
+    color: ${pallete.gray[6]};
   }
 `;
 

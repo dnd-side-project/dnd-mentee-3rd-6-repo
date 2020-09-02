@@ -19,7 +19,7 @@ const RegisterPage = () => {
     '우동집',
     '집사님이',
     null,
-    '우리집에',
+    null,
     '우리집에',
     '우리집에',
     '우리집에',
@@ -38,6 +38,7 @@ const RegisterPage = () => {
   const subTitles = [
     '고양이 좋아하는 당신은 좋은 사람 ( ˘ ³˘) ♡',
     '우동이는 당신을 더 알고 싶다옹 (ง •̀_•́)ง',
+    null,
     null,
   ];
 

@@ -4,6 +4,7 @@ import { pallete } from '../../lib/style/pallete';
 const HighLight = styled.strong`
   position: relative;
   padding: 0;
+  font-weight: bold;
 
   .line {
     position: absolute;

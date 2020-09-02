@@ -57,6 +57,8 @@ const LoginForm = ({
           </InputWrapper>
         </Margin>
         <BottomCol
+          top="5vh"
+          bottom="13vh"
           buttonType="submit"
           loading={logInLoading}
           buttonText="로그인"
