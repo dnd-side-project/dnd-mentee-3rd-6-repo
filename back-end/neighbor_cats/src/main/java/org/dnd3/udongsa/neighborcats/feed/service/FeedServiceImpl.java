@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -67,6 +68,7 @@ public class FeedServiceImpl implements FeedService {
   }
 
   @Override
+  @Transactional
   public FeedDto save(FeedSaveDto saveDto) {
     Servant author = servantService.findServantByEmail(securityService.getLoggedUserEmail());
     Cat cat = catService.findCatById(saveDto.getCatId());
@@ -85,6 +87,7 @@ public class FeedServiceImpl implements FeedService {
   }
 
   @Override
+  @Transactional
   public FeedDto delete(Long id) {
     Feed feed = repo.findById(id).orElseThrow();
     feedTagService.deleteByFeed(feed);

@@ -2,6 +2,7 @@ package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
@@ -21,14 +22,18 @@ public class FeedMapper {
     FeedDto dto = new FeedDto();
     dto.setId(feed.getId());
     dto.setContent(feed.getContent());
-    dto.setFeedTags(tagDtos);
-    dto.setImages(imgDtos);
+    if(Objects.nonNull(tagDtos))
+      dto.setFeedTags(tagDtos);
+    if(Objects.nonNull(imgDtos))
+      dto.setImages(imgDtos);
     dto.setAuthor(authorDto);
-    dto.setComments(comments);
+    if(Objects.nonNull(comments))
+      dto.setComments(comments);
     dto.setIsLike(isLike);
     dto.setNumberOfLikes(numberOfLikes);
     dto.setNumberOfComments(numberOfComments);
-    dto.setCreatedDateTime(createdDateTime.toString());
+    if(Objects.nonNull(createdDateTime))
+      dto.setCreatedDateTime(createdDateTime.toString());
     dto.setTimeDesc(timeDesc);
 		return dto;
 	}
