@@ -24,7 +24,7 @@ const IdentifyForm = ({
   return (
     <>
       <Form onFinish={identifyDone && onSubmitCheckAuthNumber}>
-        <Margin top="105px">
+        <Margin top="40px">
           <InputWrapper>
             <div>
               <label htmlFor="username">이름</label>
@@ -67,6 +67,7 @@ const IdentifyForm = ({
                 <br />
                 <InputForm
                   addonAfter={<p>{timeString}</p>}
+                  addonpx="60px"
                   type="number"
                   name="auth-number"
                   placeholder="인증번호 6자리 수를 입력해주세요."

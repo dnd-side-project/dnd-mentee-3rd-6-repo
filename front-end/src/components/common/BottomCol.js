@@ -10,17 +10,18 @@ const BottomWarrper = styled.div`
   justify-content: center;
   align-content: center;
 
-  margin-bottom: 80px;
+  margin: 80px 0;
 `;
 
 const Btn = styled(Button)`
   width: 310px;
   height: 54px;
-  color: ${pallete.white};
-  background: ${pallete.orange};
   border: none;
-  border-radius: 14px;
   text-shadow: none;
+
+  background: ${pallete.primary[2]};
+  color: ${pallete.primary[3]};
+  border-radius: 14px;
 
   font-style: normal;
   font-weight: bold;
@@ -28,16 +29,26 @@ const Btn = styled(Button)`
   line-height: 20px;
   text-align: center;
 
-  &:hover {
-    background: ${pallete.orange};
+  &[disabled] {
+    background: ${pallete.gray[3]};
+    color: ${pallete.primary[3]};
   }
 
-  &:active {
-    background: ${pallete.orange};
+  &[disabled]:hover {
+    background: ${pallete.gray[3]};
+    color: ${pallete.primary[3]};
+  }
+
+  &:hover {
+    background: ${pallete.gray[3]};
   }
 
   &:focus {
-    background: ${pallete.orange};
+    background: ${pallete.gray[3]};
+  }
+
+  &:active {
+    background: ${pallete.primary[2]};
   }
 `;
 

@@ -21,7 +21,7 @@ export const InputForm = styled(Input)`
   line-height: 19px;
   text-align: left;
 
-  width: 343px;
+  width: 91vw;
   padding: 0;
   padding-bottom: 14px;
   margin-top: 31px;
@@ -29,18 +29,18 @@ export const InputForm = styled(Input)`
   border: none;
   border-radius: 0;
 
-  border-bottom: 1px solid ${pallete.gray[4]};
+  border-bottom: 1px solid ${pallete.gray[3]};
 
   &:focus {
     border: none;
-    border-bottom: 1px solid ${pallete.gray[6]};
+    border-bottom: 1px solid ${pallete.primary[1]};
     outline: none;
     border-radius: 0;
     box-shadow: none;
   }
 
   &:hover {
-    border-bottom: 1px solid ${pallete.gray[6]};
+    border-bottom: 1px solid ${pallete.primary[1]};
   }
 
   &::placeholder {
@@ -71,16 +71,22 @@ export const InputForm = styled(Input)`
       border: none;
 
       p {
-        margin-left: 50px;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+
+        margin-left: ${({ addonpx }) => addonpx};
       }
 
-      color: ${pallete.orange};
+      color: ${pallete.primary[2]};
 
       &:focus {
         outline: none;
       }
 
-      & button {
+      & .ant-btn {
         padding: 4px 10px;
 
         font-style: normal;
@@ -88,12 +94,17 @@ export const InputForm = styled(Input)`
         font-size: 10px;
         line-height: 14px;
         text-align: center;
-        color: ${pallete.white};
-        ${(props) =>
-          props.addonAfter &&
-          css`
-            background: ${props.value.length === 11 ? `${pallete.orange}` : `${pallete.gray[3]}`};
-          `}
+        ${(props) => {
+          return props.addonAfter && props.value.length === 11
+            ? css`
+                background: ${pallete.primary[2]};
+                color: ${pallete.primary[3]};
+              `
+            : css`
+                background: ${pallete.gray[2]};
+                color: ${pallete.primary[1]};
+              `;
+        }}
 
         border: none;
 
