@@ -6,8 +6,8 @@ import useInput from '../../hooks/useInput';
 import { EMAIL_VALID_REQUEST, SIGN_UP_2, NEXT_PAGE } from '../../modules/auth';
 
 const EmailPasswordFormContainer = () => {
-  const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput('');
+  const [email, onChangeEmail, setEmail] = useInput('');
+  const [password, onChangePassword, setPassword] = useInput('');
 
   const [prevEmail, setPrevEmail] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -47,6 +47,16 @@ const EmailPasswordFormContainer = () => {
     });
   }, [dispatch, email, prevEmail]);
 
+  const onClickReset = useCallback(
+    (value) => () => {
+      value === 1 && setEmail('');
+      value === 2 && setPassword('');
+      value === 3 && setPasswordCheck('');
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   /* 페이지 2 - 패스워드 확인 후 다음 페이지 이동 */
   const onSubmitSignUp = useCallback(() => {
     if (password !== passwordCheck) {
@@ -76,6 +86,7 @@ const EmailPasswordFormContainer = () => {
       emailInputRef={emailInputRef}
       EmailValidData={EmailValidData}
       onFocusCheckEmail={onFocusCheckEmail}
+      onClickReset={onClickReset}
       onSubmitSignUp={onSubmitSignUp}
     />
   );

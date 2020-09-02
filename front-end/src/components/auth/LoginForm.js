@@ -30,6 +30,7 @@ const LoginForm = ({
                 placeholder="이메일을 입력해 주세요"
                 onChange={onChangeEmail}
                 value={email}
+                // logInError={logInError?.message} // border-bottom 색 바꾸기
                 required
               />
             </div>
@@ -44,6 +45,7 @@ const LoginForm = ({
                 placeholder="비밀번호를 입력해 주세요"
                 onChange={onChangePassword}
                 value={password}
+                // logInError={logInError?.message} // border-bottom 색 바꾸기
                 required
               />
               {logInError && (
