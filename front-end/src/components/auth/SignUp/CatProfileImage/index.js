@@ -6,6 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import BottomCol from '../../../common/BottomCol';
 import ProfileImageWrapper, { ImageBox, ProfileHeader, Imagebutton } from './styles';
 import Margin from '../../../common/Margin';
+import HighLight from '../../../common/HighLight';
 
 const CatProfileImageForm = ({
   imageInputRef,
@@ -16,11 +17,15 @@ const CatProfileImageForm = ({
 }) => {
   return (
     <Form onFinish={onSubmitSignUp}>
-      <Margin top="94px">
+      <Margin top="10vh">
         <ProfileImageWrapper>
           <div>
             <ProfileHeader>
-              <strong>냥이의 사진</strong>을 등록해주세요
+              <HighLight line="163px">
+                우리 냥이의 사진
+                <span className="line" />
+              </HighLight>
+              을 <br /> 등록해주세요
             </ProfileHeader>
           </div>
           <input
@@ -31,12 +36,16 @@ const CatProfileImageForm = ({
             ref={imageInputRef}
             onChange={onChangeImage}
           />
-          <ImageBox>
-            {prevImagePath.previewPath && <img src={prevImagePath.previewPath} alt="고양이 사진" />}
-          </ImageBox>
-          <Imagebutton type="button" onClick={onClickImageUpload}>
-            <PlusOutlined />
-          </Imagebutton>
+          <div className="second">
+            <ImageBox>
+              {prevImagePath.previewPath && (
+                <img src={prevImagePath.previewPath} alt="고양이 사진" />
+              )}
+            </ImageBox>
+            <Imagebutton type="button" onClick={onClickImageUpload}>
+              <PlusOutlined />
+            </Imagebutton>
+          </div>
           <div>
             <p>
               가입 후 마이페이지에서 냥이 사진 변경과 <br /> 냥이 추가가 가능하니 부담없이
@@ -46,6 +55,8 @@ const CatProfileImageForm = ({
         </ProfileImageWrapper>
       </Margin>
       <BottomCol
+        top="14.5vh"
+        bottom="10px"
         buttonType="submit"
         buttonText="사진 선택 완료"
         disabled={!prevImagePath.previewPath}

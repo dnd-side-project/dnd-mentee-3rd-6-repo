@@ -4,7 +4,7 @@ import { Form } from 'antd';
 
 import InputWrapper, { InputForm } from '../../common/InputForm';
 import BottomCol from '../../common/BottomCol';
-import { ErrorMessage, CleanMessage } from '../../common/Message';
+import { ErrorMessage } from '../../common/Message';
 import Margin from '../../common/Margin';
 import CloseButton from '../../common/CloseButton';
 import CheckIcon from '../../../lib/style/CheckIcon';
@@ -124,6 +124,8 @@ const EmailPasswordForm = ({
           )}
         </Margin>
         <BottomCol
+          top="5vh"
+          bottom="5vh"
           buttonType="submit"
           buttonText="다음으로"
           disabled={!(passwordCheck && !EmailValidData && !passwordError)}

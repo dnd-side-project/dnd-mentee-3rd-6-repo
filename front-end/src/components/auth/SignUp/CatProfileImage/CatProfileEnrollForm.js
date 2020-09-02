@@ -7,9 +7,11 @@ import { EnrollImageBox, CatKindModal, ScrollStop, CheckButton } from './styles'
 import BottomCol from '../../../common/BottomCol';
 import Margin from '../../../common/Margin';
 import RdioWrapper, { RadioButton } from '../../../common/RdioForm';
+import DropDownIcon from '../../../../lib/style/button/DropDownIcon';
 
 const CatProfileEnrollForm = ({
   catName,
+  catFeatures,
   previewPath,
   onSelectCatKindId,
   selectCheck,
@@ -29,25 +31,34 @@ const CatProfileEnrollForm = ({
     <>
       <ScrollStop selectCheck={selectCheck} />
       <Form onFinish={onSubmitSignUp}>
-        <Margin top="34px" bottom="70px">
+        <Margin top="30px">
           <EnrollImageBox>
-            <span>{previewPath && <img src={previewPath} alt="고양이 사진" />}</span>
-            <p>{catName} (고양이 이름 나오는 공간)</p>
-          </EnrollImageBox>
-          <InputWrapper>
-            <div>
-              <label htmlFor="catKind">품종</label>
-              <br />
-              <InputForm
-                // addonAfter="dd"
-                name="catKind"
-                placeholder="냥이의 품종을 알려주세요"
-                value={catKindCheck && CatKindId[catKindCheck - 1].name}
-                onFocus={onSelectCatKindId}
-                readOnly
-                required
-              />
+            <div className="img-wrapper">
+              {previewPath && <img src={previewPath} alt="고양이 사진" />}
             </div>
+            <dl className="info-wrapper">
+              <dt>{catName} 이름</dt>
+              <dd>{catFeatures} 특징</dd>
+            </dl>
+          </EnrollImageBox>
+          <InputWrapper flexRow>
+            <label htmlFor="catKind">품종</label>
+            <InputForm
+              addonAfter={
+                <p>
+                  <DropDownIcon />
+                </p>
+              }
+              flex={0.95}
+              name="catKind"
+              placeholder="냥이의 품종을 알려주세요"
+              value={catKindCheck && CatKindId[catKindCheck - 1].name}
+              onFocus={onSelectCatKindId}
+              width="75vw"
+              top="0px"
+              readOnly
+              required
+            />
           </InputWrapper>
           <InputWrapper>
             <div>
@@ -157,6 +168,7 @@ const CatProfileEnrollForm = ({
 
 CatProfileEnrollForm.prototype = {
   catName: PropTypes.string.isRequired,
+  catFeatures: PropTypes.string.isRequired,
   previewPath: PropTypes.string.isRequired,
   onSelectCatKindId: PropTypes.func.isRequired,
   selectCheck: PropTypes.bool.isRequired,

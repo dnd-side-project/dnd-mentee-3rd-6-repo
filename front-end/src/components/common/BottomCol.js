@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { pallete } from '../../lib/style/pallete';
@@ -10,7 +10,12 @@ const BottomWarrper = styled.div`
   justify-content: center;
   align-content: center;
 
-  margin: 80px 0;
+  ${({ top, bottom }) => {
+    return css`
+      margin-top: ${top};
+      margin-bottom: ${bottom};
+    `;
+  }}
 `;
 
 const Btn = styled(Button)`
@@ -52,9 +57,9 @@ const Btn = styled(Button)`
   }
 `;
 
-const BottomCol = ({ buttonType, loading, buttonText, disabled }) => {
+const BottomCol = ({ buttonType, loading, buttonText, disabled, top, bottom }) => {
   return (
-    <BottomWarrper>
+    <BottomWarrper top={top} bottom={bottom}>
       <Btn type="primary" size="large" htmlType={buttonType} loading={loading} disabled={disabled}>
         {buttonText}
       </Btn>
@@ -67,6 +72,8 @@ BottomCol.prototype = {
   loading: PropTypes.bool.isRequired,
   buttonText: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
+  top: PropTypes.string.isRequired,
+  bottom: PropTypes.string.isRequired,
 };
 
 export default BottomCol;

@@ -1,13 +1,14 @@
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
 import { Input } from 'antd';
 
 import { pallete } from '../../lib/style/pallete';
 
 const InputWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: ${({ flexRow }) => (flexRow ? 'row' : 'column')};
+  align-items: ${({ flexRow }) => (flexRow ? 'flex-start' : 'center')};
+  justify-content: ${({ flexRow }) => (flexRow ? 'space-between' : 'column')};
 
   & + & {
     margin-top: 50px;
@@ -21,10 +22,10 @@ export const InputForm = styled(Input)`
   line-height: 19px;
   text-align: left;
 
-  width: 91vw;
+  width: ${({ width }) => width || '91vw'};
   padding: 0;
   padding-bottom: 14px;
-  margin-top: 31px;
+  margin-top: ${({ top }) => top || '31px'};
 
   border: none;
   border-radius: 0;
@@ -51,14 +52,16 @@ export const InputForm = styled(Input)`
   & .ant-input-wrapper.ant-input-group {
     display: flex;
     align-content: center;
+
     &:focus {
       outline: none;
     }
 
     & input {
-      flex: 0.7;
+      flex: ${({ flex }) => flex || 0.7};
       padding: 0;
       border: none;
+
       &:focus {
         outline: none;
         box-shadow: none;
@@ -80,7 +83,7 @@ export const InputForm = styled(Input)`
         margin-left: ${({ addonpx }) => addonpx};
       }
 
-      color: ${pallete.primary[2]};
+      color: ${({ color }) => color || pallete.primary[2]};
 
       &:focus {
         outline: none;
@@ -95,7 +98,7 @@ export const InputForm = styled(Input)`
         line-height: 14px;
         text-align: center;
         ${(props) => {
-          return props.addonAfter && props.value.length === 11
+          return props.addonTrue && props.value.length === 11
             ? css`
                 background: ${pallete.primary[2]};
                 color: ${pallete.primary[3]};
@@ -120,5 +123,9 @@ export const InputForm = styled(Input)`
     }
   }
 `;
+
+InputWrapper.prototype = {
+  flexRow: PropTypes.bool.isRequired,
+};
 
 export default InputWrapper;

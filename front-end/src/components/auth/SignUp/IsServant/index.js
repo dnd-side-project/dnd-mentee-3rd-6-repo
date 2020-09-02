@@ -8,13 +8,20 @@ import 'slick-carousel/slick/slick-theme.css';
 import { ImageBox, Wrapper, Title, SubTitle, DotsIndicator, SliderWrapper } from './styles';
 import BottomCol from '../../../common/BottomCol';
 import Margin from '../../../common/Margin';
+import HighLight from '../../../common/HighLight';
 
 const IsServantForm = ({ name, isServant, setIsServant, onSubmitSignUp }) => {
   return (
     <Form onFinish={onSubmitSignUp}>
-      <Margin top="92px" bottom="35px">
+      <Margin top="10vh">
         <Wrapper>
-          <Title>{name}님은 어떤 집사인가요?</Title>
+          <Title>
+            <HighLight line="60px">
+              {name} <span className="line" />
+            </HighLight>{' '}
+            님은 <br />
+            어떤 집사인가요?
+          </Title>
           <SliderWrapper>
             <Slider
               dots={false}
@@ -45,7 +52,7 @@ const IsServantForm = ({ name, isServant, setIsServant, onSubmitSignUp }) => {
           </DotsIndicator>
         </Wrapper>
       </Margin>
-      <BottomCol buttonType="submit" buttonText="다음으로" />
+      <BottomCol top="10vh" bottom="10px" buttonType="submit" buttonText="다음으로" />
     </Form>
   );
 };

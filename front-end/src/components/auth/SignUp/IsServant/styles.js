@@ -44,7 +44,7 @@ export const ImageBox = styled.div`
             width: auto;
             height: 100%;
             margin: 0 auto;
-            background: ${pallete.white};
+            background: ${pallete.primary[3]};
           }
           .dot2-img {
             transform: scale(0.7);
@@ -54,7 +54,7 @@ export const ImageBox = styled.div`
             width: auto;
             height: 100%;
             margin: 0 auto;
-            background: ${pallete.white};
+            background: ${pallete.primary[3]};
           }
         `
       : css`
@@ -66,7 +66,7 @@ export const ImageBox = styled.div`
             width: auto;
             height: 100%;
             margin: 0 auto;
-            background: ${pallete.white};
+            background: ${pallete.primary[3]};
             border-radius: 14px;
           }
           .dot2-img {
@@ -75,7 +75,7 @@ export const ImageBox = styled.div`
             width: auto;
             height: 100%;
             margin: 0 auto;
-            background: ${pallete.white};
+            background: ${pallete.primary[3]};
             border-radius: 14px;
           }
         `;
@@ -84,28 +84,26 @@ export const ImageBox = styled.div`
 
 export const Title = styled.h1`
   font-style: normal;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
   line-height: 27px;
   text-align: center;
 
-  margin-bottom: 78px;
+  margin-bottom: 30px;
 
-  width: 343px;
-
-  color: ${pallete.gray[6]};
+  color: ${pallete.primary[1]};
 `;
 
 export const SubTitle = styled.h2`
   font-style: normal;
   font-weight: bold;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 19px;
   text-align: center;
 
   margin-top: 36px;
 
-  color: ${pallete.gray[4]};
+  color: ${pallete.primary[1]};
 `;
 
 export const DotsIndicator = styled.div`
@@ -114,13 +112,17 @@ export const DotsIndicator = styled.div`
   align-items: center;
   margin-top: 34px;
 
-  width: 24px;
-
   span {
     width: 8px;
     height: 8px;
 
     border-radius: 50%;
+
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
   }
 
   ${({ choice }) =>
@@ -130,7 +132,12 @@ export const DotsIndicator = styled.div`
             transform: scale(1.4);
             transition: all 0.2s;
 
-            background: ${pallete.orange};
+            width: 17px;
+            height: 8px;
+
+            border-radius: 8px;
+
+            background: ${pallete.secondary[2]};
           }
           .dot2 {
             transition: all 0.25s;
@@ -147,7 +154,12 @@ export const DotsIndicator = styled.div`
             transform: scale(1.4);
             transition: all 0.25s;
 
-            background: ${pallete.orange};
+            width: 17px;
+            height: 8px;
+
+            border-radius: 8px;
+
+            background: ${pallete.secondary[2]};
           }
         `};
 `;
