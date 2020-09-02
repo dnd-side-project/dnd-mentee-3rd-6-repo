@@ -170,7 +170,7 @@ export const CatKindModal = styled.div`
   .modal-wrapper {
     position: relative;
     width: 288px;
-    height: 582px;
+    height: 80vh;
 
     background: ${pallete.primary[3]};
     border-radius: 14px;
@@ -182,7 +182,7 @@ export const CatKindModal = styled.div`
       top: 0;
       left: 0;
       width: 100%;
-      height: 530px;
+      height: 70vh;
       margin: 0 auto;
 
       display: flex;
@@ -196,6 +196,9 @@ export const CatKindModal = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+
+        width: 288px;
+        min-height: 52px;
 
         font-style: normal;
         font-weight: 500;
