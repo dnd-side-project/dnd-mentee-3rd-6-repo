@@ -9,5 +9,7 @@ public interface FeedLikeRepo extends JpaRepository<FeedLike, Long>{
 	Boolean existsByFeedAndServant(Feed feed, Servant servant);
 
 	long countByFeed(Feed feed);
+
+	void deleteAllByFeed(Feed feed);
   
 }

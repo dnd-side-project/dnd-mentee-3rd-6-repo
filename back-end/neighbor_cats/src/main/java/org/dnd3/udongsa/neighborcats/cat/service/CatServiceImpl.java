@@ -65,5 +65,10 @@ public class CatServiceImpl implements CatService {
       return CatMapper.map(cat, profileImgUrl);
     }).collect(Collectors.toList());
   }
+
+  @Override
+  public Cat findCatById(Long catId) {
+    return catRepo.findById(catId).orElseThrow();
+  }
   
 }

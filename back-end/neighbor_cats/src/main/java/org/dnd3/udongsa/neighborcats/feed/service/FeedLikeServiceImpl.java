@@ -25,5 +25,10 @@ public class FeedLikeServiceImpl implements FeedLikeService {
   public Long getNumberOfLikes(Feed feed) {
     return repo.countByFeed(feed);
   }
+
+  @Override
+  public void deleteByFeed(Feed feed) {
+    repo.deleteAllByFeed(feed);
+  }
   
 }

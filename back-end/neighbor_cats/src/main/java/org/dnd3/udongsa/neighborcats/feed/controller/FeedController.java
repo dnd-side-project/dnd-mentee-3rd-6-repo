@@ -30,6 +30,7 @@ public class FeedController {
     return service.findAll(serachDto);
   }
 
+  @Secured("ROLE_USER")
   @PostMapping("")
   public FeedDto save(FeedSaveDto saveDto){
     return service.save(saveDto);

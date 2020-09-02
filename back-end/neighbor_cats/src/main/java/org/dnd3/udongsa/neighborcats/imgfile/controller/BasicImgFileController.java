@@ -17,7 +17,6 @@ public class BasicImgFileController {
   
   private final BasicImgFileService service;
 
-  @Secured("ROLE_ADMIN")
   @PostMapping("/servant")
   public ImgFileUrlDto saveServantBasicImg(MultipartFile baseImgFile){
 

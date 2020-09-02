@@ -1,5 +1,7 @@
 package org.dnd3.udongsa.neighborcats.feed.service;
 
+import java.util.List;
+
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedComment;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedCommentLikeRepo;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
@@ -24,6 +26,13 @@ public class FeedCommentLikeServiceImpl implements FeedCommentLikeService {
   public Boolean isLike(String loggedUserEmail, FeedComment feedComment) {
     Servant servant = servantService.findServantByEmail(loggedUserEmail);
     return repo.existsByServantAndFeedComment(servant, feedComment);
+  }
+
+  @Override
+  public void deleteByComments(List<FeedComment> comments) {
+    for(FeedComment comment : comments){
+      repo.deleteAllByFeedComment(comment);
+    }
   }
   
 }

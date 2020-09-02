@@ -44,5 +44,15 @@ public class FeedCommentServiceImpl implements FeedCommentService {
     }
     return dtos;
   }
+
+  @Override
+  public void deleteByFeed(Feed feed) {
+    List<FeedComment> comments = repo.findAllByFeed(feed);
+    commentLikeService.deleteByComments(comments);
+    // 대댓글 삭제
+    replyService.deleteByComments(comments);
+    // 댓글 삭제
+    repo.deleteAll(comments);
+  }
   
 }

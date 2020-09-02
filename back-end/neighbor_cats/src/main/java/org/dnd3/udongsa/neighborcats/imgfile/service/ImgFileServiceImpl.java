@@ -3,9 +3,11 @@ package org.dnd3.udongsa.neighborcats.imgfile.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
+import org.dnd3.udongsa.neighborcats.feed.entity.FeedImg;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileByteDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.ImgFileRepository;
@@ -46,7 +48,7 @@ public class ImgFileServiceImpl implements ImgFileService {
       throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "프로필 이미지 파일 로딩에 실패했습니다.");
     }
     return bytes;
-  } 
+  }
 
   private String saveImgFile(byte[] bytes, String fileName) {
     Path filePath = Path.of(imgFileDir, fileName).toAbsolutePath();
@@ -90,12 +92,13 @@ public class ImgFileServiceImpl implements ImgFileService {
   @Override
   public ImgFile updateFile(ImgFile imgFile, MultipartFile multipartFile) {
     FileUtils.deleteQuietly(new File(imgFile.getFilePath()));
-    
+
     String newFileName = generateRandomFileName();
     String newFilepath = saveImgFile(getBytes(multipartFile), newFileName);
     imgFile.updateFile(newFilepath, newFileName, IMG_FILE_EXT);
     return imgFile;
   }
+
 
 
   

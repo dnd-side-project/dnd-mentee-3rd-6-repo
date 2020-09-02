@@ -4,19 +4,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
+import org.dnd3.udongsa.neighborcats.cat.service.CatService;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedModifyDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSearchDto;
-import org.dnd3.udongsa.neighborcats.feed.dto.FeedTagDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.PagingDto;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
+import org.dnd3.udongsa.neighborcats.feed.entity.FeedMapper;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedRepository;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
 import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
+import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
+import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
+import org.dnd3.udongsa.neighborcats.tag.TagDto;
 import org.dnd3.udongsa.neighborcats.util.TimeDescService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +41,8 @@ public class FeedServiceImpl implements FeedService {
   private final SecurityContextService securityService;
   private final FeedLikeService feedLikeService;
   private final TimeDescService timeDescService;
+  private final ServantService servantService;
+  private final CatService catService;
 
   @Override
   public PagingDto<FeedDto> findAll(FeedSearchDto searchDto) {
@@ -43,7 +50,7 @@ public class FeedServiceImpl implements FeedService {
     Page<Feed> pageFeeds = repo.findAll(pageable);
     List<FeedDto> feedDtos = new ArrayList<>();
     for(Feed feed : pageFeeds.getContent()){
-      List<FeedTagDto> feedTags = feedTagService.getAllByFeed(feed);
+      List<TagDto> feedTags = feedTagService.getAllByFeed(feed);
       List<FeedCommentDto> comments = commentService.getAllByFeed(feed);
       List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
       AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
@@ -61,8 +68,14 @@ public class FeedServiceImpl implements FeedService {
 
   @Override
   public FeedDto save(FeedSaveDto saveDto) {
-    // TODO Auto-generated method stub
-    return null;
+    Servant author = servantService.findServantByEmail(securityService.getLoggedUserEmail());
+    Cat cat = catService.findCatById(saveDto.getCatId());
+    Feed feed = FeedMapper.map(saveDto, author, cat);
+    repo.save(feed);
+    List<ImgFileDto> imgFiles = feedImgService.save(saveDto.getImgFiles(), feed);
+    List<TagDto> tags = feedTagService.save(saveDto.getTagIds(), feed);
+    String timeDesc = timeDescService.generate(feed.getCreatedAt());
+    return FeedMapper.map(feed, tags, null, imgFiles, ServantMapper.map(author), false, 0L, 0, feed.getCreatedAt(), timeDesc);
   }
 
   @Override
@@ -73,8 +86,15 @@ public class FeedServiceImpl implements FeedService {
 
   @Override
   public FeedDto delete(Long id) {
-    // TODO Auto-generated method stub
-    return null;
+    Feed feed = repo.findById(id).orElseThrow();
+    feedTagService.deleteByFeed(feed);
+    commentService.deleteByFeed(feed);
+    feedImgService.deleteByFeed(feed);
+    feedLikeService.deleteByFeed(feed);
+    FeedDto feedDto = new FeedDto();
+    feedDto.setId(feed.getId());
+    repo.delete(feed);
+    return feedDto;
   }
 
   @Override

@@ -13,5 +13,5 @@ public interface ImgFileService {
 	boolean delete(ImgFile imgFile);
 
 	ImgFile updateFile(ImgFile imgFile, MultipartFile baseImgFile);
-  
+
 }

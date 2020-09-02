@@ -9,5 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FeedTagRepo extends JpaRepository<FeedTag, Long>{
 
 	List<FeedTag> findAllByFeed(Feed feed);
+
+	void deleteAllByFeed(Feed feed);
   
 }
