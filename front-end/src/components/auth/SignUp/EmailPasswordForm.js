@@ -57,6 +57,7 @@ const EmailPasswordForm = ({
                 value={email}
                 onChange={onChangeEmail}
                 ref={emailInputRef}
+                top="16px"
                 required
               />
               {EmailValidData === null ? null : EmailValidData ? (
@@ -68,7 +69,7 @@ const EmailPasswordForm = ({
               )}
             </div>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="55px">
             <div>
               <label htmlFor="password">비밀번호</label>
               <br />
@@ -91,12 +92,13 @@ const EmailPasswordForm = ({
                 value={password}
                 onChange={onChangePassword}
                 onFocus={onFocusCheckEmail}
+                top="16px"
                 required
               />
             </div>
           </InputWrapper>
           {password.length >= 8 && (
-            <InputWrapper>
+            <InputWrapper top="45px">
               <div>
                 <label htmlFor="password-check">비밀번호 확인</label>
                 <br />
@@ -117,6 +119,7 @@ const EmailPasswordForm = ({
                   name="password-check"
                   value={passwordCheck}
                   onChange={onChangePasswordCheck}
+                  top="16px"
                   required
                 />
               </div>
@@ -128,7 +131,7 @@ const EmailPasswordForm = ({
           bottom="5vh"
           buttonType="submit"
           buttonText="다음으로"
-          disabled={!(passwordCheck && !EmailValidData && !passwordError)}
+          disabled={!(email && passwordCheck && !EmailValidData && !passwordError)}
         />
       </Form>
     </>

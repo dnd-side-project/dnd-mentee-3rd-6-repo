@@ -16,7 +16,7 @@ const HomeHeader = styled.header`
   display: flex;
   flex-direction: column;
   align-content: center;
-  margin-top: 20vh;
+  margin-top: 15vh;
 
   h1 {
     font-style: normal;

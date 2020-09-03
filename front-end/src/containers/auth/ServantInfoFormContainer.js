@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 /* global kakao */
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../../hooks/useInput';
 import ServantInfoForm from '../../components/auth/SignUp/ServantInfo/index';
 import { SIGN_UP_REQUEST } from '../../modules/user';
-import { SIGN_UP_7, NEXT_PAGE } from '../../modules/auth';
+import { SIGN_UP_7, NEXT_PAGE, NICKNAME_VALID_REQUEST } from '../../modules/auth';
 
 const ServantInfoFormContainer = () => {
   const {
@@ -23,15 +23,23 @@ const ServantInfoFormContainer = () => {
     catName,
     catFeatures,
     catKindId,
+    catWeight,
     catGender,
     catBirthday,
     catNeutralized,
     catProfileImg,
   } = useSelector((state) => state.auth.authInfo);
+  const { NickNameValidData } = useSelector((state) => state.auth);
+
+  const address = `${addressDepth1}`
+    ? `${addressDepth1} ${addressDepth2} ${addressDepth3} ${addressDepth4}`
+    : '';
 
   const [initialNickName, onChangeInitialNickName] = useInput(nickName || '');
 
   const dispatch = useDispatch();
+
+  const nickNameInputRef = useRef();
 
   /* 페이지 7 - 현재 위치 찾기 버튼 */
   const onSearchHometown = useCallback(() => {
@@ -43,6 +51,14 @@ const ServantInfoFormContainer = () => {
       type: NEXT_PAGE,
     });
   }, [dispatch, initialNickName]);
+
+  /* 페이지 7 - 닉네임 중복 확인 */
+  const onBlurCheckNickName = useCallback(() => {
+    return dispatch({
+      type: NICKNAME_VALID_REQUEST,
+      data: nickName,
+    });
+  }, [dispatch, nickName]);
 
   /* 페이지 7 - 회원가입 마무리 단계 버튼 */
   const onSubmitSignUp = useCallback(async () => {
@@ -60,10 +76,12 @@ const ServantInfoFormContainer = () => {
     await formData.append('catName', catName);
     await formData.append('catFeatures', catFeatures);
     await formData.append('catKindId', catKindId);
+    await formData.append('catWeight', catWeight);
     await formData.append('catGender', catGender);
     await formData.append('catBirthday', catBirthday);
     await formData.append('catNeutralized', catNeutralized);
     await formData.append('catProfileImg', catProfileImg);
+
     return dispatch({
       type: SIGN_UP_REQUEST,
       data: formData,
@@ -80,6 +98,7 @@ const ServantInfoFormContainer = () => {
     catName,
     catNeutralized,
     catProfileImg,
+    catWeight,
     dispatch,
     email,
     isServant,
@@ -92,11 +111,13 @@ const ServantInfoFormContainer = () => {
   return (
     <>
       <ServantInfoForm
-        username={name}
         nickName={initialNickName}
         onChangeNickName={onChangeInitialNickName}
         onSearchHometown={onSearchHometown}
-        addressDepth1={addressDepth1}
+        address={address}
+        NickNameValidData={NickNameValidData}
+        nickNameInputRef={nickNameInputRef}
+        onBlurCheckNickName={onBlurCheckNickName}
         onSubmitSignUp={onSubmitSignUp}
       />
     </>

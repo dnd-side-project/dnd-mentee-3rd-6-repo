@@ -35,11 +35,12 @@ const IdentifyForm = ({
                 value={username}
                 onChange={onChangeUsername}
                 placeholder="이름을 입력해 주세요"
+                top="16px"
                 required
               />
             </div>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="50px">
             <div>
               <label htmlFor="phone-number">휴대폰 번호</label>
               <br />
@@ -49,32 +50,35 @@ const IdentifyForm = ({
                     {!identifyDone ? '인증번호 받기' : '인증번호 재전송'}
                   </Button>
                 }
+                flex={0.75}
                 addonTrue
                 type="tel"
                 name="phone-number"
-                placeholder="휴대폰 번호를 입력해주세요 ( - 제외 )"
+                placeholder="휴대폰 번호를 입력해주세요 (- 제외)"
                 maxLength={11}
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
+                top="16px"
                 required
               />
             </div>
             <div id="recaptcha-container" />
           </InputWrapper>
           {identifyDone && (
-            <InputWrapper>
+            <InputWrapper top="50px">
               <div>
                 <label htmlFor="auth-number">인증번호</label>
                 <br />
                 <InputForm
                   addonAfter={<p>{timeString}</p>}
-                  addonpx="60px"
+                  addonpx="70px"
                   type="number"
                   name="auth-number"
                   placeholder="인증번호 6자리 수를 입력해주세요."
                   maxLength={6}
                   onChange={onChangeAuthNumber}
                   value={authNumber}
+                  top="16px"
                   time="true"
                   required
                 />
