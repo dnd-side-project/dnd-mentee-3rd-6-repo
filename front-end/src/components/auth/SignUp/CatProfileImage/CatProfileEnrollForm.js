@@ -7,19 +7,23 @@ import { EnrollImageBox, CatKindModal, ScrollStop, CheckButton } from './styles'
 import BottomCol from '../../../common/BottomCol';
 import Margin from '../../../common/Margin';
 import RdioWrapper, { RadioButton } from '../../../common/RdioForm';
+import DropDownIcon from '../../../../lib/style/button/DropDownIcon';
 
 const CatProfileEnrollForm = ({
   catName,
+  catFeatures,
   previewPath,
   onSelectCatKindId,
   selectCheck,
   CatKindId,
   catKindCheck,
   onClickCatKindCheck,
-  catGender,
-  onClcikCatGender,
   currentDay,
   catBirthday,
+  catWeight,
+  onChangeCatWeight,
+  catGender,
+  onClcikCatGender,
   onChangeCatBirthday,
   catNeutralized,
   onClickCatNeutralized,
@@ -29,31 +33,71 @@ const CatProfileEnrollForm = ({
     <>
       <ScrollStop selectCheck={selectCheck} />
       <Form onFinish={onSubmitSignUp}>
-        <Margin top="34px" bottom="70px">
+        <Margin top="30px">
           <EnrollImageBox>
-            <span>{previewPath && <img src={previewPath} alt="고양이 사진" />}</span>
-            <p>{catName} (고양이 이름 나오는 공간)</p>
-          </EnrollImageBox>
-          <InputWrapper>
-            <div>
-              <label htmlFor="catKind">품종</label>
-              <br />
-              <InputForm
-                // addonAfter="dd"
-                name="catKind"
-                placeholder="냥이의 품종을 알려주세요"
-                value={catKindCheck && CatKindId[catKindCheck - 1].name}
-                onFocus={onSelectCatKindId}
-                readOnly
-                required
-              />
+            <div className="img-wrapper">
+              {previewPath && <img src={previewPath} alt="고양이 사진" />}
             </div>
+            <dl className="info-wrapper">
+              <dt>{catName} 이름</dt>
+              <dd>{catFeatures} 특징</dd>
+            </dl>
+          </EnrollImageBox>
+          <InputWrapper top="0px" flexRow>
+            <label htmlFor="catKind">품종</label>
+            <InputForm
+              addonAfter={
+                <p>
+                  <DropDownIcon />
+                </p>
+              }
+              flex={0.95}
+              type="text"
+              name="catKind"
+              placeholder="냥이의 품종을 알려주세요"
+              value={catKindCheck && CatKindId[catKindCheck - 1].name}
+              onFocus={onSelectCatKindId}
+              width="75vw"
+              top="0px"
+              readOnly
+              required
+            />
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="35px" flexRow>
+            <label htmlFor="catBirthday">생일</label>
+            <InputForm
+              name="catBirthday"
+              type="date"
+              data-placeholder="냥이가 언제 태어났는지 궁금해요"
+              min="2000-01-01"
+              max={currentDay}
+              value={catBirthday}
+              onChange={onChangeCatBirthday}
+              width="75vw"
+              top="0px"
+              required
+            />
+          </InputWrapper>
+          <InputWrapper top="35px" flexRow>
+            <label htmlFor="catWeight">몸무게</label>
+            <InputForm
+              addonAfter={<p>kg</p>}
+              flex={0.94}
+              type="number"
+              name="catWeight"
+              placeholder="몸무게를 알려주세요"
+              value={catWeight} // 최대 입력 범위 지정해야 함
+              onChange={onChangeCatWeight}
+              width="75vw"
+              top="0px"
+              color
+              required
+            />
+          </InputWrapper>
+          <InputWrapper top="25px">
             <div>
               <label htmlFor="catGender">성별</label>
               <br />
-              {catGender}
               <RdioWrapper name="catGender">
                 <RadioButton
                   type="button"
@@ -74,22 +118,7 @@ const CatProfileEnrollForm = ({
               </RdioWrapper>
             </div>
           </InputWrapper>
-          <InputWrapper>
-            <div>
-              <label htmlFor="catBirthday">생일</label>
-              <br />
-              <InputForm
-                name="catBirthday"
-                type="date"
-                min="2000-01-01"
-                max={currentDay}
-                value={catBirthday}
-                onChange={onChangeCatBirthday}
-                required
-              />
-            </div>
-          </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="25px">
             <div>
               <label htmlFor="catNeutralized">중성화 유무</label>
               <br />
@@ -99,6 +128,7 @@ const CatProfileEnrollForm = ({
                   value="TRUE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   했어요
                 </RadioButton>
@@ -107,6 +137,7 @@ const CatProfileEnrollForm = ({
                   value="FALSE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   안했어요
                 </RadioButton>
@@ -115,6 +146,7 @@ const CatProfileEnrollForm = ({
                   value="NONE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   잘모르겠어요
                 </RadioButton>
@@ -122,11 +154,7 @@ const CatProfileEnrollForm = ({
             </div>
           </InputWrapper>
         </Margin>
-        <BottomCol
-          buttonType="submit"
-          // loading={uploadImageDone}
-          buttonText="다음 단계로"
-        />
+        <BottomCol top="7vh" bottom="10px" buttonType="submit" buttonText="다음 단계로" />
       </Form>
       {selectCheck && (
         <CatKindModal>
@@ -157,16 +185,17 @@ const CatProfileEnrollForm = ({
 
 CatProfileEnrollForm.prototype = {
   catName: PropTypes.string.isRequired,
+  catFeatures: PropTypes.string.isRequired,
   previewPath: PropTypes.string.isRequired,
   onSelectCatKindId: PropTypes.func.isRequired,
   selectCheck: PropTypes.bool.isRequired,
   CatKindId: PropTypes.object.isRequired,
   catKindCheck: PropTypes.number.isRequired,
   onClickCatKindCheck: PropTypes.func.isRequired,
-  catGender: PropTypes.string.isRequired,
-  onClcikCatGender: PropTypes.func.isRequired,
   currentDay: PropTypes.string.isRequired,
   catBirthday: PropTypes.string.isRequired,
+  catGender: PropTypes.string.isRequired,
+  onClcikCatGender: PropTypes.func.isRequired,
   onChangeCatBirthday: PropTypes.func.isRequired,
   catNeutralized: PropTypes.string.isRequired,
   onClickCatNeutralized: PropTypes.func.isRequired,

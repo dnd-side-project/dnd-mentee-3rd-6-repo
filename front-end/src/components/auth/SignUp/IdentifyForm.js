@@ -49,6 +49,7 @@ const IdentifyForm = ({
                     {!identifyDone ? '인증번호 받기' : '인증번호 재전송'}
                   </Button>
                 }
+                addonTrue
                 type="tel"
                 name="phone-number"
                 placeholder="휴대폰 번호를 입력해주세요 ( - 제외 )"
@@ -82,6 +83,8 @@ const IdentifyForm = ({
           )}
         </Margin>
         <BottomCol
+          top="5vh"
+          bottom="5vh"
           buttonType="submit"
           loading={identifyLoading || numberVerifyLoading}
           buttonText="다음 단계로"

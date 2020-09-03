@@ -2,11 +2,10 @@ import styled, { css } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
 const RdioWrapper = styled.div`
-  width: 343px;
-  margin-top: 31px;
-
   display: flex;
   justify-content: space-between;
+
+  width: 91vw;
 `;
 
 export const RadioButton = styled.button`
@@ -14,26 +13,33 @@ export const RadioButton = styled.button`
   justify-content: center;
   align-items: center;
 
+  margin-top: 17px;
+
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 19px;
   text-align: center;
 
-  min-width: 98px;
-  border: none;
+  width: ${({ width }) => width || '165px'};
+  height: 40px;
+
   outline: none;
   background: none;
 
+  color: ${pallete.gray[3]};
+
   border: 1px solid ${pallete.gray[3]};
+  border-radius: 14px;
 
   ${({ value, catNeutralized }) => {
     return value === catNeutralized
       ? css`
-          background: red;
+          border: 1px solid ${pallete.secondary[2]};
+          color: ${pallete.primary[1]};
         `
       : css`
-          background: white;
+          border: 1px solid ${pallete.gray[3]};
         `;
   }}
 `;
