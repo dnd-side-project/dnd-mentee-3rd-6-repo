@@ -47,4 +47,9 @@ public class Feed {
         return feed;
     }
 
+	public void update(String modifyContent, Cat modifyCat) {
+        this.content = modifyContent;
+        this.cat = modifyCat;
+	}
+
 }

@@ -17,5 +17,7 @@ public interface FeedTagService {
   List<TagDto> save(List<Long> tagIds, Feed feed);
 
   void deleteByFeed(Feed feed);
+
+void update(Feed persist, List<Long> feedTagIds);
   
 }

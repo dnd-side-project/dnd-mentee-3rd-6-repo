@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
-import org.dnd3.udongsa.neighborcats.feed.entity.FeedImg;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileByteDto;
 import org.dnd3.udongsa.neighborcats.imgfile.repository.ImgFileRepository;
@@ -69,6 +68,7 @@ public class ImgFileServiceImpl implements ImgFileService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ImgFileByteDto findById(Long id) {
     ImgFile imgFile = repo.findById(id).orElseThrow();
     byte[] bytes = new byte[0];
@@ -90,6 +90,7 @@ public class ImgFileServiceImpl implements ImgFileService {
   }
 
   @Override
+  @Transactional
   public ImgFile updateFile(ImgFile imgFile, MultipartFile multipartFile) {
     FileUtils.deleteQuietly(new File(imgFile.getFilePath()));
 
@@ -97,6 +98,16 @@ public class ImgFileServiceImpl implements ImgFileService {
     String newFilepath = saveImgFile(getBytes(multipartFile), newFileName);
     imgFile.updateFile(newFilepath, newFileName, IMG_FILE_EXT);
     return imgFile;
+  }
+
+  @Override
+  public void deleteAll(List<ImgFile> deletedImgFiles) {
+    repo.deleteAll(deletedImgFiles);
+  }
+
+  @Override
+  public List<ImgFile> findAllById(List<Long> imgFileIds) {
+    return repo.findAllById(imgFileIds);
   }
 
 

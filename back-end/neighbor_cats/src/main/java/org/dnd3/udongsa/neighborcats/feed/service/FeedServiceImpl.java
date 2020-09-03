@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
+import org.dnd3.udongsa.neighborcats.cat.entity.CatMapper;
 import org.dnd3.udongsa.neighborcats.cat.service.CatService;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
@@ -46,25 +48,31 @@ public class FeedServiceImpl implements FeedService {
   private final CatService catService;
 
   @Override
+  @Transactional(readOnly = true)
   public PagingDto<FeedDto> findAll(FeedSearchDto searchDto) {
     Pageable pageable = PageRequest.of(searchDto.getPageNumber(), searchDto.getPageSize());
     Page<Feed> pageFeeds = repo.findAll(pageable);
     List<FeedDto> feedDtos = new ArrayList<>();
     for(Feed feed : pageFeeds.getContent()){
-      List<TagDto> feedTags = feedTagService.getAllByFeed(feed);
-      List<FeedCommentDto> comments = commentService.getAllByFeed(feed);
-      List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
-      AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
-      Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUserEmail(), feed);
-      long numberOfLikes = feedLikeService.getNumberOfLikes(feed);
-      int numberOfComments = comments.size();
-      LocalDateTime createdDateTime = feed.getCreatedAt();
-      String timeDesc = timeDescService.generate(createdDateTime);
-      FeedDto feedDto = FeedMapper.map(feed, feedTags, comments, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc);
-      feedDtos.add(feedDto);
+      feedDtos.add(toDto(feed));
     } 
     PagingDto<FeedDto> pagingDto = PagingMapper.map(pageFeeds, feedDtos);
     return pagingDto;
+  }
+
+  private FeedDto toDto(Feed feed){
+    List<TagDto> feedTags = feedTagService.getAllByFeed(feed);
+    List<FeedCommentDto> comments = commentService.getAllByFeed(feed);
+    List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
+    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
+    Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUserEmail(), feed);
+    long numberOfLikes = feedLikeService.getNumberOfLikes(feed);
+    int numberOfComments = comments.size();
+    LocalDateTime createdDateTime = feed.getCreatedAt();
+    String timeDesc = timeDescService.generate(createdDateTime);
+    CatDto catDto = CatMapper.map(feed.getCat());
+    FeedDto feedDto = FeedMapper.map(feed, feedTags, comments, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc, catDto);
+    return feedDto;
   }
 
   @Override
@@ -74,16 +82,16 @@ public class FeedServiceImpl implements FeedService {
     Cat cat = catService.findCatById(saveDto.getCatId());
     Feed feed = FeedMapper.map(saveDto, author, cat);
     repo.save(feed);
-    List<ImgFileDto> imgFiles = feedImgService.save(saveDto.getImgFiles(), feed);
-    List<TagDto> tags = feedTagService.save(saveDto.getTagIds(), feed);
-    String timeDesc = timeDescService.generate(feed.getCreatedAt());
-    return FeedMapper.map(feed, tags, null, imgFiles, ServantMapper.map(author), false, 0L, 0, feed.getCreatedAt(), timeDesc);
+    feedImgService.save(saveDto.getImgFiles(), feed);
+    feedTagService.save(saveDto.getTagIds(), feed);
+    return toDto(feed);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public FeedDto findById(Long id) {
-    // TODO Auto-generated method stub
-    return null;
+    Feed feed = repo.findById(id).orElseThrow();
+    return toDto(feed);
   }
 
   @Override
@@ -101,9 +109,15 @@ public class FeedServiceImpl implements FeedService {
   }
 
   @Override
-  public FeedDto modify(FeedModifyDto modifyDto) {
-    // TODO Auto-generated method stub
-    return null;
+  @Transactional
+  public FeedDto modify(Long id, FeedModifyDto modifyDto) {
+    Feed persist = repo.findById(id).orElseThrow();   
+    Cat modifyCat = catService.findCatById(modifyDto.getCatId());
+    persist.update(modifyDto.getContent(), modifyCat);
+    feedImgService.deleteByImgFileIds(persist, modifyDto.getRemoveImgFileIds());
+    feedImgService.save(modifyDto.getInsertImgFiles(), persist);
+    feedTagService.update(persist, modifyDto.getFeedTagIds());
+    return toDto(persist);
   }
 
 

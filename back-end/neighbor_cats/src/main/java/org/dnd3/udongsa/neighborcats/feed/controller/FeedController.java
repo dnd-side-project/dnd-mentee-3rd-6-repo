@@ -36,19 +36,22 @@ public class FeedController {
     return service.save(saveDto);
   }
 
+  @Secured("ROLE_USER")
   @GetMapping("/{id}")
   public FeedDto getOne(@PathVariable("id") Long id){
     return service.findById(id);
   }
 
+  @Secured("ROLE_USER")
   @DeleteMapping("/{id}")
   public FeedDto delete(@PathVariable("id") Long id){
     return service.delete(id);
   }
 
+  @Secured("ROLE_USER")
   @PutMapping("/{id}")
   public FeedDto modify(@PathVariable("id") Long id, FeedModifyDto modifyDto){
-    return service.modify(modifyDto);
+    return service.modify(id, modifyDto);
   }
 
 }

@@ -47,5 +47,31 @@ public class FeedTagServiceImpl implements FeedTagService {
   public void deleteByFeed(Feed feed) {
     repo.deleteAllByFeed(feed);
   }
-  
+
+  @Override
+  public void update(Feed feed, List<Long> modifyTagIds) {
+    List<Tag> modifyTags = tagService.findAll(modifyTagIds);
+    List<Tag> persistTags = repo.findAllByFeed(feed).stream().map(feedTag->feedTag.getTag()).collect(Collectors.toList());
+    List<Tag> removeTags = new ArrayList<>();
+    for(Tag tag : persistTags){
+      if(!modifyTags.contains(tag)){
+        removeTags.add(tag);
+      }
+    }
+    for(Tag tag : removeTags){
+      FeedTag feedTag = repo.findByTagAndFeed(tag, feed);
+      repo.delete(feedTag);
+    }
+    
+    List<Tag> insertTags = new ArrayList<>();
+    for(Tag tag : modifyTags){
+      if(!persistTags.contains(tag)){
+        insertTags.add(tag);
+      }
+    }
+    for(Tag tag : insertTags){
+      FeedTag feedTag = FeedTag.of(tag, feed);
+      repo.save(feedTag);
+    }
+  }
 }

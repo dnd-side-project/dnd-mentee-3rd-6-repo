@@ -16,6 +16,6 @@ public interface FeedService {
 
 	FeedDto delete(Long id);
 
-	FeedDto modify(FeedModifyDto modifyDto);
+	FeedDto modify(Long id, FeedModifyDto modifyDto);
   
 }

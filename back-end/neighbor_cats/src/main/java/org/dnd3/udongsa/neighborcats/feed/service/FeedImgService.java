@@ -13,5 +13,7 @@ public interface FeedImgService {
 	List<ImgFileDto> save(List<MultipartFile> imgFiles, Feed feed);
 
 	void deleteByFeed(Feed feed);
+
+	void deleteByImgFileIds(Feed persist, List<Long> removeImgFileIds);
   
 }
