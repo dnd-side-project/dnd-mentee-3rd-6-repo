@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedImg;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedImgRepo;
@@ -12,7 +11,6 @@ import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
 import org.dnd3.udongsa.neighborcats.imgfile.service.ImgFileService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

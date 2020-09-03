@@ -10,5 +10,7 @@ public interface ServantRepository extends JpaRepository<Servant, Long>{
   Optional<Servant> findByEmail(String email);
 
 	Boolean existsByEmail(String email);
+
+	Boolean existsByNickname(String nickname);
     
 }

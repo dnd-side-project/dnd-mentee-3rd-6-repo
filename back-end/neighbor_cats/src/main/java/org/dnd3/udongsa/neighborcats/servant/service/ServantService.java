@@ -16,5 +16,7 @@ public interface ServantService {
   boolean isMatchPassword(String password, Long id);
 
   Servant findServantByEmail(String loggedUserEmail);
+
+  Boolean isExistNickname(String nickname);
    
 }

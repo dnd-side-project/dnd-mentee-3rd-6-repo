@@ -79,4 +79,9 @@ public class AuthServiceImpl implements AuthService {
       servantDto.getRoles());
   }
 
+  @Override
+  public Boolean isExistNickname(String nickname) {
+    return servantService.isExistNickname(nickname);
+  }
+
 }

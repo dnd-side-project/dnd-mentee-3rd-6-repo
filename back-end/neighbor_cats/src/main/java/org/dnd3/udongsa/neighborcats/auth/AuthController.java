@@ -41,6 +41,11 @@ public class AuthController {
     return service.isExistEmail(email);
   }
 
+  @GetMapping("/nickname/is-exist")
+  public Boolean isExistNickname(@RequestParam("nickname") String nickname){
+    return service.isExistNickname(nickname);
+  }
+
  
 
 }
