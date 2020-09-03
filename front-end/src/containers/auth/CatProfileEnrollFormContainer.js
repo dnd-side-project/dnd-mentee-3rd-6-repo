@@ -7,6 +7,7 @@ import { SIGN_UP_6, NEXT_PAGE } from '../../modules/auth';
 
 const CatProfileEnrollFormContainer = () => {
   const [catGender, setCatGender] = useState('MALE');
+  const [catWeight, onChangeCatWeight] = useInput(null);
   const [catBirthday, onChangeCatBirthday] = useInput('');
   const [catNeutralized, setCatNeutralized] = useState('TRUE');
 
@@ -74,15 +75,16 @@ const CatProfileEnrollFormContainer = () => {
       type: SIGN_UP_6,
       data: {
         catKindId: CatKindId[catKindCheck - 1].id,
-        catGender,
         catBirthday,
+        catWeight,
+        catGender,
         catNeutralized,
       },
     });
     return dispatch({
       type: NEXT_PAGE,
     });
-  }, [CatKindId, catBirthday, catGender, catKindCheck, catNeutralized, dispatch]);
+  }, [CatKindId, catBirthday, catGender, catKindCheck, catNeutralized, catWeight, dispatch]);
 
   return (
     <>
@@ -95,10 +97,12 @@ const CatProfileEnrollFormContainer = () => {
         CatKindId={CatKindId}
         catKindCheck={catKindCheck}
         onClickCatKindCheck={onClickCatKindCheck}
-        catGender={catGender}
-        onClcikCatGender={onClcikCatGender}
+        catWeight={catWeight}
+        onChangeCatWeight={onChangeCatWeight}
         currentDay={currentDay}
         catBirthday={catBirthday}
+        catGender={catGender}
+        onClcikCatGender={onClcikCatGender}
         onChangeCatBirthday={onChangeCatBirthday}
         catNeutralized={catNeutralized}
         onClickCatNeutralized={onClickCatNeutralized}
