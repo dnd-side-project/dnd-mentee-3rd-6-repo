@@ -65,12 +65,6 @@ public class FeedImgServiceImpl implements FeedImgService {
   @Transactional
   public void deleteByImgFileIds(Feed feed, List<Long> removeImgFileIds) {
     if(removeImgFileIds.size() == 0) return;
-    List<FeedImg> feedImages = repo.findAllByFeed(feed);
-    for(FeedImg feedImg : feedImages){
-      if(!removeImgFileIds.contains(feedImg.getImgFile().getId())){
-        throw new CustomException(HttpStatus.BAD_REQUEST, "해당 피드에 첨부되지 않은 이미지 파일을 삭제할 수 없습니다.");
-      }
-    }
     List<ImgFile> deletedImgFiles = imgFileService.findAllById(removeImgFileIds);
     for(ImgFile imgFile : deletedImgFiles){
       FeedImg feedImg = repo.findByFeedAndImgFile(feed, imgFile);
