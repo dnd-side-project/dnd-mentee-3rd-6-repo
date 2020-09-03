@@ -18,10 +18,12 @@ const CatProfileEnrollForm = ({
   CatKindId,
   catKindCheck,
   onClickCatKindCheck,
-  catGender,
-  onClcikCatGender,
   currentDay,
   catBirthday,
+  catWeight,
+  onChangeCatWeight,
+  catGender,
+  onClcikCatGender,
   onChangeCatBirthday,
   catNeutralized,
   onClickCatNeutralized,
@@ -41,7 +43,7 @@ const CatProfileEnrollForm = ({
               <dd>{catFeatures} 특징</dd>
             </dl>
           </EnrollImageBox>
-          <InputWrapper flexRow>
+          <InputWrapper top="0px" flexRow>
             <label htmlFor="catKind">품종</label>
             <InputForm
               addonAfter={
@@ -50,6 +52,7 @@ const CatProfileEnrollForm = ({
                 </p>
               }
               flex={0.95}
+              type="text"
               name="catKind"
               placeholder="냥이의 품종을 알려주세요"
               value={catKindCheck && CatKindId[catKindCheck - 1].name}
@@ -60,11 +63,41 @@ const CatProfileEnrollForm = ({
               required
             />
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="35px" flexRow>
+            <label htmlFor="catBirthday">생일</label>
+            <InputForm
+              name="catBirthday"
+              type="date"
+              data-placeholder="냥이가 언제 태어났는지 궁금해요"
+              min="2000-01-01"
+              max={currentDay}
+              value={catBirthday}
+              onChange={onChangeCatBirthday}
+              width="75vw"
+              top="0px"
+              required
+            />
+          </InputWrapper>
+          <InputWrapper top="35px" flexRow>
+            <label htmlFor="catWeight">몸무게</label>
+            <InputForm
+              addonAfter={<p>kg</p>}
+              flex={0.94}
+              type="number"
+              name="catWeight"
+              placeholder="몸무게를 알려주세요"
+              value={catWeight} // 최대 입력 범위 지정해야 함
+              onChange={onChangeCatWeight}
+              width="75vw"
+              top="0px"
+              color
+              required
+            />
+          </InputWrapper>
+          <InputWrapper top="25px">
             <div>
               <label htmlFor="catGender">성별</label>
               <br />
-              {catGender}
               <RdioWrapper name="catGender">
                 <RadioButton
                   type="button"
@@ -85,22 +118,7 @@ const CatProfileEnrollForm = ({
               </RdioWrapper>
             </div>
           </InputWrapper>
-          <InputWrapper>
-            <div>
-              <label htmlFor="catBirthday">생일</label>
-              <br />
-              <InputForm
-                name="catBirthday"
-                type="date"
-                min="2000-01-01"
-                max={currentDay}
-                value={catBirthday}
-                onChange={onChangeCatBirthday}
-                required
-              />
-            </div>
-          </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="25px">
             <div>
               <label htmlFor="catNeutralized">중성화 유무</label>
               <br />
@@ -110,6 +128,7 @@ const CatProfileEnrollForm = ({
                   value="TRUE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   했어요
                 </RadioButton>
@@ -118,6 +137,7 @@ const CatProfileEnrollForm = ({
                   value="FALSE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   안했어요
                 </RadioButton>
@@ -126,6 +146,7 @@ const CatProfileEnrollForm = ({
                   value="NONE"
                   catNeutralized={catNeutralized}
                   onClick={onClickCatNeutralized}
+                  width="109px"
                 >
                   잘모르겠어요
                 </RadioButton>
@@ -133,11 +154,7 @@ const CatProfileEnrollForm = ({
             </div>
           </InputWrapper>
         </Margin>
-        <BottomCol
-          buttonType="submit"
-          // loading={uploadImageDone}
-          buttonText="다음 단계로"
-        />
+        <BottomCol top="7vh" bottom="10px" buttonType="submit" buttonText="다음 단계로" />
       </Form>
       {selectCheck && (
         <CatKindModal>
@@ -175,10 +192,10 @@ CatProfileEnrollForm.prototype = {
   CatKindId: PropTypes.object.isRequired,
   catKindCheck: PropTypes.number.isRequired,
   onClickCatKindCheck: PropTypes.func.isRequired,
-  catGender: PropTypes.string.isRequired,
-  onClcikCatGender: PropTypes.func.isRequired,
   currentDay: PropTypes.string.isRequired,
   catBirthday: PropTypes.string.isRequired,
+  catGender: PropTypes.string.isRequired,
+  onClcikCatGender: PropTypes.func.isRequired,
   onChangeCatBirthday: PropTypes.func.isRequired,
   catNeutralized: PropTypes.string.isRequired,
   onClickCatNeutralized: PropTypes.func.isRequired,
