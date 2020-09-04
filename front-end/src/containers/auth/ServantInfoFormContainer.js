@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 /* global kakao */
-import React, { useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../../hooks/useInput';
@@ -31,11 +31,12 @@ const ServantInfoFormContainer = () => {
   } = useSelector((state) => state.auth.authInfo);
   const { NickNameValidData } = useSelector((state) => state.auth);
 
+  const [initialNickName, onChangeInitialNickName] = useInput(nickName || '');
+  const [prevNickName, setPrevNickName] = useState('');
+
   const address = `${addressDepth1}`
     ? `${addressDepth1} ${addressDepth2} ${addressDepth3} ${addressDepth4}`
     : '';
-
-  const [initialNickName, onChangeInitialNickName] = useInput(nickName || '');
 
   const dispatch = useDispatch();
 
@@ -54,11 +55,16 @@ const ServantInfoFormContainer = () => {
 
   /* 페이지 7 - 닉네임 중복 확인 */
   const onBlurCheckNickName = useCallback(() => {
-    return dispatch({
-      type: NICKNAME_VALID_REQUEST,
-      data: nickName,
-    });
-  }, [dispatch, nickName]);
+    if (prevNickName !== initialNickName) {
+      nickNameInputRef.current.focus();
+
+      dispatch({
+        type: NICKNAME_VALID_REQUEST,
+        data: initialNickName,
+      });
+    }
+    setPrevNickName(prevNickName);
+  }, [dispatch, initialNickName, prevNickName]);
 
   /* 페이지 7 - 회원가입 마무리 단계 버튼 */
   const onSubmitSignUp = useCallback(async () => {

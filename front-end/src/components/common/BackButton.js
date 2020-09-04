@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { PREV_PAGE, NOT_SERVANT_PREV_PAGE } from '../../modules/auth';
 import BackIcon from '../../lib/style/button/BackIcon';
 import { PREV_FEED_PAGE } from '../../modules/feed';
+import { PREV_WRITE_PAGE } from '../../modules/write';
 
 const GoBackButton = styled.button`
   display: flex;
@@ -15,6 +16,7 @@ const GoBackButton = styled.button`
   width: 20px;
 
   padding: 0;
+  padding-bottom: 3px;
 
   border: none;
   outline: none;
@@ -26,11 +28,12 @@ const BackButton = ({ history, page }) => {
   const dispatch = useDispatch();
   const { pageIndex: registerIndex, isServant } = useSelector((state) => state.auth);
   const { titleIndex: feedIndex } = useSelector((state) => state.feed);
+  const { pageIndex: writeIndex } = useSelector((state) => state.write);
 
   /* 1. 회원가입 */
   const onClickRegister = useCallback(() => {
     if (registerIndex <= 1) {
-      return history.goBack();
+      return history.push('/');
     }
     if (!isServant && registerIndex === 7) {
       return dispatch({
@@ -54,8 +57,14 @@ const BackButton = ({ history, page }) => {
 
   /* 3. 글쓰기 */
   const onClickWrite = useCallback(() => {
-    return history.goBack('/feed');
-  }, [history]);
+    if (writeIndex <= 1) {
+      console.log(history);
+      return history.push('/feed');
+    }
+    return dispatch({
+      type: PREV_WRITE_PAGE,
+    });
+  }, [dispatch, history, writeIndex]);
 
   /* 모아주기 */
   const stepButtons = [onClickRegister, onClickFeed, onClickWrite];

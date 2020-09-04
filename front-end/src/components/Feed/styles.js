@@ -4,7 +4,7 @@ import { pallete } from '../../lib/style/pallete';
 export const FeedWrapper = styled.main`
   width: 100vw;
 
-  margin-top: 98px;
+  margin-top: 50px;
 
   transform: translateX(-16px);
 
@@ -26,7 +26,7 @@ export const Header = styled.header`
     justify-content: space-between;
 
     width: 100%;
-    height: 37px;
+    height: 40px;
 
     li {
       display: flex;
@@ -34,9 +34,9 @@ export const Header = styled.header`
       align-items: flex-end;
 
       width: 100%;
-      background: ${pallete.white};
+      background: ${pallete.primary[3]};
 
-      border-bottom: 1px solid ${pallete.gray[4]};
+      border-bottom: 1px solid ${pallete.gray[3]};
     }
   }
 
@@ -100,16 +100,17 @@ export const HeaderButton = styled.button`
   font-size: 14px;
   line-height: 19px;
 
-  background: ${pallete.white};
+  background: ${pallete.primary[3]};
 
   ${({ value, check }) => {
     return value === check
       ? css`
-          color: ${pallete.gray[6]};
-          border-bottom: 2px solid ${pallete.gray[5]};
+          color: ${pallete.primary[1]};
+          border-bottom: 2px solid ${pallete.primary[1]};
+          padding-bottom: 12px;
         `
       : css`
-          color: ${pallete.gray[4]};
+          color: ${pallete.gray[5]};
         `;
   }}
 `;
@@ -120,7 +121,7 @@ export const TagButton = styled.button`
 
   border: none;
   outline: none;
-  background: ${pallete.white};
+  background: ${pallete.primary[3]};
 
   border-radius: 14px;
 
@@ -135,8 +136,8 @@ export const TagButton = styled.button`
   ${({ check, checkId }) => {
     return check === checkId
       ? css`
-          border: 1px solid ${pallete.orange};
-          color: ${pallete.orange};
+          border: 1px solid ${pallete.primary[2]};
+          color: ${pallete.primary[2]};
         `
       : css`
           border: 1px solid ${pallete.gray[3]};
@@ -160,8 +161,8 @@ export const CardList = styled.section`
 export const CardItem = styled.li`
   list-style: none;
 
-  width: 100%;
   height: auto;
+  width: 100vw;
   margin-top: 25px;
 
   &:first-child {
@@ -202,13 +203,43 @@ export const CardTitle = styled.div`
     }
 
     dd {
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 19px;
-
-      color: ${pallete.gray[6]};
       margin-left: 10px;
+
+      ${({ comment }) =>
+        comment
+          ? css`
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+
+              span:first-child {
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 19px;
+
+                color: ${pallete.primary[1]};
+              }
+
+              span:last-child {
+                margin-top: 2px;
+
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+
+                color: ${pallete.gray[6]};
+              }
+            `
+          : css`
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 19px;
+
+              color: ${pallete.primary[1]};
+            `}
     }
   }
 
@@ -218,14 +249,14 @@ export const CardTitle = styled.div`
     font-size: 12px;
     line-height: 16px;
 
-    color: ${pallete.gray[6]};
+    color: ${pallete.primary[1]};
   }
 `;
 
 export const CardImage = styled.div`
   position: relative;
-  width: 100vw;
-  height: 319px;
+  width: 100%;
+  height: 375px;
 
   display: flex;
   flex-direction: column;
@@ -237,13 +268,13 @@ export const CardImage = styled.div`
   overflow: hidden;
 
   .slick-list {
-    width: 375px;
-    height: 319px;
+    width: 100vw;
+    height: auto;
   }
 
   .slick-slide {
-    width: 375px;
-    height: 319px;
+    width: 100vw;
+    height: auto;
   }
 
   .feed-card__img-index {
@@ -265,7 +296,7 @@ export const CardImage = styled.div`
     font-size: 11px;
     line-height: 15px;
 
-    color: ${pallete.white};
+    color: ${pallete.primary[3]};
 
     z-index: 999;
   }
@@ -273,17 +304,17 @@ export const CardImage = styled.div`
 
 export const CardImageBox = styled.div`
   width: 100vw;
-  height: 319px;
+  height: 375px;
 
   overflow: hidden;
 
-  display: flex !important;
+  display: flex;
   justify-content: center;
   align-items: center;
 
   img {
     width: auto;
-    height: 319px;
+    height: 100%;
   }
 `;
 
@@ -292,6 +323,8 @@ export const CardIcon = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   padding: 0 16px;
+
+  margin-top: 5px;
 
   height: 25px;
   width: 100%;
@@ -309,7 +342,7 @@ export const CardIcon = styled.div`
         border: none;
         outline: none;
 
-        background: ${pallete.white};
+        background: ${pallete.primary[3]};
       }
 
       &:last-child {
@@ -343,7 +376,7 @@ export const CardContent = styled.div`
       font-size: 12px;
       line-height: 16px;
 
-      color: ${pallete.gray[4]};
+      color: ${pallete.gray[5]};
     }
   }
 `;
@@ -360,7 +393,7 @@ export const CardContentText = styled.p`
   overflow: hidden;
   white-space: nowrap; */
 
-  color: ${pallete.gray[6]};
+  color: ${pallete.primary[1]};
 `;
 
 export const CardContentButton = styled.button`
@@ -381,24 +414,24 @@ export const CardContentButton = styled.button`
       border: none;
       outline: none;
 
-      background: ${pallete.white};
+      background: ${pallete.primary[3]};
 
       font-style: normal;
       font-weight: 500;
       font-size: 14px;
       line-height: 19px;
-      color: ${pallete.gray[4]};
+      color: ${pallete.primary[1]};
     `;
   }}
 `;
 
-export const CommentSection = styled.section`
+export const CommentWrapper = styled.section`
   width: 100vw;
 
   overflow-x: hidden;
   transform: translateX(-16px);
 
-  margin-top: 98px;
+  margin-top: 50px;
 `;
 
 export const CommentHeader = styled.header`
@@ -426,7 +459,7 @@ export const CommentItem = styled.li`
 
     height: 131px;
     width: 100%;
-    border-top: 1px solid ${pallete.gray[2]};
+    border-top: 1px solid ${pallete.gray[3]};
 
     dt {
       display: flex;
@@ -475,7 +508,7 @@ export const CommentItem = styled.li`
             font-size: 14px;
             line-height: 19px;
 
-            color: ${pallete.gray[5]};
+            color: ${pallete.primary[1]};
           }
 
           span:last-child {
@@ -486,7 +519,7 @@ export const CommentItem = styled.li`
             font-size: 12px;
             line-height: 16px;
 
-            color: ${pallete.gray[4]};
+            color: ${pallete.gray[6]};
           }
         }
       }
@@ -514,25 +547,25 @@ export const CommentItem = styled.li`
             `}
 
       div:first-child {
-        margin-top: 7px;
+        margin-top: 12px;
 
         font-style: normal;
         font-weight: 500;
         font-size: 14px;
         line-height: 19px;
 
-        color: ${pallete.gray[5]};
+        color: ${pallete.primary[1]};
       }
 
       div:last-child {
-        margin-top: 8px;
+        margin-top: 6px;
 
         font-style: normal;
         font-weight: 500;
         font-size: 11px;
         line-height: 15px;
 
-        color: ${pallete.gray[4]};
+        color: ${pallete.gray[5]};
 
         span {
           margin-left: 13px;
@@ -591,7 +624,7 @@ export const CommentInput = styled.div`
     outline: none;
     border-radius: 14px;
 
-    background: ${pallete.white};
+    background: ${pallete.primary[3]};
     padding: 10px;
 
     &::placeholder {

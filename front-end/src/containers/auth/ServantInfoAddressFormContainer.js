@@ -54,12 +54,12 @@ const ServantInfoAddressFormContainer = () => {
   /* 현재 위치 가져오기 */
   useEffect(() => {
     if (navigator.geolocation) {
-      dispatch({
-        type: CURRENT_GPS_REQUEST,
-      });
-      // GPS를 지원하면
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      try {
+        dispatch({
+          type: CURRENT_GPS_REQUEST,
+        });
+        // GPS를 지원하면
+        navigator.geolocation.getCurrentPosition((position) => {
           const { latitude } = position.coords;
           const { longitude } = position.coords;
           console.log('2. GPS 가져오기');
@@ -70,20 +70,14 @@ const ServantInfoAddressFormContainer = () => {
               geoLon: longitude,
             },
           });
-        },
-        (error) => {
-          console.error(error);
-          dispatch({
-            type: CURRENT_GPS_FAILURE,
-            error,
-          });
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 0,
-          timeout: Infinity,
-        },
-      );
+        });
+      } catch (error) {
+        console.error(error);
+        dispatch({
+          type: CURRENT_GPS_FAILURE,
+          error,
+        });
+      }
     } else {
       alert('GPS를 지원하지 않습니다');
     }

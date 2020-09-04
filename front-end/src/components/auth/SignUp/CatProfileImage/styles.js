@@ -210,8 +210,7 @@ export const CatKindModal = styled.div`
 
     background: ${pallete.primary[3]};
     border-radius: 14px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
 
     ul {
       position: absolute;
@@ -220,6 +219,8 @@ export const CatKindModal = styled.div`
       width: 100%;
       height: 70vh;
       margin: 0 auto;
+
+      margin-top: 15px;
 
       display: flex;
       flex-direction: column;

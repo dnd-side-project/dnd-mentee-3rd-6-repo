@@ -33,8 +33,6 @@ export const MapModal = styled.div`
   width: 100vw;
   height: 300px;
 
-  opacity: 0;
-
   box-shadow: 0px -3px 15px rgba(43, 43, 39, 0.15);
   border-radius: 30px;
 
@@ -60,18 +58,25 @@ export const MapModal = styled.div`
   @keyframes slideUp {
     0% {
       transform: translateY(0);
-      opacity: 0;
+    }
+    30% {
+      transform: translateY(-35vh);
+    }
+    70% {
+      transform: translateY(-30vh);
+    }
+    90% {
+      transform: translateY(-30.5vh);
     }
     100% {
       transform: translateY(-30vh);
-      opacity: 1;
     }
   }
 
   ${({ currentGPSLoading }) =>
     !currentGPSLoading &&
     css`
-      animation: slideUp 0.7s forwards;
+      animation: slideUp 0.5s ease-out forwards;
       animation-delay: 0.5s;
     `}
 `;

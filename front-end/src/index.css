@@ -13,9 +13,9 @@ body {
 #root {
   min-height: 100vh;
 
-  overflow-x: hidden;
   padding-left: 16px;
   padding-right: 16px;
+
   overflow: hidden;
 }
 
@@ -31,4 +31,10 @@ a {
 
 * {
   box-sizing: inherit; /* 모든 엘리먼트의 box-sizing 값을 border-box로 설정 */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }

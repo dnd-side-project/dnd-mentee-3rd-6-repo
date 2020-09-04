@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../../hooks/useInput';
 import CatProfileEnrollForm from '../../components/auth/SignUp/CatProfileImage/CatProfileEnrollForm';
-import { SIGN_UP_6, NEXT_PAGE } from '../../modules/auth';
+import { SIGN_UP_6, NEXT_PAGE, CAT_KIND_ID_REQUEST } from '../../modules/auth';
 
 const CatProfileEnrollFormContainer = () => {
   const [catGender, setCatGender] = useState('MALE');
@@ -23,13 +23,13 @@ const CatProfileEnrollFormContainer = () => {
   const { catName, catFeatures } = authInfo;
 
   /* 페이지 6 - 냥이 품종 가져오기 */
-  // useEffect(() => {
-  //   if (page === 6) {
-  //     dispatch({
-  //       type: CAT_KIND_ID_REQUEST,
-  //     });
-  //   }
-  // }, [dispatch, page]);
+  useEffect(() => {
+    if (!CatKindId) {
+      dispatch({
+        type: CAT_KIND_ID_REQUEST,
+      });
+    }
+  }, [CatKindId, dispatch]);
 
   /* 페이지 6 - 오늘 날짜 가져오기 */
   useEffect(() => {

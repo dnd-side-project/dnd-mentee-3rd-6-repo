@@ -1,52 +1,37 @@
-import { put, delay, takeLatest, all, fork, call, getContext } from 'redux-saga/effects';
+import { put, delay, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
 
 export const initialSate = {
   pageIndex: 1,
-  titleIndex: 1,
+  filterIndex: 1,
   tagIndex: 1,
-  hotIndex: 1,
-  feedAllTags: {
-    filterTypes: [
-      {
-        id: 1,
-        name: '우리동네',
-      },
-      {
-        id: 2,
-        name: '전체',
-      },
-      {
-        id: 3,
-        name: '내친구',
-      },
-    ],
-    feedTags: [
-      {
-        id: 1,
-        name: '일상',
-      },
-      {
-        id: 2,
-        name: '나눔',
-      },
-      {
-        id: 3,
-        name: '탁묘',
-      },
-    ],
-    sortTypes: [
-      {
-        id: 1,
-        name: '인기글',
-      },
-      {
-        id: 2,
-        name: '전체글',
-      },
-    ],
-  },
+  sortIndex: 1,
+  filterTypes: [
+    {
+      id: 1,
+      name: '우리동네',
+    },
+    {
+      id: 2,
+      name: '전체',
+    },
+    {
+      id: 3,
+      name: '내친구',
+    },
+  ],
+  sortTypes: [
+    {
+      id: 1,
+      name: '인기글',
+    },
+    {
+      id: 2,
+      name: '전체글',
+    },
+  ],
+  feedTags: null,
   Feeds: {
     pageNumber: 0,
     pageSize: 10,
@@ -118,9 +103,9 @@ export const initialSate = {
   getFeedTagLoading: false, // 피드 태그 불러오기
   getFeedTagDone: false,
   getFeedTagError: null,
-  filterTypeLoading: false, // 필터 타입 불러오기
-  filterTypeDone: false,
-  filterTypeError: null,
+  getFeedListLoading: false, // 필터 리스트 불러오기
+  getFeedListDone: false,
+  getFeedListError: null,
   likeFeedLoading: false, // 좋아요
   likeFeedDone: false,
   likeFeedError: null,
@@ -133,17 +118,17 @@ export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
 export const GET_FEED_TAG_SUCCESS = 'feed/GET_FEED_TAG_SUCCESS';
 export const GET_FEED_TAG_FAILURE = 'feed/GET_FEED_TAG_FAILURE';
 
-export const FILTER_TYPE_1_REQUEST = 'feed/FILTER_TYPE_1_REQUEST';
-export const FILTER_TYPE_1_SUCCESS = 'feed/FILTER_TYPE_1_SUCCESS';
-export const FILTER_TYPE_1_FAILURE = 'feed/FILTER_TYPE_1_FAILURE';
+export const GET_FEED_LIST_1_REQUEST = 'feed/GET_FEED_LIST_1_REQUEST';
+export const GET_FEED_LIST_1_SUCCESS = 'feed/GET_FEED_LIST_1_SUCCESS';
+export const GET_FEED_LIST_1_FAILURE = 'feed/GET_FEED_LIST_1_FAILURE';
 
-export const FILTER_TYPE_2_REQUEST = 'feed/FILTER_TYPE_2_REQUEST';
-export const FILTER_TYPE_2_SUCCESS = 'feed/FILTER_TYPE_2_SUCCESS';
-export const FILTER_TYPE_2_FAILURE = 'feed/FILTER_TYPE_2_FAILURE';
+export const GET_FEED_LIST_2_REQUEST = 'feed/GET_FEED_LIST_2_REQUEST';
+export const GET_FEED_LIST_2_SUCCESS = 'feed/GET_FEED_LIST_2_SUCCESS';
+export const GET_FEED_LIST_2_FAILURE = 'feed/GET_FEED_LIST_2_FAILURE';
 
-export const FILTER_TYPE_3_REQUEST = 'feed/FILTER_TYPE_3_REQUEST';
-export const FILTER_TYPE_3_SUCCESS = 'feed/FILTER_TYPE_3_SUCCESS';
-export const FILTER_TYPE_3_FAILURE = 'feed/FILTER_TYPE_3_FAILURE';
+export const GET_FEED_LIST_3_REQUEST = 'feed/GET_FEED_LIST_3_REQUEST';
+export const GET_FEED_LIST_3_SUCCESS = 'feed/GET_FEED_LIST_3_SUCCESS';
+export const GET_FEED_LIST_3_FAILURE = 'feed/GET_FEED_LIST_3_FAILURE';
 
 export const LIKE_FEED_REQUEST = 'feed/LIKE_FEED_REQUEST';
 export const LIKE_FEED_SUCCESS = 'feed/LIKE_FEED_SUCCESS';
@@ -170,6 +155,7 @@ export const UNLIKE_REPLE_SUCCESS = 'feed/UNLIKE_REPLE_SUCCESS';
 export const UNLIKE_REPLE_FAILURE = 'feed/UNLIKE_REPLE_FAILURE';
 
 export const GO_BACK_LOGIN_PAGE = 'GO_BACK_LOGIN_PAGE';
+export const NEXT_FEED_PAGE = 'feed/NEXT_FEED_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 export const COMMENT_PAGE = 'feed/COMMENT_PAGE';
 
@@ -179,7 +165,7 @@ function* goBackLoginPage() {
 }
 
 const getFeedTagAPI = () => {
-  return axios.get('/feed-all-tags');
+  return axios.get('/tags');
 };
 
 function* getFeedTag(action) {
@@ -198,7 +184,7 @@ function* getFeedTag(action) {
   }
 }
 
-const filterType1API = ({ filterTypeId, feedTagId }) => {
+const getFeedList1PI = ({ filterTypeId, feedTagId }) => {
   const params = {
     filterTypeId,
     feedTagId,
@@ -206,78 +192,88 @@ const filterType1API = ({ filterTypeId, feedTagId }) => {
   return axios.get('', { params });
 };
 
-function* filterType1(action) {
+function* getFeedList1(action) {
   try {
-    // const result = yield call(filterTypeAPI, action);
+    // const result = yield call(getFeedList1PI, action);
     yield put({
-      type: FILTER_TYPE_1_SUCCESS,
+      type: GET_FEED_LIST_1_SUCCESS,
       data: {
-        pageIndex: action.data.filterTypeId,
-        titleIndex: action.data.filterTypeId,
-        tagIndex: action.data.feedTagId,
+        filterId: action.data.filterId,
+        tagId: action.data.tagId,
         // Feeds: result.data,
       },
+    });
+    yield put({
+      type: NEXT_FEED_PAGE,
+      data: action.data.filterId,
     });
   } catch (error) {
     console.error(error);
     yield put({
-      type: FILTER_TYPE_1_FAILURE,
+      type: GET_FEED_LIST_1_FAILURE,
       error: error.response.data,
     });
   }
 }
 
-const filterType2API = ({ filterTypeId, sortTypes }) => {
+const getFeedList2API = ({ filterTypeId, feedTagId }) => {
   const params = {
     filterTypeId,
-    sortTypes,
+    feedTagId,
   };
   return axios.get('', { params });
 };
 
-function* filterType2(action) {
+function* getFeedList2(action) {
   try {
-    // const result = yield call(filterTypeAPI, action);
+    // const result = yield call(getFeedList2, action);
     yield put({
-      type: FILTER_TYPE_2_SUCCESS,
+      type: GET_FEED_LIST_2_SUCCESS,
       data: {
-        pageIndex: action.data.filterTypeId,
-        titleIndex: action.data.filterTypeId,
-        hotIndex: action.data.sortTypes,
+        filterId: action.data.filterId,
+        sortId: action.data.sortId,
         // Feeds: result.data,
       },
+    });
+    yield put({
+      type: NEXT_FEED_PAGE,
+      data: action.data.filterId,
     });
   } catch (error) {
     console.error(error);
     yield put({
-      type: FILTER_TYPE_2_FAILURE,
+      type: GET_FEED_LIST_2_FAILURE,
       error: error.response.data,
     });
   }
 }
 
-const filterType3API = ({ filterTypeId }) => {
+const getFeedList3API = ({ filterTypeId, feedTagId }) => {
   const params = {
     filterTypeId,
+    feedTagId,
   };
   return axios.get('', { params });
 };
 
-function* filterType3(action) {
+function* getFeedList3(action) {
   try {
-    // const result = yield call(filterTypeAPI, action);
+    // const result = yield call(getFeedList3API, action);
     yield put({
-      type: FILTER_TYPE_3_SUCCESS,
+      type: GET_FEED_LIST_3_SUCCESS,
       data: {
-        pageIndex: action.data.filterTypeId,
-        titleIndex: action.data.filterTypeId,
+        filterId: action.data.filterId,
         // Feeds: result.data,
       },
+    });
+    yield put({
+      type: NEXT_FEED_PAGE,
+      data: action.data.filterId,
     });
   } catch (error) {
     console.error(error);
     yield put({
-      type: FILTER_TYPE_3_FAILURE,
+      type: GET_FEED_LIST_3_FAILURE,
       error: error.response.data,
     });
   }
@@ -414,16 +410,16 @@ function* watchGetFeedTag() {
   yield takeLatest(GET_FEED_TAG_REQUEST, getFeedTag);
 }
 
-function* watchFilterType1() {
-  yield takeLatest(FILTER_TYPE_1_REQUEST, filterType1);
+function* watchGetFeedList1() {
+  yield throttle(5000, GET_FEED_LIST_1_REQUEST, getFeedList1);
 }
 
-function* watchFilterType2() {
-  yield takeLatest(FILTER_TYPE_2_REQUEST, filterType2);
+function* watchGetFeedList2() {
+  yield throttle(5000, GET_FEED_LIST_2_REQUEST, getFeedList2);
 }
 
-function* watchFilterType3() {
-  yield takeLatest(FILTER_TYPE_3_REQUEST, filterType3);
+function* watchGetFeedList3() {
+  yield throttle(5000, GET_FEED_LIST_3_REQUEST, getFeedList3);
 }
 
 function* watchLikeFeed() {
@@ -453,9 +449,9 @@ function* watchUnlikeReple() {
 export function* feedSaga() {
   yield all([
     fork(watchGetFeedTag),
-    fork(watchFilterType1),
-    fork(watchFilterType2),
-    fork(watchFilterType3),
+    fork(watchGetFeedList1),
+    fork(watchGetFeedList2),
+    fork(watchGetFeedList3),
     fork(watchGoBackLoginPage),
     fork(watchLikeFeed),
     fork(watchUnlikeFeed),
@@ -477,7 +473,7 @@ const feed = (state = initialSate, action) => {
         draft.getFeedTagError = null;
         break;
       case GET_FEED_TAG_SUCCESS:
-        draft.feedAllTags = action.data;
+        draft.feedTags = action.data;
         draft.getFeedTagLoading = false;
         draft.getFeedTagDone = true;
         break;
@@ -485,58 +481,55 @@ const feed = (state = initialSate, action) => {
         draft.getFeedTagLoading = false;
         draft.getFeedTagError = action.error;
         break;
-      /* 필터 타입1 화면 이동 */
-      case FILTER_TYPE_1_REQUEST:
-        draft.filterTypeLoading = true;
-        draft.filterTypeDone = false;
-        draft.filterTypeError = null;
+      /* 피드 리스트(우리 동네) 가져오기 */
+      case GET_FEED_LIST_1_REQUEST:
+        draft.getFeedListLoading = true;
+        draft.getFeedListDone = false;
+        draft.getFeedListError = null;
         break;
-      case FILTER_TYPE_1_SUCCESS:
-        draft.pageIndex = action.data.pageIndex;
-        draft.titleIndex = action.data.pageIndex;
-        draft.tagIndex = action.data.tagIndex;
+      case GET_FEED_LIST_1_SUCCESS:
+        draft.filterIndex = action.data.filterId;
+        draft.tagIndex = action.data.tagId;
         // draft.Feeds = action.data.Feeds;
-        draft.filterTypeLoading = false;
-        draft.filterTypeDone = true;
+        draft.getFeedListLoading = false;
+        draft.getFeedListDone = true;
         break;
-      case FILTER_TYPE_1_FAILURE:
-        draft.filterTypeLoading = false;
-        draft.filterTypeError = action.error;
+      case GET_FEED_LIST_1_FAILURE:
+        draft.getFeedListLoading = false;
+        draft.getFeedListError = action.error;
         break;
-      /* 필터 타입2 화면 이동 */
-      case FILTER_TYPE_2_REQUEST:
-        draft.filterTypeLoading = true;
-        draft.filterTypeDone = false;
-        draft.filterTypeError = null;
+      /* 피드 리스트(전체) 가져오기 */
+      case GET_FEED_LIST_2_REQUEST:
+        draft.getFeedListLoading = true;
+        draft.getFeedListDone = false;
+        draft.getFeedListError = null;
         break;
-      case FILTER_TYPE_2_SUCCESS:
-        draft.pageIndex = action.data.pageIndex;
-        draft.titleIndex = action.data.pageIndex;
-        draft.hotIndex = action.data.hotIndex;
+      case GET_FEED_LIST_2_SUCCESS:
+        draft.filterIndex = action.data.filterId;
+        draft.sortIndex = action.data.sortId;
         // draft.Feeds = action.data.Feeds;
-        draft.filterTypeLoading = false;
-        draft.filterTypeDone = true;
+        draft.getFeedListLoading = false;
+        draft.getFeedListDone = true;
         break;
-      case FILTER_TYPE_2_FAILURE:
-        draft.filterTypeLoading = false;
-        draft.filterTypeError = action.error;
+      case GET_FEED_LIST_2_FAILURE:
+        draft.getFeedListLoading = false;
+        draft.getFeedListError = action.error;
         break;
-      /* 필터 타입3 화면 이동 */
-      case FILTER_TYPE_3_REQUEST:
-        draft.filterTypeLoading = true;
-        draft.filterTypeDone = false;
-        draft.filterTypeError = null;
+      /* 피드 리스트(내 친구) 가져오기 */
+      case GET_FEED_LIST_3_REQUEST:
+        draft.getFeedListLoading = true;
+        draft.getFeedListDone = false;
+        draft.getFeedListError = null;
         break;
-      case FILTER_TYPE_3_SUCCESS:
-        draft.pageIndex = action.data.pageIndex;
-        draft.titleIndex = action.data.pageIndex;
+      case GET_FEED_LIST_3_SUCCESS:
+        draft.filterIndex = action.data.filterId;
         // draft.Feeds = action.data.Feeds;
-        draft.filterTypeLoading = false;
-        draft.filterTypeDone = true;
+        draft.getFeedListLoading = false;
+        draft.getFeedListDone = true;
         break;
-      case FILTER_TYPE_3_FAILURE:
-        draft.filterTypeLoading = false;
-        draft.filterTypeError = action.error;
+      case GET_FEED_LIST_3_FAILURE:
+        draft.getFeedListLoading = false;
+        draft.getFeedListError = action.error;
         break;
       /* 좋아요 */
       case LIKE_FEED_REQUEST:
@@ -571,6 +564,10 @@ const feed = (state = initialSate, action) => {
       case UNLIKE_FEED_FAILURE:
         draft.unLikeFeedLoading = false;
         draft.unLikeFeedError = action.error;
+        break;
+      /* 다음 페이지 이동 */
+      case NEXT_FEED_PAGE:
+        draft.pageIndex = action.data;
         break;
       /* 이전 페이지 이동 */
       case PREV_FEED_PAGE:

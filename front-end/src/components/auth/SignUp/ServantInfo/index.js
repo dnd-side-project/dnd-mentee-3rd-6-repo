@@ -7,7 +7,7 @@ import InputWrapper, { InputForm } from '../../../common/InputForm';
 import BottomCol from '../../../common/BottomCol';
 import MarginTop from '../../../common/Margin';
 import { AddressButton, InfoWrapper } from './styles';
-import { ErrorMessage } from '../../../common/Message';
+import { ErrorMessage, CleanMessage } from '../../../common/Message';
 
 const ServantInfoForm = ({
   nickName,
@@ -37,15 +37,18 @@ const ServantInfoForm = ({
                   maxLength={10}
                   value={nickName}
                   onChange={onChangeNickName}
-                  // onBlur={onBlurCheckNickName}
+                  onBlur={onBlurCheckNickName}
                   ref={nickNameInputRef}
+                  borderColor={NickNameValidData}
                   top="16px"
-                  color
+                  color="true"
                   required
                 />
-                {NickNameValidData == null
-                  ? null
-                  : NickNameValidData && <ErrorMessage>이미 사용중인 닉네임 입니다</ErrorMessage>}
+                {NickNameValidData === null ? null : NickNameValidData ? (
+                  <ErrorMessage>이미 사용중인 닉네임 입니다 (다 지우고 검사하기)</ErrorMessage>
+                ) : (
+                  <CleanMessage>사용 가능한 닉네임 입니다</CleanMessage>
+                )}
               </div>
             </InputWrapper>
             <InputWrapper top="60px">
@@ -67,7 +70,7 @@ const ServantInfoForm = ({
                   maxLength={10}
                   value={address}
                   top="16px"
-                  color
+                  color="true"
                   readOnly
                   required
                 />
@@ -80,7 +83,7 @@ const ServantInfoForm = ({
           bottom="5vh"
           buttonType="submit"
           buttonText="정보 등록 완료"
-          disabled={!(address && nickName)}
+          disabled={!(address && nickName && !NickNameValidData)}
         />
       </Form>
     </>

@@ -69,7 +69,8 @@ const CatProfileEnrollForm = ({
               <InputForm
                 name="catBirthday"
                 type="date"
-                data-placeholder="냥이가 언제 태어났는지 궁금해요"
+                placeholder="우리 냥이의 생일 (예 2019-10-12)"
+                data-placeholder="우리 냥이의 생일 (예 2019-10-12)"
                 min="2000-01-01"
                 max={currentDay}
                 value={catBirthday}

@@ -30,8 +30,8 @@ const Btn = styled(Button)`
 
   font-style: normal;
   font-weight: bold;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 25px;
   text-align: center;
 
   &[disabled] {

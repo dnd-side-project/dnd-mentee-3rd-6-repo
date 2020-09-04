@@ -12,7 +12,7 @@ export const ErrorMessage = styled.p`
 `;
 
 export const CleanMessage = styled.p`
-  color: ${pallete.secondary[1]};
+  color: ${pallete.secondary[2]};
   font-style: normal;
   font-weight: 500;
   font-size: 11px;

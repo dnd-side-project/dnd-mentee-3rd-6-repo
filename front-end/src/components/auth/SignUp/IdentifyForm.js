@@ -51,7 +51,7 @@ const IdentifyForm = ({
                   </Button>
                 }
                 flex={0.75}
-                addonTrue
+                authbtn="true"
                 type="tel"
                 name="phone-number"
                 placeholder="휴대폰 번호를 입력해주세요 (- 제외)"
