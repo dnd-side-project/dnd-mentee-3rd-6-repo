@@ -9,7 +9,7 @@ import FeedCardListContainer from '../containers/Feed/FeedCardListContainer';
 import CommentHeadContainer from '../containers/Feed/Comment/CommentHeadContainer';
 import CommentListContainer from '../containers/Feed/Comment/CommentListContainer';
 import CommentFormContainer from '../containers/Feed/Comment/CommentFormContainer';
-import { FeedWrapper, CommentSection } from '../components/Feed/styles';
+import { FeedWrapper, CommentWrapper } from '../components/Feed/styles';
 
 const FeedPage = () => {
   const { pageIndex } = useSelector((state) => state.feed);
@@ -34,12 +34,12 @@ const FeedPage = () => {
     >
       {pageIndex === 4 ? (
         <>
-          <CommentSection>
+          <CommentWrapper>
             <div>
               <CommentHeadContainer />
               <CommentListContainer />
             </div>
-          </CommentSection>
+          </CommentWrapper>
           <CommentFormContainer />
         </>
       ) : (

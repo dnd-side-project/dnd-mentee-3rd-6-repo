@@ -68,7 +68,7 @@ const CatProfileNameForm = ({
                 color={pallete.primary[1]}
                 required
               />
-              <CleanMessage>ex) 똥꼬발랄 개냥이, 냔냥펀치의 날인</CleanMessage>
+              <CleanMessage>ex) 똥꼬발랄 개냥이, 냔냥펀치의 달인</CleanMessage>
             </div>
           </InputWrapper>
         </ProfileWrapper>

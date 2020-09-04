@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 import { Header, HeaderButton, TagButton } from './styles';
 
-const FilterType = ({ filterType, checkFilterTypes, onClickFilter }) => {
+const FilterType = ({ filterType, checkFilterType, onClickFilter }) => {
   return (
     <li>
       <HeaderButton
         type="button"
         value={filterType.id}
-        check={checkFilterTypes}
+        check={checkFilterType}
         onClick={onClickFilter(filterType.id)}
       >
         {filterType.name}
@@ -18,12 +18,12 @@ const FilterType = ({ filterType, checkFilterTypes, onClickFilter }) => {
   );
 };
 
-const FeedTag = ({ feedTag, onClickFeedTag, checkFeedTags, checkSortTypes }) => {
+const FeedTag = ({ feedTag, onClickFeedTag, checkFeedTag, checkSortType }) => {
   return (
     <li>
       <TagButton
         type="button"
-        check={checkFeedTags || checkSortTypes}
+        check={checkFeedTag || checkSortType}
         checkId={feedTag.id}
         onClick={onClickFeedTag(feedTag.id)}
       >
@@ -35,13 +35,13 @@ const FeedTag = ({ feedTag, onClickFeedTag, checkFeedTags, checkSortTypes }) => 
 
 const FeedHead = ({
   filterTypes,
-  onClickFilter,
   feedTags,
   sortTypes,
-  checkFilterTypes,
+  checkFilterType,
+  checkFeedTag,
+  checkSortType,
+  onClickFilter,
   onClickFeedTag,
-  checkFeedTags,
-  checkSortTypes,
 }) => {
   return (
     <Header>
@@ -50,28 +50,28 @@ const FeedHead = ({
           <FilterType
             key={filterType.id}
             filterType={filterType}
-            checkFilterTypes={checkFilterTypes}
+            checkFilterType={checkFilterType}
             onClickFilter={onClickFilter}
           />
         ))}
       </ul>
-      {checkFilterTypes !== 3 && (
+      {checkFilterType !== 3 && (
         <div className="feed-head__tag">
           <ul>
-            {checkFilterTypes === 1
+            {checkFilterType === 1
               ? feedTags.map((feedTag) => (
                   <FeedTag
                     key={feedTag.id}
-                    checkFeedTags={checkFeedTags}
+                    checkFeedTag={checkFeedTag}
                     feedTag={feedTag}
                     onClickFeedTag={onClickFeedTag}
                   />
                 ))
-              : checkFilterTypes === 2
+              : checkFilterType === 2
               ? sortTypes.map((sortType) => (
                   <FeedTag
                     key={sortType.id}
-                    checkSortTypes={checkSortTypes}
+                    checkSortType={checkSortType}
                     feedTag={sortType}
                     onClickFeedTag={onClickFeedTag}
                   />
@@ -86,26 +86,26 @@ const FeedHead = ({
 
 FilterType.prototype = {
   filterType: PropTypes.object.isRequired,
-  checkFilterTypes: PropTypes.number.isRequired,
+  checkFilterType: PropTypes.number.isRequired,
   onClickFilter: PropTypes.func.isRequired,
 };
 
 FeedTag.prototype = {
   feedTag: PropTypes.object.isRequired,
+  checkFeedTag: PropTypes.number.isRequired,
+  checkSortType: PropTypes.number.isRequired,
   onClickFeedTag: PropTypes.func.isRequired,
-  checkFeedTags: PropTypes.number.isRequired,
-  checkSortTypes: PropTypes.number.isRequired,
 };
 
 FeedHead.prototype = {
   filterTypes: PropTypes.arrayOf(PropTypes.object),
   feedTags: PropTypes.arrayOf(PropTypes.object),
   sortTypes: PropTypes.arrayOf(PropTypes.object),
-  checkFilterTypes: PropTypes.number.isRequired,
+  checkFilterType: PropTypes.number.isRequired,
+  checkFeedTag: PropTypes.number.isRequired,
+  checkSortType: PropTypes.number.isRequired,
   onClickFilter: PropTypes.func.isRequired,
   onClickFeedTag: PropTypes.func.isRequired,
-  checkFeedTags: PropTypes.number.isRequired,
-  checkSortTypes: PropTypes.number.isRequired,
 };
 
 export default FeedHead;

@@ -133,8 +133,8 @@ export const InputForm = styled(Input)`
         font-size: 10px;
         line-height: 14px;
         text-align: center;
-        ${({ addonTrue, value }) => {
-          return addonTrue && value.length === 11
+        ${({ authbtn, value }) => {
+          return authbtn && value.length === 11
             ? css`
                 background: ${pallete.primary[2]};
                 color: ${pallete.primary[3]};

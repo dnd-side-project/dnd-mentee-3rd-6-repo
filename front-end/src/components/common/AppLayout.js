@@ -19,14 +19,14 @@ const TopCol = styled(Col)`
   right: 0;
   width: 100%;
   /* 상태바 포함 (아이폰 x: 44px) */
-  height: 98px;
+  /* height: 98px; */
 
   /* 상태바 x */
-  /* height: 54px; */
+  height: 54px;
 
   padding: 0 16px;
   padding-bottom: 18px;
-  background: ${pallete.white};
+  background: ${pallete.primary[3]};
 
   z-index: 999;
 
@@ -54,15 +54,15 @@ const Menu = styled.ul`
   left: 0;
   right: 0;
   width: 100%;
-  height: 83px;
+  height: 10vh;
 
-  background: ${pallete.white};
+  background: ${pallete.primary[3]};
 
   margin: 0 auto;
   padding: 0;
   padding-top: 13px;
 
-  border-top: 1px solid ${pallete.gray[3]};
+  border-top: 1px solid ${pallete.gray[1]};
 
   z-index: 999;
 

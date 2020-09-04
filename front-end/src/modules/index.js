@@ -6,6 +6,7 @@ import auth, { authSaga } from './auth';
 import user, { userSaga, initialSate } from './user';
 import map, { mapSaga } from './map';
 import feed, { feedSaga } from './feed';
+import write from './write';
 
 axios.defaults.baseURL = `${
   process.env.NODE_ENV === 'production' ? '/api' : 'http://15.164.158.155/api'
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   map,
   user,
   feed,
+  write,
 });
 
 export default rootReducer;

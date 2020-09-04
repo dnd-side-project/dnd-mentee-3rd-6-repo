@@ -4,7 +4,7 @@ import produce from 'immer';
 
 /* 초기 상태 */
 export const initialSate = {
-  pageIndex: 7,
+  pageIndex: 6,
   authInfo: {
     // 1
     phoneNumber: '',
@@ -36,29 +36,7 @@ export const initialSate = {
   previewPath: null,
   EmailValidData: null,
   NickNameValidData: null,
-  CatKindId: [
-    { id: 1, name: '코리안 쇼트헤어' },
-    { id: 2, name: '페르시안' },
-    { id: 3, name: '러시안 블루' },
-    { id: 4, name: '샴' },
-    { id: 5, name: '터키쉬앙고라' },
-    { id: 6, name: '스코티쉬 폴드' },
-    { id: 7, name: '친칠라' },
-    { id: 8, name: '아비시니안' },
-    { id: 9, name: '길고양이' },
-    { id: 10, name: '맹크스' },
-    { id: 11, name: '노르웨이숲' },
-    { id: 12, name: '브리티시 쇼트헤어' },
-    { id: 13, name: '먼치킨' },
-    { id: 14, name: '랙돌' },
-    { id: 15, name: '메인쿤' },
-    { id: 16, name: '시암' },
-    { id: 17, name: '아메리칸 쇼트헤어' },
-    { id: 18, name: '엑조틱 쇼트헤어' },
-    { id: 19, name: '아비시니안' },
-    { id: 20, name: '터키쉬앙고라' },
-    { id: 21, name: '기타' },
-  ],
+  CatKindId: null,
   identifyLoading: false, // 본인인증(리캡챠) 시도 중
   identifyDone: false,
   identifyError: null,
@@ -126,21 +104,21 @@ function* emailValid(action) {
   try {
     const result = yield call(emailValidAPI, action.data);
     yield put({
-      type: NICKNAME_VALID_SUCCESS,
+      type: EMAIL_VALID_SUCCESS,
       data: result.data,
     });
   } catch (error) {
     console.log(error);
     yield put({
-      type: NICKNAME_VALID_FAILURE,
+      type: EMAIL_VALID_FAILURE,
       error: error.response.data,
     });
   }
 }
 
 const nickNameValidAPI = (data) => {
-  return axios.get(`/auth/nickName/is-exist`, {
-    params: { nickName: data },
+  return axios.get(`/auth/nickname/is-exist`, {
+    params: { nickname: data },
   });
 };
 
@@ -161,7 +139,7 @@ function* nickNameValid(action) {
 }
 
 const catKindIdAPI = () => {
-  return axios.get(`/catkinds?sort=id,asc`);
+  return axios.get(`/cat-kinds`);
 };
 
 function* catKindId(action) {
