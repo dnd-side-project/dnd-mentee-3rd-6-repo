@@ -35,7 +35,7 @@ export const InputForm = styled(Input)`
   border-radius: 0;
 
   border-bottom: 1px solid ${({ value }) => (value ? pallete.primary[1] : pallete.gray[3])};
-  border-bottom: 1px solid ${({ borderColor }) => borderColor && pallete.ui[1]};
+  border-bottom: 1px solid ${({ bordercolor }) => bordercolor && pallete.ui[1]};
 
   &:focus {
     border-bottom: 1px solid ${pallete.secondary[2]};

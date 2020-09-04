@@ -17,6 +17,7 @@ const CatProfileEnrollForm = ({
   selectCheck,
   CatKindId,
   catKindCheck,
+  catIdName,
   onClickCatKindCheck,
   currentDay,
   catBirthday,
@@ -56,7 +57,7 @@ const CatProfileEnrollForm = ({
                 type="text"
                 name="catKind"
                 placeholder="냥이의 품종을 알려주세요"
-                value={catKindCheck && CatKindId[catKindCheck - 1].name}
+                value={catIdName}
                 onFocus={onSelectCatKindId}
                 width="75vw"
                 top="0px"
@@ -86,13 +87,14 @@ const CatProfileEnrollForm = ({
                 addonAfter={<p>kg</p>}
                 flex={0.94}
                 type="number"
+                step="0.1"
                 name="catWeight"
-                placeholder="몸무게를 알려주세요"
-                value={catWeight} // 최대 입력 범위 지정해야 함
+                placeholder="몸무게를 알려주세요 (예 6.8)"
+                value={catWeight}
                 onChange={onChangeCatWeight}
                 width="75vw"
                 top="0px"
-                color
+                color="true"
                 required
               />
             </InputWrapper>
@@ -200,6 +202,7 @@ CatProfileEnrollForm.prototype = {
   selectCheck: PropTypes.bool.isRequired,
   CatKindId: PropTypes.object.isRequired,
   catKindCheck: PropTypes.number.isRequired,
+  catIdName: PropTypes.string.isRequired,
   onClickCatKindCheck: PropTypes.func.isRequired,
   currentDay: PropTypes.string.isRequired,
   catBirthday: PropTypes.string.isRequired,

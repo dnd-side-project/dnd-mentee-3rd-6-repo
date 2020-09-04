@@ -94,8 +94,9 @@ export const Imagebutton = styled.button`
   color: ${pallete.primary[3]};
   font-size: 18px;
   outline: none;
+  border: none;
 
-  border: 3px solid ${pallete.primary[3]};
+  /* border: 3px solid ${pallete.primary[3]}; */
   background: ${pallete.secondary[1]};
   border-radius: 50%;
   transition: all 0.25s;

@@ -56,7 +56,7 @@ const EmailPasswordForm = ({
                 value={email}
                 onChange={onChangeEmail}
                 onBlur={onBlurEmailVaid}
-                borderColor={EmailValidData}
+                bordercolor={EmailValidData}
                 top="16px"
                 required
               />
