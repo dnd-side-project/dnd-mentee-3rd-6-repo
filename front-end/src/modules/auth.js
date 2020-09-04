@@ -4,7 +4,7 @@ import produce from 'immer';
 
 /* 초기 상태 */
 export const initialSate = {
-  pageIndex: 6,
+  pageIndex: 1,
   authInfo: {
     // 1
     phoneNumber: '',
