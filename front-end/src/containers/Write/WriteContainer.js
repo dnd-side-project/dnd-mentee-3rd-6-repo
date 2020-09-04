@@ -1,30 +1,34 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
 import Write from '../../components/Write/Write';
+import useInput from '../../hooks/useInput';
+import { NEXT_WRITE_PAGE } from '../../modules/write';
 
 const WriteContainer = () => {
   const [files, setFiles] = useState({
     file: [],
     previewPath: [],
   });
+  const [checkId, setCheckId] = useState(1);
+  const [text, onChangeText] = useInput('');
+  const [focus, setFocus] = useState(false);
+  const [click, setClick] = useState(false);
 
   const { file, previewPath } = files;
 
+  const dispatch = useDispatch();
   const { feedTags } = useSelector((state) => state.feed.feedAllTags);
 
   const imageInputRef = useRef();
   const videoInputRef = useRef();
   const nextId = useRef(0);
 
-  const onFinishFeed = useCallback(() => {
-    console.log('피드 작성');
-  }, []);
-
   const onClickImage = useCallback(() => {
     console.log('이미지');
     imageInputRef.current.click();
+    setClick(true);
   }, []);
 
   const onClickVideo = useCallback(() => {
@@ -36,13 +40,16 @@ const WriteContainer = () => {
     [].forEach.call(e.target.files, (f) => {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
+      reader.onload = () => {
         setFiles(
           produce((draft) => {
-            draft.file.push(f);
-            draft.previewPath.push({ id: nextId.current, url: reader.result });
+            draft.file.unshift({ id: nextId.current, f });
+            draft.previewPath.unshift({ id: nextId.current, url: reader.result });
           }),
         );
+      };
+
+      reader.onloadend = () => {
         nextId.current += 1;
       };
 
@@ -56,11 +63,31 @@ const WriteContainer = () => {
     (index) => () => {
       setFiles({
         ...files,
+        file: file.filter((v) => v.id !== index),
         previewPath: previewPath.filter((v) => v.id !== index),
       });
     },
-    [files, previewPath],
+    [file, files, previewPath],
   );
+
+  /* 피드 태그 호출 */
+  const onClickWriteTag = useCallback(
+    (index) => () => {
+      setCheckId(index);
+    },
+    [],
+  );
+
+  const onFocusText = useCallback(() => {
+    setFocus((prev) => !prev);
+  }, []);
+
+  const onFinishFeed = useCallback(() => {
+    dispatch({
+      type: NEXT_WRITE_PAGE,
+    });
+    setClick(false);
+  }, [dispatch]);
 
   return (
     <Write
@@ -74,6 +101,13 @@ const WriteContainer = () => {
       onClickVideo={onClickVideo}
       previewPath={previewPath}
       onClickClose={onClickClose}
+      checkId={checkId}
+      onClickWriteTag={onClickWriteTag}
+      text={text}
+      onChangeText={onChangeText}
+      focus={focus}
+      onFocusText={onFocusText}
+      click={click}
     />
   );
 };

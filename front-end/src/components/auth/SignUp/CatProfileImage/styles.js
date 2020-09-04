@@ -17,6 +17,26 @@ ${({ selectCheck }) => {
 }}
 `;
 
+export const ProfileWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  height: 65.6vh;
+`;
+
+export const ProfileHeader = styled.h1`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 27px;
+
+  text-align: center;
+
+  color: ${pallete.primary[1]};
+`;
+
 export const PrevImageBox = styled.div`
   display: flex;
   justify-content: center;
@@ -29,7 +49,7 @@ export const PrevImageBox = styled.div`
   border-radius: 50%;
   overflow: hidden;
 
-  margin: 35px auto 0 auto;
+  margin: 10px auto 0 auto;
 
   img {
     max-width: 100%;
@@ -39,20 +59,7 @@ export const PrevImageBox = styled.div`
   }
 `;
 
-export const ProfileHeader = styled.h3`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 27px;
-
-  text-align: center;
-
-  color: ${pallete.primary[1]};
-`;
-
 export const ImageBox = styled.div`
-  margin-top: 70px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,14 +81,13 @@ export const ImageBox = styled.div`
 
 export const Imagebutton = styled.button`
   position: absolute;
-  bottom: 12px;
+  bottom: 70px;
   right: 12px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* transform: translate(80px, -60px); */
   width: 45px;
   height: 45px;
 
@@ -100,9 +106,39 @@ export const Imagebutton = styled.button`
   }
 `;
 
+export const ProfileImageWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  height: 65.6vh;
+
+  .second {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+
+      margin-top: 27px;
+
+      color: ${pallete.gray[6]};
+    }
+  }
+`;
+
 export const EnrollImageBox = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
 
   margin-bottom: 34px;
 
@@ -174,8 +210,7 @@ export const CatKindModal = styled.div`
 
     background: ${pallete.primary[3]};
     border-radius: 14px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
 
     ul {
       position: absolute;
@@ -184,6 +219,8 @@ export const CatKindModal = styled.div`
       width: 100%;
       height: 70vh;
       margin: 0 auto;
+
+      margin-top: 15px;
 
       display: flex;
       flex-direction: column;
@@ -262,30 +299,3 @@ export const CheckButton = styled.button`
         `;
   }}
 `;
-
-const ProfileImageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .second {
-    position: relative;
-
-    display: flex;
-    justify-content: center;
-  }
-
-  p {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-    text-align: center;
-
-    margin-top: 27px;
-
-    color: ${pallete.gray[6]};
-  }
-`;
-
-export default ProfileImageWrapper;

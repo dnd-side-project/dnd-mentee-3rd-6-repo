@@ -17,13 +17,12 @@ const EmailPasswordForm = ({
   passwordCheck,
   onChangePasswordCheck,
   passwordError,
-  emailInputRef,
   EmailValidData,
-  onFocusCheckEmail,
+  onBlurEmailVaid,
+  claenEmail,
   onClickReset,
   onSubmitSignUp,
 }) => {
-  const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   return (
     <>
       <Form onFinish={onSubmitSignUp}>
@@ -34,14 +33,14 @@ const EmailPasswordForm = ({
               <br />
               <InputForm
                 addonAfter={
-                  emailRule.test(email) ? (
-                    !EmailValidData ? (
+                  claenEmail ? (
+                    EmailValidData ? (
                       <p>
-                        <CheckIcon />
+                        <CloseButton index={1} onClickReset={onClickReset} />
                       </p>
                     ) : (
                       <p>
-                        <CloseButton index={1} onClickReset={onClickReset} />
+                        <CheckIcon />
                       </p>
                     )
                   ) : (
@@ -56,19 +55,19 @@ const EmailPasswordForm = ({
                 placeholder="이메일을 입력해 주세요"
                 value={email}
                 onChange={onChangeEmail}
-                ref={emailInputRef}
+                onBlur={onBlurEmailVaid}
+                borderColor={EmailValidData}
+                top="16px"
                 required
               />
               {EmailValidData === null ? null : EmailValidData ? (
                 <ErrorMessage>이미 가입한 이메일입니다.</ErrorMessage>
               ) : (
-                !emailRule.test(email) && (
-                  <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
-                )
+                !claenEmail && <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
               )}
             </div>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="55px">
             <div>
               <label htmlFor="password">비밀번호</label>
               <br />
@@ -90,13 +89,13 @@ const EmailPasswordForm = ({
                 placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
                 value={password}
                 onChange={onChangePassword}
-                onFocus={onFocusCheckEmail}
+                top="16px"
                 required
               />
             </div>
           </InputWrapper>
           {password.length >= 8 && (
-            <InputWrapper>
+            <InputWrapper top="45px">
               <div>
                 <label htmlFor="password-check">비밀번호 확인</label>
                 <br />
@@ -117,6 +116,7 @@ const EmailPasswordForm = ({
                   name="password-check"
                   value={passwordCheck}
                   onChange={onChangePasswordCheck}
+                  top="16px"
                   required
                 />
               </div>
@@ -128,7 +128,7 @@ const EmailPasswordForm = ({
           bottom="5vh"
           buttonType="submit"
           buttonText="다음으로"
-          disabled={!(passwordCheck && !EmailValidData && !passwordError)}
+          disabled={!(email && passwordCheck && !EmailValidData && !passwordError)}
         />
       </Form>
     </>
@@ -143,11 +143,9 @@ EmailPasswordForm.prototype = {
   passwordCheck: PropTypes.string.isRequired,
   onChangePasswordCheck: PropTypes.func.isRequired,
   passwordError: PropTypes.bool.isRequired,
-  emailInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  emailNone: PropTypes.bool.isRequired,
   EmailValidData: PropTypes.bool.isRequired,
-  emailValid: PropTypes.bool.isRequired,
-  onFocusCheckEmail: PropTypes.func.isRequired,
+  onBlurEmailVaid: PropTypes.func.isRequired,
+  claenEmail: PropTypes.bool.isRequired,
   onClickReset: PropTypes.func.isRequired,
   onSubmitSignUp: PropTypes.func.isRequired,
 };

@@ -13,7 +13,7 @@ import HighLight from '../../../common/HighLight';
 const IsServantForm = ({ name, isServant, setIsServant, onSubmitSignUp }) => {
   return (
     <Form onFinish={onSubmitSignUp}>
-      <Margin top="10vh">
+      <Margin top="40px">
         <Wrapper>
           <Title>
             <HighLight line="60px">
@@ -52,7 +52,7 @@ const IsServantForm = ({ name, isServant, setIsServant, onSubmitSignUp }) => {
           </DotsIndicator>
         </Wrapper>
       </Margin>
-      <BottomCol top="10vh" bottom="10px" buttonType="submit" buttonText="다음으로" />
+      <BottomCol top="5vh" bottom="5vh" buttonType="submit" buttonText="다음으로" />
     </Form>
   );
 };

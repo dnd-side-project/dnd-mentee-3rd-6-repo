@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Form } from 'antd';
 
 import { pallete } from '../../lib/style/pallete';
@@ -8,29 +8,42 @@ export const WriteForm = styled(Form)`
   flex-direction: column;
   align-items: center;
   width: 100vw;
+  height: 100%;
 
   transform: translateX(-16px);
 
-  margin-top: 98px;
+  margin-top: 50px;
+`;
+
+export const WriteWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 61.5vh;
 `;
 
 export const WriteTag = styled.section`
-  width: 100vw;
-  height: 107px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 96px;
 
   border-top: 1px solid ${pallete.gray[3]};
-
-  background: ${pallete.gray[1]};
+  border-bottom: 1px solid ${pallete.gray[3]};
 
   & > span {
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 19px;
 
-    color: ${pallete.gray[5]};
+    color: ${pallete.primary[1]};
 
-    margin-left: 23px;
+    padding-top: 16px;
+    margin-left: 16px;
   }
 
   .write-tag {
@@ -63,28 +76,6 @@ export const WriteTag = styled.section`
       li {
         margin-left: 9px;
 
-        button {
-          height: 28px;
-          min-width: 71px;
-
-          border: none;
-          outline: none;
-          background: ${pallete.white};
-
-          border: 1px solid ${pallete.orange};
-          border-radius: 14px;
-
-          font-style: normal;
-          font-weight: bold;
-          font-size: 12px;
-          line-height: 16px;
-          text-align: center;
-
-          white-space: nowrap;
-
-          color: ${pallete.orange};
-        }
-
         &:first-child {
           margin-left: 16px;
         }
@@ -102,10 +93,7 @@ export const TextArea = styled.textarea`
   height: 30vh;
   padding: 19px;
 
-  /* border: none; */
-
-  border-top: 1px solid ${pallete.gray[3]};
-
+  border: none;
   resize: none;
   outline: none;
 
@@ -122,7 +110,7 @@ export const TextArea = styled.textarea`
 export const Image = styled.div`
   position: relative;
   width: 100vw;
-  height: 100px;
+  height: 95px;
 
   padding: 0 16px;
 
@@ -135,8 +123,6 @@ export const Image = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
-
-  background: lightgray;
 
   ul {
     position: absolute;
@@ -154,7 +140,7 @@ export const Image = styled.div`
 export const ImageBox = styled.li`
   position: relative;
   width: 86px;
-  height: 80px;
+  height: auto;
 
   display: flex;
   justify-content: center;
@@ -176,7 +162,7 @@ export const ImageBox = styled.li`
       top: 0;
       width: auto;
       height: 80px;
-      background: ${pallete.white};
+      background: ${pallete.primary[3]};
     }
   }
 
@@ -208,49 +194,329 @@ export const ImageBox = styled.li`
 `;
 
 export const ButtonsWrapper = styled.div`
+  position: relative;
+
   display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: 100vw;
+  height: auto;
 
-  padding-left: 27px;
+  background: ${pallete.gray[1]};
 
-  margin-bottom: 15px;
-
-  button {
+  & div:first-child {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
 
-    outline: none;
-    background: none;
+    margin-top: 30px;
 
-    border: none;
-    padding: 5px;
+    .input-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-    &:last-child {
-      margin-left: 10px;
+      margin-left: 36px;
+
+      outline: none;
+      background: none;
+
+      border: none;
+      padding: 5px;
+
+      &:last-child {
+        margin-left: 10px;
+      }
     }
   }
 `;
 
-export const CatTag = styled.section`
+export const Tolltip = styled.div`
+  @keyframes showTooltip {
+    0% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(20px);
+    }
+    70% {
+      transform: translateY(18px);
+    }
+    90% {
+      transform: translateY(23px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  @keyframes hiddenTooltip {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(15px);
+      opacity: 0;
+    }
+  }
+
+  position: absolute;
+
+  top: -70px;
+  left: 15px;
+
+  p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 152px;
+    height: 31px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: ${pallete.secondary[1]};
+    border-radius: 14px;
+
+    span {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+
+      color: ${pallete.primary[3]};
+
+      margin-right: 5px;
+    }
+  }
+
+  .arrow {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+
+    border-top: 15px solid ${pallete.secondary[1]};
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+
+  ${({ focus }) => {
+    return focus
+      ? css`
+          animation: hiddenTooltip 0.5s forwards;
+        `
+      : css`
+          animation: showTooltip 1s infinite;
+        `;
+  }}
+`;
+
+export const CatTagWrapper = styled.section`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  width: 100vw;
+  height: 66vh;
+  width: 100%;
+`;
 
-  padding-top: 17px;
+export const CatTagHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  background: ${pallete.gray[1]};
-  border-top: 1px solid ${pallete.gray[3]};
+  h1 {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 150.2%;
+    text-align: center;
 
-  span {
+    color: ${pallete.primary[1]};
+  }
+`;
+
+export const CatTagList = styled.div`
+  position: relative;
+
+  width: 100%;
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+
+  margin-top: 60px;
+
+  overflow-y: hidden;
+  overflow-x: scroll;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+
+  ul {
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+
+    width: auto;
+    height: 220px;
+  }
+`;
+
+export const CatTagItem = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & button {
+    position: relative;
+
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+
+    border-radius: 50%;
+
+    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
+
+    ${({ check, checkId }) =>
+      check === checkId &&
+      css`
+        border: 5px solid ${pallete.secondary[1]};
+      `}
+
+    & .img-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      ${({ check, checkId }) =>
+        check === checkId
+          ? css`
+              width: 120px;
+              height: 120px;
+            `
+          : css`
+              width: 130px;
+              height: 130px;
+            `}
+
+      border-radius: 50%;
+
+      background: ${pallete.gray[3]};
+
+      overflow: hidden;
+
+      img {
+        width: auto;
+        height: 130px;
+
+        background: ${pallete.primary[3]};
+      }
+    }
+
+    & .check {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 30px;
+      height: 30px;
+
+      border-radius: 50%;
+      background: ${pallete.secondary[1]};
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      z-index: 999;
+    }
+  }
+
+  p {
+    margin-top: 16px;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+
+    color: ${pallete.primary[1]};
+  }
+
+  & + & {
+    margin-left: 26px;
+  }
+
+  &:first-child {
+    margin-left: 44px;
+  }
+
+  &:last-child {
+    margin-right: 44px;
+  }
+`;
+
+export const CatTagTooltip = styled.div`
+  @keyframes showTooltip {
+    0% {
+      transform: translateY(-10px);
+    }
+    30% {
+      transform: translateY(10px);
+    }
+    70% {
+      transform: translateY(8px);
+    }
+    90% {
+      transform: translateY(13px);
+    }
+    100% {
+      transform: translateY(-10px);
+    }
+  }
+
+  position: relative;
+  width: 216px;
+  height: 33px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: ${pallete.primary[3]};
+  border-radius: 14px;
+
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.15);
+
+  p {
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
-    line-height: 16px;
+    line-height: 150%;
 
-    color: ${pallete.gray[6]};
-
-    margin-left: 23px;
+    color: ${pallete.primary[1]};
   }
+
+  .arrow {
+    position: absolute;
+    top: 30px;
+    left: 50px;
+
+    border-top: 15px solid ${pallete.primary[3]};
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+
+  animation: showTooltip 1s infinite;
 `;

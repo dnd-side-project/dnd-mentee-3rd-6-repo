@@ -11,6 +11,8 @@ const InputWrapper = styled.div`
   justify-content: ${({ flexRow }) => (flexRow ? 'space-between' : 'center')};
 
   margin-top: ${({ top }) => top};
+
+  width: 100%;
 `;
 
 export const InputForm = styled(Input)`
@@ -33,6 +35,7 @@ export const InputForm = styled(Input)`
   border-radius: 0;
 
   border-bottom: 1px solid ${({ value }) => (value ? pallete.primary[1] : pallete.gray[3])};
+  border-bottom: 1px solid ${({ borderColor }) => borderColor && pallete.ui[1]};
 
   &:focus {
     border-bottom: 1px solid ${pallete.secondary[2]};
@@ -130,8 +133,8 @@ export const InputForm = styled(Input)`
         font-size: 10px;
         line-height: 14px;
         text-align: center;
-        ${({ addonTrue, value }) => {
-          return addonTrue && value.length === 11
+        ${({ authbtn, value }) => {
+          return authbtn && value.length === 11
             ? css`
                 background: ${pallete.primary[2]};
                 color: ${pallete.primary[3]};
@@ -144,10 +147,10 @@ export const InputForm = styled(Input)`
 
         border: none;
 
-        width: 104px;
-        height: 30px;
+        width: 88px;
+        height: 27px;
 
-        border-radius: 15px;
+        border-radius: 14px;
 
         &:focus {
           outline: none;

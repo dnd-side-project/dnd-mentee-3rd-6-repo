@@ -3,125 +3,127 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FeedHead from '../../components/Feed/FeedHead';
 import {
-  FILTER_TYPE_1_REQUEST,
-  FILTER_TYPE_2_REQUEST,
-  FILTER_TYPE_3_REQUEST,
   GO_BACK_LOGIN_PAGE,
   GET_FEED_TAG_REQUEST,
+  GET_FEED_LIST_1_REQUEST,
+  GET_FEED_LIST_2_REQUEST,
+  GET_FEED_LIST_3_REQUEST,
 } from '../../modules/feed';
 
 const FeedHeadContainer = () => {
-  const [checkFilterTypes, setCheckFilterTypes] = useState(1);
-  const [checkFeedTags, setCheckFeedTags] = useState(1);
-  const [checkSortTypes, setCheckSortTypes] = useState(1);
+  const [checkFilterType, setCheckFilterType] = useState(1);
+  const [checkFeedTag, setCheckFeedTag] = useState(1);
+  const [checkSortType, setCheckSortType] = useState(1);
 
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
-  const { feedAllTags, getFeedTagDone } = useSelector((state) => state.feed);
+  const { feedTags, filterTypes, sortTypes, getFeedTagDone } = useSelector((state) => state.feed);
 
-  const { filterTypes, feedTags, sortTypes } = feedAllTags;
+  const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
+  const sortList = ['POPULAR', 'LATEST'];
 
-  // useEffect(() => {
-  //   if (userInfo.accessToken) {
-  //   dispatch({
-  //     type: GET_FEED_TAG_REQUEST,
-  //   });
-  //   } else {
-  //     dispatch({
-  //       type: GO_BACK_LOGIN_PAGE,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
+  /* 유저 정보 있는지 확인 하기 */
   useEffect(() => {
-    if (feedAllTags) {
+    if (userInfo.accessToken) {
       dispatch({
-        type: FILTER_TYPE_1_REQUEST,
-        data: {
-          filterTypeId: checkFilterTypes,
-          feedTagId: checkFeedTags,
-        },
+        type: GET_FEED_TAG_REQUEST,
+      });
+    } else {
+      dispatch({
+        type: GO_BACK_LOGIN_PAGE,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feedAllTags]);
+  }, []);
 
-  /* 필터 타입 별 페이지 피드 호출 */
+  /* 피드 태그 가져오고 피드(우리 동네) 리스트 호출 */
+  useEffect(() => {
+    feedTags &&
+      dispatch({
+        type: GET_FEED_LIST_1_REQUEST,
+        data: {
+          filterId: filterTypeList[checkFilterType - 1],
+          tagId: checkFeedTag,
+        },
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedTags]);
+
+  /* 필터 타입 별 피드 리스트 호출 */
   const onClickFilter = useCallback(
     (index) => () => {
-      if (index !== checkFilterTypes) {
+      if (index !== checkFilterType) {
         index === 1 &&
           dispatch({
-            type: FILTER_TYPE_1_REQUEST,
+            type: GET_FEED_LIST_1_REQUEST,
             data: {
-              filterTypeId: checkFilterTypes,
-              feedTagId: checkFeedTags,
+              filterId: filterTypeList[checkFilterType - 1],
+              tagId: checkFeedTag,
             },
           });
         index === 2 &&
           dispatch({
-            type: FILTER_TYPE_2_REQUEST,
+            type: GET_FEED_LIST_2_REQUEST,
             data: {
-              filterTypeId: checkFilterTypes,
-              sortTypes: checkSortTypes,
+              filterId: filterTypeList[checkFilterType - 1],
+              sortId: sortList[checkSortType - 1],
             },
           });
         index === 3 &&
           dispatch({
-            type: FILTER_TYPE_3_REQUEST,
+            type: GET_FEED_LIST_3_REQUEST,
             data: {
-              filterTypeId: checkFilterTypes,
+              filterId: filterTypeList[checkFilterType - 1],
             },
           });
-        setCheckFilterTypes(() => index);
+        setCheckFilterType(index);
       }
     },
-    [checkFeedTags, checkFilterTypes, checkSortTypes, dispatch],
+    [checkFeedTag, checkFilterType, checkSortType, dispatch, filterTypeList, sortList],
   );
 
-  /* 피드 태그 호출 */
+  /* 피드 태그 별 피드 리스트 호출 */
   const onClickFeedTag = useCallback(
     (index) => () => {
-      if (checkFilterTypes === 1) {
-        setCheckFeedTags(index);
-        index !== checkFeedTags &&
+      if (checkFilterType === 1) {
+        index !== checkFeedTag &&
           dispatch({
-            type: FILTER_TYPE_1_REQUEST,
+            type: GET_FEED_LIST_1_REQUEST,
             data: {
-              filterTypeId: checkFilterTypes,
-              feedTagId: checkFeedTags,
+              filterId: filterTypeList[checkFilterType - 1],
+              tagId: checkFeedTag,
             },
           });
+        setCheckFeedTag(index);
       } else {
-        setCheckSortTypes(index);
-        index !== checkSortTypes &&
+        index !== checkSortType &&
           dispatch({
-            type: FILTER_TYPE_2_REQUEST,
+            type: GET_FEED_LIST_2_REQUEST,
             data: {
-              filterTypeId: checkFilterTypes,
-              sortTypes: checkSortTypes,
+              filterId: filterTypeList[checkFilterType - 1],
+              sortId: sortList[checkSortType - 1],
             },
           });
+        setCheckSortType(index);
       }
     },
-    [checkFeedTags, checkFilterTypes, checkSortTypes, dispatch],
+    [checkFeedTag, checkFilterType, checkSortType, dispatch, filterTypeList, sortList],
   );
 
-  // if (!getFeedTagDone) {
-  //   return null;
-  // }
+  if (!getFeedTagDone) {
+    return null;
+  }
 
   return (
     <FeedHead
       filterTypes={filterTypes}
       feedTags={feedTags}
       sortTypes={sortTypes}
-      checkFilterTypes={checkFilterTypes}
+      checkFilterType={checkFilterType}
+      checkFeedTag={checkFeedTag}
+      checkSortType={checkSortType}
       onClickFilter={onClickFilter}
       onClickFeedTag={onClickFeedTag}
-      checkFeedTags={checkFeedTags}
-      checkSortTypes={checkSortTypes}
     />
   );
 };

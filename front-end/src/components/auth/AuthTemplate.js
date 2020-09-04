@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
 import BackButton from '../common/BackButton';
@@ -9,10 +9,17 @@ import HighLight from '../common/HighLight';
 
 const TopCol = styled(Col)`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ title }) => (title === '우리 동네 인증하기' ? 'none' : 'column')};
 
-  /* margin-top: 16px; */
-  margin-top: 60px; /* 상태바 포함 */
+  ${({ title }) =>
+    title === '우리 동네 인증하기' &&
+    css`
+      justify-content: space-between;
+      align-items: center;
+    `};
+
+  margin-top: 16px;
+  /* margin-top: 60px; */
 
   h1 {
     font-style: normal;
@@ -22,7 +29,14 @@ const TopCol = styled(Col)`
 
     color: ${pallete.primary[1]};
 
-    margin-top: 28px;
+    margin-top: ${({ title }) => (title === '우리 동네 인증하기' ? '0px' : '28px')};
+
+    ${({ title }) =>
+      title === '우리 동네 인증하기' &&
+      css`
+        line-height: 0px;
+        padding-right: 5vw;
+      `};
   }
 
   h2 {
@@ -59,7 +73,7 @@ const MiddleCol = styled(Col)`
 const AuthTemplate = ({ children, line, highLightTitle, title, subTitle }) => {
   return (
     <Row gutter={[0, 0]}>
-      <TopCol xs={24}>
+      <TopCol title={title} xs={24}>
         <BackButton page={1} />
         {title && (
           <>
@@ -73,6 +87,7 @@ const AuthTemplate = ({ children, line, highLightTitle, title, subTitle }) => {
             <h2>{subTitle}</h2>
           </>
         )}
+        {/* {title === '우리 동네 인증하기' && <span className="block" />} */}
       </TopCol>
       <MiddleCol xs={24}>{children}</MiddleCol>
     </Row>

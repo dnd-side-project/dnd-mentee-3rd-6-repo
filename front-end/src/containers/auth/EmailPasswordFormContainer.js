@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import EmailPasswordForm from '../../components/auth/SignUp/EmailPasswordForm';
@@ -9,6 +9,7 @@ const EmailPasswordFormContainer = () => {
   const [email, onChangeEmail, setEmail] = useInput('');
   const [password, onChangePassword, setPassword] = useInput('');
 
+  const [claenEmail, setCleanEmail] = useState(false);
   const [prevEmail, setPrevEmail] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -16,15 +17,21 @@ const EmailPasswordFormContainer = () => {
   const dispatch = useDispatch();
   const { EmailValidData } = useSelector((state) => state.auth);
 
-  const emailInputRef = useRef();
+  /* true: 올바른 이메일 형식, false: 올바르지 않은 이메일 형식 */
+  const emailRule = /^[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.\]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
   /* 페이지 2 - 이메일 중복확인 */
-  useEffect(() => {
-    EmailValidData && emailInputRef.current.focus();
-    if (email !== prevEmail) {
-      EmailValidData && emailInputRef.current.focus();
+  const onBlurEmailVaid = useCallback(() => {
+    if (prevEmail !== email) {
+      setCleanEmail(emailRule.test(email));
+
+      dispatch({
+        type: EMAIL_VALID_REQUEST,
+        data: email,
+      });
     }
-  }, [EmailValidData, email, prevEmail]);
+    setPrevEmail(email);
+  }, [dispatch, email, emailRule, prevEmail]);
 
   /* 페이지 2 - 비밀번호 확인 */
   const onChangePasswordCheck = useCallback(
@@ -34,18 +41,6 @@ const EmailPasswordFormContainer = () => {
     },
     [password],
   );
-
-  /* 페이지 2 - 이메일 중복 확인 */
-  const onFocusCheckEmail = useCallback(() => {
-    if (prevEmail === email) {
-      return null;
-    }
-    setPrevEmail(() => email);
-    return dispatch({
-      type: EMAIL_VALID_REQUEST,
-      data: email,
-    });
-  }, [dispatch, email, prevEmail]);
 
   const onClickReset = useCallback(
     (value) => () => {
@@ -83,9 +78,9 @@ const EmailPasswordFormContainer = () => {
       passwordCheck={passwordCheck}
       onChangePasswordCheck={onChangePasswordCheck}
       passwordError={passwordError}
-      emailInputRef={emailInputRef}
+      onBlurEmailVaid={onBlurEmailVaid}
       EmailValidData={EmailValidData}
-      onFocusCheckEmail={onFocusCheckEmail}
+      claenEmail={claenEmail}
       onClickReset={onClickReset}
       onSubmitSignUp={onSubmitSignUp}
     />

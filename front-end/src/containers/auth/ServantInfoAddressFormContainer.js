@@ -1,7 +1,6 @@
 /* global kakao */
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import dotenv from 'dotenv';
 
 import ServantInfoAddressForm from '../../components/auth/SignUp/ServantInfo/ServantInfoAddressForm';
 import {
@@ -12,8 +11,6 @@ import {
 } from '../../modules/map';
 import { SIGN_UP_8, PREV_PAGE } from '../../modules/auth';
 
-dotenv.config();
-
 const ServantInfoAddressFormContainer = () => {
   const [myMap, setMyMap] = useState(null);
 
@@ -22,6 +19,8 @@ const ServantInfoAddressFormContainer = () => {
   );
   const { geoLat, geoLon } = currentLocation;
   const dispatch = useDispatch();
+
+  const address = `${regionCodeData.addressDepth1} ${regionCodeData.addressDepth2} ${regionCodeData.addressDepth3} ${regionCodeData.addressDepth4}`;
 
   /* 지도 생성 */
   useEffect(() => {
@@ -55,12 +54,12 @@ const ServantInfoAddressFormContainer = () => {
   /* 현재 위치 가져오기 */
   useEffect(() => {
     if (navigator.geolocation) {
-      dispatch({
-        type: CURRENT_GPS_REQUEST,
-      });
-      // GPS를 지원하면
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      try {
+        dispatch({
+          type: CURRENT_GPS_REQUEST,
+        });
+        // GPS를 지원하면
+        navigator.geolocation.getCurrentPosition((position) => {
           const { latitude } = position.coords;
           const { longitude } = position.coords;
           console.log('2. GPS 가져오기');
@@ -71,31 +70,27 @@ const ServantInfoAddressFormContainer = () => {
               geoLon: longitude,
             },
           });
-        },
-        (error) => {
-          console.error(error);
-          dispatch({
-            type: CURRENT_GPS_FAILURE,
-            error,
-          });
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 0,
-          timeout: Infinity,
-        },
-      );
+        });
+      } catch (error) {
+        console.error(error);
+        dispatch({
+          type: CURRENT_GPS_FAILURE,
+          error,
+        });
+      }
     } else {
       alert('GPS를 지원하지 않습니다');
     }
   }, [dispatch]);
 
+  /* 마커 표시 */
   useEffect(() => {
     if (myMap !== null && geoLat && geoLon) {
       console.log('3. 마커 등록');
 
       // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
       const locPosition = new kakao.maps.LatLng(geoLat, geoLon);
+      const mapPosition = new kakao.maps.LatLng(geoLat - 0.01, geoLon - 0.0001);
 
       // 마커와 인포윈도우를 표시합니다
       const imageSrc = '/images/map/maker.svg'; // 마커이미지의 주소입니다
@@ -113,9 +108,24 @@ const ServantInfoAddressFormContainer = () => {
       });
       marker.setMap(myMap);
 
-      // 지도 중심을 부드럽게 이동시킵니다
+      const content =
+        '<div class="info-map">' + '<p>현재 위치가 아닌가요?</p>' + '<span/>' + '</div>';
+      const position = new kakao.maps.LatLng(geoLat, geoLon); // 인포윈도우 표시 위치입니다
+
+      // 커스텀 오버레이를 생성합니다
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position,
+        content,
+        xAnchor: 0.7,
+        yAnchor: 2.5,
+      });
+
+      // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+      customOverlay.setMap(myMap);
+
+      // 지도 부드럽게 이동시킵니다
       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-      myMap.panTo(locPosition);
+      myMap.panTo(mapPosition);
     }
   }, [geoLat, geoLon, myMap]);
 
@@ -123,7 +133,6 @@ const ServantInfoAddressFormContainer = () => {
   useEffect(() => {
     if (currentGPSDone) {
       console.log('4. 행정동 찾기');
-      console.log(geoLat, geoLon);
       dispatch({
         type: REGION_CODE_REQUEST,
         data: {
@@ -148,7 +157,7 @@ const ServantInfoAddressFormContainer = () => {
 
   return (
     <ServantInfoAddressForm
-      regionCodeData={regionCodeData}
+      address={address}
       currentGPSLoading={currentGPSLoading}
       onSubmitSignUp={onSubmitSignUp}
     />

@@ -22,6 +22,7 @@ export const initialSate = {
     // 6
     catKindId: null,
     catGender: '',
+    catWeight: '',
     catBirthday: '',
     catNeutralized: '',
     // 7
@@ -34,29 +35,8 @@ export const initialSate = {
   },
   previewPath: null,
   EmailValidData: null,
-  CatKindId: [
-    { id: 1, name: '코리안 쇼트헤어' },
-    { id: 2, name: '페르시안' },
-    { id: 3, name: '러시안 블루' },
-    { id: 4, name: '샴' },
-    { id: 5, name: '터키쉬앙고라' },
-    { id: 6, name: '스코티쉬 폴드' },
-    { id: 7, name: '친칠라' },
-    { id: 8, name: '아비시니안' },
-    { id: 9, name: '길고양이' },
-    { id: 10, name: '맹크스' },
-    { id: 11, name: '노르웨이숲' },
-    { id: 12, name: '브리티시 쇼트헤어' },
-    { id: 13, name: '먼치킨' },
-    { id: 14, name: '랙돌' },
-    { id: 15, name: '메인쿤' },
-    { id: 16, name: '시암' },
-    { id: 17, name: '아메리칸 쇼트헤어' },
-    { id: 18, name: '엑조틱 쇼트헤어' },
-    { id: 19, name: '아비시니안' },
-    { id: 20, name: '터키쉬앙고라' },
-    { id: 21, name: '기타' },
-  ],
+  NickNameValidData: null,
+  CatKindId: null,
   identifyLoading: false, // 본인인증(리캡챠) 시도 중
   identifyDone: false,
   identifyError: null,
@@ -66,6 +46,9 @@ export const initialSate = {
   emailValidLoading: false, // 이메일 중복 확인 시도 중
   emailValidDone: false,
   emailValidError: null,
+  nickNameValidLoading: false, // 닉네임 중복 확인 시도 중
+  nickNameValidDone: false,
+  nickNameValidError: null,
   catKindIdLoading: false, // 고양이 품종 가져오기 시도 중
   catKindIdDone: false,
   catKindIdError: null,
@@ -83,6 +66,10 @@ export const NUMBER_VERIFY_FAILURE = 'user/NUMBER_VERIFY_FAILURE';
 export const EMAIL_VALID_REQUEST = 'user/EMAIL_VALID_REQUEST';
 export const EMAIL_VALID_SUCCESS = 'user/EMAIL_VALID_SUCCESS';
 export const EMAIL_VALID_FAILURE = 'user/EMAIL_VALID_FAILURE';
+
+export const NICKNAME_VALID_REQUEST = 'user/NICKNAME_VALID_REQUEST';
+export const NICKNAME_VALID_SUCCESS = 'user/NICKNAME_VALID_SUCCESS';
+export const NICKNAME_VALID_FAILURE = 'user/NICKNAME_VALID_FAILURE';
 
 export const PROFILE_IMAGE_REQUEST = 'user/PROFILE_IMAGE_REQUEST';
 export const PROFILE_IMAGE_SUCCESS = 'user/PROFILE_IMAGE_SUCCESS';
@@ -129,8 +116,30 @@ function* emailValid(action) {
   }
 }
 
+const nickNameValidAPI = (data) => {
+  return axios.get(`/auth/nickname/is-exist`, {
+    params: { nickname: data },
+  });
+};
+
+function* nickNameValid(action) {
+  try {
+    const result = yield call(nickNameValidAPI, action.data);
+    yield put({
+      type: NICKNAME_VALID_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: NICKNAME_VALID_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 const catKindIdAPI = () => {
-  return axios.get(`/catkinds?sort=id,asc`);
+  return axios.get(`/cat-kinds`);
 };
 
 function* catKindId(action) {
@@ -153,12 +162,16 @@ function* watchEmailValid() {
   yield takeLatest(EMAIL_VALID_REQUEST, emailValid);
 }
 
+function* watchNickNameValid() {
+  yield takeLatest(NICKNAME_VALID_REQUEST, nickNameValid);
+}
+
 function* watchCatKindId() {
   yield takeLatest(CAT_KIND_ID_REQUEST, catKindId);
 }
 
 export function* authSaga() {
-  yield all([fork(watchEmailValid), fork(watchCatKindId)]);
+  yield all([fork(watchEmailValid), fork(watchCatKindId), fork(watchNickNameValid)]);
 }
 
 /* 리듀서 */
@@ -210,6 +223,21 @@ const auth = (state = initialSate, action) => {
         draft.emailValidLoading = false;
         draft.emailValidError = action.error;
         break;
+      /* 닉네임 중복확인 */
+      case NICKNAME_VALID_REQUEST:
+        draft.nickNameValidLoading = true;
+        draft.nickNameValidDone = false;
+        draft.nickNameValidError = null;
+        break;
+      case NICKNAME_VALID_SUCCESS:
+        draft.NickNameValidData = action.data;
+        draft.nickNameValidLoading = false;
+        draft.nickNameValidDone = true;
+        break;
+      case NICKNAME_VALID_FAILURE:
+        draft.nickNameValidLoading = false;
+        draft.nickNameValidError = action.error;
+        break;
       /* 고양이 품종 가져오기 */
       case CAT_KIND_ID_REQUEST:
         draft.catKindIdLoading = true;
@@ -244,6 +272,7 @@ const auth = (state = initialSate, action) => {
       case SIGN_UP_6:
         draft.authInfo.catKindId = action.data.catKindId;
         draft.authInfo.catGender = action.data.catGender;
+        draft.authInfo.catWeight = action.data.catWeight;
         draft.authInfo.catBirthday = action.data.catBirthday;
         draft.authInfo.catNeutralized = action.data.catNeutralized;
         break;

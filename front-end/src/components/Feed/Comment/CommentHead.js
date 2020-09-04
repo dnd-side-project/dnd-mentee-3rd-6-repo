@@ -6,14 +6,16 @@ import { CardTitle, CardContent, CardContentText, CommentHeader } from '../style
 const CommentHead = ({ content, author, timeDesc }) => {
   return (
     <CommentHeader>
-      <CardTitle>
+      <CardTitle comment>
         <dl className="feed-card__title-column">
           <dt>
             <img src={author.profileImg} alt={author.nickName} />
           </dt>
-          <dd>{author.nickName}</dd>
+          <dd>
+            <span>{author.nickName}</span>
+            <span>{author.addressName}</span>
+          </dd>
         </dl>
-        <div className="feed-card__title-column">{author.addressName}</div>
       </CardTitle>
       <CardContent>
         <div className="feed-card__content-column">

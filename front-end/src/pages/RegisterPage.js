@@ -14,17 +14,8 @@ import ServantInfoAddressFormContainer from '../containers/auth/ServantInfoAddre
 const RegisterPage = () => {
   const { pageIndex } = useSelector((state) => state.auth);
 
-  const lines = ['68px', '88px', null, '88px', '88px', '88px', '88px', '88px'];
-  const highLightTitles = [
-    '우동집',
-    '집사님이',
-    null,
-    null,
-    '우리집에',
-    '우리집에',
-    '우리집에',
-    '우리집에',
-  ];
+  const lines = ['68px', '88px', null, null, null, null, '128px', null];
+  const highLightTitles = ['우동집', '집사님이', null, null, null, null, '이웃집사들을', null];
   const titles = [
     '오신걸 환영합니다',
     '누군지 궁금해요!',
@@ -32,13 +23,17 @@ const RegisterPage = () => {
     null,
     null,
     null,
-    '집사 정보 등록',
-    null,
+    '만나러 가볼까요?',
+    '우리 동네 인증하기',
   ];
   const subTitles = [
     '고양이 좋아하는 당신은 좋은 사람 ( ˘ ³˘) ♡',
     '우동이는 당신을 더 알고 싶다옹 (ง •̀_•́)ง',
     null,
+    null,
+    null,
+    null,
+    '마지막 단계다냥! 아자아자 (ง •̀_•́)ง',
     null,
   ];
 

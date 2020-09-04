@@ -6,6 +6,8 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
+  height: 65.6vh;
 `;
 
 export const SliderWrapper = styled.div`
@@ -101,7 +103,7 @@ export const SubTitle = styled.h2`
   line-height: 19px;
   text-align: center;
 
-  margin-top: 36px;
+  margin-top: 20px;
 
   color: ${pallete.primary[1]};
 `;
@@ -110,7 +112,7 @@ export const DotsIndicator = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 34px;
+  margin-top: 8vh;
 
   span {
     width: 8px;
