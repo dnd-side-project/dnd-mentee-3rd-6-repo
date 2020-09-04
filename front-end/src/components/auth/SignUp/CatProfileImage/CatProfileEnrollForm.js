@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'antd';
 
 import InputWrapper, { InputForm } from '../../../common/InputForm';
-import { EnrollImageBox, CatKindModal, ScrollStop, CheckButton } from './styles';
+import { EnrollImageBox, CatKindModal, ScrollStop, CheckButton, ProfileWrapper } from './styles';
 import BottomCol from '../../../common/BottomCol';
 import Margin from '../../../common/Margin';
 import RdioWrapper, { RadioButton } from '../../../common/RdioForm';
@@ -33,128 +33,136 @@ const CatProfileEnrollForm = ({
     <>
       <ScrollStop selectCheck={selectCheck} />
       <Form onFinish={onSubmitSignUp}>
-        <Margin top="30px">
-          <EnrollImageBox>
-            <div className="img-wrapper">
-              {previewPath && <img src={previewPath} alt="고양이 사진" />}
-            </div>
-            <dl className="info-wrapper">
-              <dt>{catName} 이름</dt>
-              <dd>{catFeatures} 특징</dd>
-            </dl>
-          </EnrollImageBox>
-          <InputWrapper top="0px" flexRow>
-            <label htmlFor="catKind">품종</label>
-            <InputForm
-              addonAfter={
-                <p>
-                  <DropDownIcon />
-                </p>
-              }
-              flex={0.95}
-              type="text"
-              name="catKind"
-              placeholder="냥이의 품종을 알려주세요"
-              value={catKindCheck && CatKindId[catKindCheck - 1].name}
-              onFocus={onSelectCatKindId}
-              width="75vw"
-              top="0px"
-              readOnly
-              required
-            />
-          </InputWrapper>
-          <InputWrapper top="35px" flexRow>
-            <label htmlFor="catBirthday">생일</label>
-            <InputForm
-              name="catBirthday"
-              type="date"
-              data-placeholder="냥이가 언제 태어났는지 궁금해요"
-              min="2000-01-01"
-              max={currentDay}
-              value={catBirthday}
-              onChange={onChangeCatBirthday}
-              width="75vw"
-              top="0px"
-              required
-            />
-          </InputWrapper>
-          <InputWrapper top="35px" flexRow>
-            <label htmlFor="catWeight">몸무게</label>
-            <InputForm
-              addonAfter={<p>kg</p>}
-              flex={0.94}
-              type="number"
-              name="catWeight"
-              placeholder="몸무게를 알려주세요"
-              value={catWeight} // 최대 입력 범위 지정해야 함
-              onChange={onChangeCatWeight}
-              width="75vw"
-              top="0px"
-              color
-              required
-            />
-          </InputWrapper>
-          <InputWrapper top="25px">
-            <div>
-              <label htmlFor="catGender">성별</label>
-              <br />
-              <RdioWrapper name="catGender">
-                <RadioButton
-                  type="button"
-                  value="MALE"
-                  catNeutralized={catGender}
-                  onClick={onClcikCatGender}
-                >
-                  남자냥
-                </RadioButton>
-                <RadioButton
-                  type="button"
-                  value="FEMALE"
-                  catNeutralized={catGender}
-                  onClick={onClcikCatGender}
-                >
-                  여자냥
-                </RadioButton>
-              </RdioWrapper>
-            </div>
-          </InputWrapper>
-          <InputWrapper top="25px">
-            <div>
-              <label htmlFor="catNeutralized">중성화 유무</label>
-              <br />
-              <RdioWrapper name="catNeutralized">
-                <RadioButton
-                  type="button"
-                  value="TRUE"
-                  catNeutralized={catNeutralized}
-                  onClick={onClickCatNeutralized}
-                  width="109px"
-                >
-                  했어요
-                </RadioButton>
-                <RadioButton
-                  type="button"
-                  value="FALSE"
-                  catNeutralized={catNeutralized}
-                  onClick={onClickCatNeutralized}
-                  width="109px"
-                >
-                  안했어요
-                </RadioButton>
-                <RadioButton
-                  type="button"
-                  value="NONE"
-                  catNeutralized={catNeutralized}
-                  onClick={onClickCatNeutralized}
-                  width="109px"
-                >
-                  잘모르겠어요
-                </RadioButton>
-              </RdioWrapper>
-            </div>
-          </InputWrapper>
+        <Margin top="40px">
+          <ProfileWrapper>
+            <EnrollImageBox>
+              <div className="img-wrapper">
+                {previewPath && <img src={previewPath} alt="고양이 사진" />}
+              </div>
+              <dl className="info-wrapper">
+                <dt>{catName}</dt>
+                <dd>{catFeatures}</dd>
+              </dl>
+            </EnrollImageBox>
+            <InputWrapper flexRow>
+              <label htmlFor="catKind">품종</label>
+              <InputForm
+                addonAfter={
+                  <p>
+                    <DropDownIcon />
+                  </p>
+                }
+                flex={0.95}
+                type="text"
+                name="catKind"
+                placeholder="냥이의 품종을 알려주세요"
+                value={catKindCheck && CatKindId[catKindCheck - 1].name}
+                onFocus={onSelectCatKindId}
+                width="75vw"
+                top="0px"
+                readOnly
+                required
+              />
+            </InputWrapper>
+            <InputWrapper top="10px" flexRow>
+              <label htmlFor="catBirthday">생일</label>
+              <InputForm
+                name="catBirthday"
+                type="date"
+                data-placeholder="냥이가 언제 태어났는지 궁금해요"
+                min="2000-01-01"
+                max={currentDay}
+                value={catBirthday}
+                onChange={onChangeCatBirthday}
+                width="75vw"
+                top="0px"
+                required
+              />
+            </InputWrapper>
+            <InputWrapper top="10px" flexRow>
+              <label htmlFor="catWeight">몸무게</label>
+              <InputForm
+                addonAfter={<p>kg</p>}
+                flex={0.94}
+                type="number"
+                name="catWeight"
+                placeholder="몸무게를 알려주세요"
+                value={catWeight} // 최대 입력 범위 지정해야 함
+                onChange={onChangeCatWeight}
+                width="75vw"
+                top="0px"
+                color
+                required
+              />
+            </InputWrapper>
+            <InputWrapper top="5px">
+              <div>
+                <label htmlFor="catGender">성별</label>
+                <br />
+                <RdioWrapper name="catGender">
+                  <RadioButton
+                    type="button"
+                    value="MALE"
+                    catNeutralized={catGender}
+                    onClick={onClcikCatGender}
+                  >
+                    남자냥
+                  </RadioButton>
+                  <RadioButton
+                    type="button"
+                    value="FEMALE"
+                    catNeutralized={catGender}
+                    onClick={onClcikCatGender}
+                  >
+                    여자냥
+                  </RadioButton>
+                </RdioWrapper>
+              </div>
+            </InputWrapper>
+            <InputWrapper top="5px">
+              <div>
+                <label htmlFor="catNeutralized">중성화 유무</label>
+                <br />
+                <RdioWrapper name="catNeutralized">
+                  <RadioButton
+                    type="button"
+                    value="TRUE"
+                    catNeutralized={catNeutralized}
+                    onClick={onClickCatNeutralized}
+                    width="109px"
+                  >
+                    했어요
+                  </RadioButton>
+                  <RadioButton
+                    type="button"
+                    value="FALSE"
+                    catNeutralized={catNeutralized}
+                    onClick={onClickCatNeutralized}
+                    width="109px"
+                  >
+                    안했어요
+                  </RadioButton>
+                  <RadioButton
+                    type="button"
+                    value="NONE"
+                    catNeutralized={catNeutralized}
+                    onClick={onClickCatNeutralized}
+                    width="109px"
+                  >
+                    잘모르겠어요
+                  </RadioButton>
+                </RdioWrapper>
+              </div>
+            </InputWrapper>
+          </ProfileWrapper>
         </Margin>
-        <BottomCol top="7vh" bottom="10px" buttonType="submit" buttonText="다음 단계로" />
+        <BottomCol
+          top="5vh"
+          bottom="5vh"
+          buttonType="submit"
+          buttonText="다음 단계로"
+          disabled={!(catKindCheck && catBirthday && catWeight && catGender && catNeutralized)}
+        />
       </Form>
       {selectCheck && (
         <CatKindModal>

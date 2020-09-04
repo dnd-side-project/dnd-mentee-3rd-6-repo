@@ -4,7 +4,7 @@ import { Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import BottomCol from '../../../common/BottomCol';
-import ProfileImageWrapper, { ImageBox, ProfileHeader, Imagebutton } from './styles';
+import { ProfileImageWrapper, ImageBox, ProfileHeader, Imagebutton } from './styles';
 import Margin from '../../../common/Margin';
 import HighLight from '../../../common/HighLight';
 
@@ -17,7 +17,7 @@ const CatProfileImageForm = ({
 }) => {
   return (
     <Form onFinish={onSubmitSignUp}>
-      <Margin top="10vh">
+      <Margin top="40px">
         <ProfileImageWrapper>
           <div>
             <ProfileHeader>
@@ -45,8 +45,6 @@ const CatProfileImageForm = ({
             <Imagebutton type="button" onClick={onClickImageUpload}>
               <PlusOutlined />
             </Imagebutton>
-          </div>
-          <div>
             <p>
               가입 후 마이페이지에서 냥이 사진 변경과 <br /> 냥이 추가가 가능하니 부담없이
               골라주세요 :)
@@ -55,8 +53,8 @@ const CatProfileImageForm = ({
         </ProfileImageWrapper>
       </Margin>
       <BottomCol
-        top="14.5vh"
-        bottom="10px"
+        top="5vh"
+        bottom="5vh"
         buttonType="submit"
         buttonText="사진 선택 완료"
         disabled={!prevImagePath.previewPath}

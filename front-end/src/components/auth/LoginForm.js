@@ -30,12 +30,13 @@ const LoginForm = ({
                 placeholder="이메일을 입력해 주세요"
                 onChange={onChangeEmail}
                 value={email}
-                // logInError={logInError?.message} // border-bottom 색 바꾸기
+                top="16px"
+                borderColor={logInError?.message === 'Email이 존재하지 않습니다.'}
                 required
               />
             </div>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper top="68px">
             <div>
               <label htmlFor="password">패스워드</label>
               <br />
@@ -45,7 +46,8 @@ const LoginForm = ({
                 placeholder="비밀번호를 입력해 주세요"
                 onChange={onChangePassword}
                 value={password}
-                // logInError={logInError?.message} // border-bottom 색 바꾸기
+                top="16px"
+                borderColor={logInError?.message === 'Password가 틀렸습니다.'}
                 required
               />
               {logInError && (
@@ -58,7 +60,7 @@ const LoginForm = ({
         </Margin>
         <BottomCol
           top="5vh"
-          bottom="13vh"
+          bottom="5vh"
           buttonType="submit"
           loading={logInLoading}
           buttonText="로그인"
