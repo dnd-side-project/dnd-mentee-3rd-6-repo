@@ -23,4 +23,9 @@ public class TagServiceImpl implements TagService {
     return repo.findAll().stream().map(tag->new TagDto(tag.getId(), tag.getName())).collect(Collectors.toList());
   }
 
+  @Override
+  public Tag findById(Long tagId) {
+    return repo.findById(tagId).orElseThrow();
+  }
+
 }

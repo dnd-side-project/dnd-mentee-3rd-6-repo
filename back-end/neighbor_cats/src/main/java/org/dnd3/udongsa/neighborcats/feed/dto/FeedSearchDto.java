@@ -8,11 +8,11 @@ import lombok.Data;
 @Data
 public class FeedSearchDto {
 
-  private int tagId;
+  private Long tagId;
   private EFilterType filterType;
   private ESortType sortType;
-  private int catId;
-  private int pageNumber;
-  private int pageSize;
+  private Long catId;
+  private Integer pageNumber;
+  private Integer pageSize;
   
 }

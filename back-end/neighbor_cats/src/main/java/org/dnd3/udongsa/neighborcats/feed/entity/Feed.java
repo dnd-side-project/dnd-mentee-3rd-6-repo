@@ -1,15 +1,20 @@
 package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
+import org.dnd3.udongsa.neighborcats.feed.repository.FeedLike;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,6 +43,12 @@ public class Feed {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "feed")
+    List<FeedLike> likes = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "feed")
+    List<FeedComment> comments = new ArrayList<>();
 
     protected static Feed of(String content, Servant author, Cat cat){
         Feed feed = new Feed();

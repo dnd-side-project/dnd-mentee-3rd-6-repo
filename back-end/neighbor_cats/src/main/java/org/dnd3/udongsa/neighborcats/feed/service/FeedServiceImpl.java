@@ -3,7 +3,9 @@ package org.dnd3.udongsa.neighborcats.feed.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.cat.entity.CatMapper;
@@ -14,6 +16,8 @@ import org.dnd3.udongsa.neighborcats.feed.dto.FeedModifyDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSearchDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.PagingDto;
+import org.dnd3.udongsa.neighborcats.feed.entity.EFilterType;
+import org.dnd3.udongsa.neighborcats.feed.entity.ESortType;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedMapper;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedRepository;
@@ -23,11 +27,13 @@ import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
 import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
+import org.dnd3.udongsa.neighborcats.tag.Tag;
 import org.dnd3.udongsa.neighborcats.tag.TagDto;
 import org.dnd3.udongsa.neighborcats.util.TimeDescService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +56,19 @@ public class FeedServiceImpl implements FeedService {
   @Override
   @Transactional(readOnly = true)
   public PagingDto<FeedDto> findAll(FeedSearchDto searchDto) {
-    Pageable pageable = PageRequest.of(searchDto.getPageNumber(), searchDto.getPageSize());
-    Page<Feed> pageFeeds = repo.findAll(pageable);
+    Pageable pageable = PageRequest.of(searchDto.getPageNumber(), searchDto.getPageSize(), Direction.DESC, "createdAt");
+    Page<Feed> pageFeeds = null;
+    if(searchDto.getFilterType() == EFilterType.HOMETOWN && Objects.nonNull(searchDto.getTagId())){
+      Address address = servantService.findServantByEmail(securityService.getLoggedUserEmail()).getAddress();
+      Tag tag = feedTagService.findTagByTagId(searchDto.getTagId());
+      pageFeeds = repo.findAllByTagAndAddress(tag, address, pageable); 
+    }else if(searchDto.getFilterType() == EFilterType.ALL && searchDto.getSortType() == ESortType.POPULAR){
+      pageFeeds = repo.findByOrderByLikesAndCountOfComments(pageable);
+    }else if(searchDto.getFilterType() == EFilterType.ALL && searchDto.getSortType() == ESortType.LATEST){
+      pageFeeds = repo.findAll(pageable);
+    }else{
+      pageFeeds = repo.findAll(pageable);
+    }
     List<FeedDto> feedDtos = new ArrayList<>();
     for(Feed feed : pageFeeds.getContent()){
       feedDtos.add(toDto(feed));

@@ -7,5 +7,7 @@ public interface TagService {
 	List<Tag> findAll(List<Long> tagIds);
 
 	List<TagDto> getAll();
+
+	Tag findById(Long tagId);
   
 }

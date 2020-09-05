@@ -24,18 +24,17 @@ public class FeedTagServiceImpl implements FeedTagService {
   @Override
   public List<TagDto> getAllByFeed(Feed feed) {
     List<FeedTag> tags = repo.findAllByFeed(feed);
-    return tags.stream()
-      .map(feedTag->{
-        Tag tag = feedTag.getTag();
-        return new TagDto(tag.getId(), tag.getName());
-      }).collect(Collectors.toList());
+    return tags.stream().map(feedTag -> {
+      Tag tag = feedTag.getTag();
+      return new TagDto(tag.getId(), tag.getName());
+    }).collect(Collectors.toList());
   }
 
   @Override
   public List<TagDto> save(List<Long> tagIds, Feed feed) {
     List<TagDto> tagDtos = new ArrayList<>();
     List<Tag> tags = tagService.findAll(tagIds);
-    for(Tag tag : tags){
+    for (Tag tag : tags) {
       FeedTag feedTag = FeedTag.of(tag, feed);
       repo.save(feedTag);
       tagDtos.add(new TagDto(tag.getId(), tag.getName()));
@@ -51,27 +50,33 @@ public class FeedTagServiceImpl implements FeedTagService {
   @Override
   public void update(Feed feed, List<Long> modifyTagIds) {
     List<Tag> modifyTags = tagService.findAll(modifyTagIds);
-    List<Tag> persistTags = repo.findAllByFeed(feed).stream().map(feedTag->feedTag.getTag()).collect(Collectors.toList());
+    List<Tag> persistTags = repo.findAllByFeed(feed).stream().map(feedTag -> feedTag.getTag())
+        .collect(Collectors.toList());
     List<Tag> removeTags = new ArrayList<>();
-    for(Tag tag : persistTags){
-      if(!modifyTags.contains(tag)){
+    for (Tag tag : persistTags) {
+      if (!modifyTags.contains(tag)) {
         removeTags.add(tag);
       }
     }
-    for(Tag tag : removeTags){
+    for (Tag tag : removeTags) {
       FeedTag feedTag = repo.findByTagAndFeed(tag, feed);
       repo.delete(feedTag);
     }
-    
+
     List<Tag> insertTags = new ArrayList<>();
-    for(Tag tag : modifyTags){
-      if(!persistTags.contains(tag)){
+    for (Tag tag : modifyTags) {
+      if (!persistTags.contains(tag)) {
         insertTags.add(tag);
       }
     }
-    for(Tag tag : insertTags){
+    for (Tag tag : insertTags) {
       FeedTag feedTag = FeedTag.of(tag, feed);
       repo.save(feedTag);
     }
+  }
+
+  @Override
+  public Tag findTagByTagId(Long tagId) {
+    return tagService.findById(tagId);
   }
 }

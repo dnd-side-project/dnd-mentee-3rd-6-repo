@@ -3,6 +3,7 @@ package org.dnd3.udongsa.neighborcats.feed.service;
 import java.util.List;
 
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
+import org.dnd3.udongsa.neighborcats.tag.Tag;
 import org.dnd3.udongsa.neighborcats.tag.TagDto;
 
 public interface FeedTagService {
@@ -18,6 +19,8 @@ public interface FeedTagService {
 
   void deleteByFeed(Feed feed);
 
-void update(Feed persist, List<Long> feedTagIds);
-  
+  void update(Feed persist, List<Long> feedTagIds);
+
+  Tag findTagByTagId(Long tagId);
+
 }
