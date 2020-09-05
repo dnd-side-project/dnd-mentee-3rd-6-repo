@@ -22,4 +22,6 @@ public interface CatService {
 
   List<CatDto> findByServant(Servant servant);
 
+  Cat findCatById(Long catTagId);
+
 }

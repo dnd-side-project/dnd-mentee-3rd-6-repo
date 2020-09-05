@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,14 +43,16 @@ public class Servant {
 
 	@NotBlank
 	@Size(max = 50)
-	@Email
+  @Email
+  @Column(unique = true)
 	private String email;
 	
 	@NotBlank
 	@Size(max = 120)
 	private String password;
 	
-	@Size(max = 20)
+  @Size(max = 20)
+  @Column(unique = true)
 	private String nickname;
 	
 	private String phoneNumber;

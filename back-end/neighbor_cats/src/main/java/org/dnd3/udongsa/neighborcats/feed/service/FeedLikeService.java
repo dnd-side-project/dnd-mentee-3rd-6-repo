@@ -7,5 +7,7 @@ public interface FeedLikeService {
 	Boolean isLikeByServant(String loggedUserEmail, Feed feed);
 
 	Long getNumberOfLikes(Feed feed);
+
+	void deleteByFeed(Feed feed);
   
 }

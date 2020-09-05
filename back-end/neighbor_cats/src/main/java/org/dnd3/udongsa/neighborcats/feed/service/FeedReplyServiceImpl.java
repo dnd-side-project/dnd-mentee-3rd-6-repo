@@ -12,8 +12,13 @@ public class FeedReplyServiceImpl implements FeedReplyService {
 
   @Override
   public List<ReplyDto> getAllByComment(FeedComment comment) {
-    // TODO: IMPLE
+    // TODO Auto-generated method stub
     return new ArrayList<ReplyDto>();
+  }
+
+  @Override
+  public void deleteByComments(List<FeedComment> comments) {
+    // TODO Auto-generated method stub
   }
   
 }

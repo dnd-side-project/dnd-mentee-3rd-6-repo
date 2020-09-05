@@ -25,5 +25,12 @@ public class FeedImg {
     @ManyToOne
     @JoinColumn
     private ImgFile imgFile;
+
+    public static FeedImg of(Feed feed, ImgFile imgFile){
+        FeedImg feedImg = new FeedImg();
+        feedImg.feed = feed;
+        feedImg.imgFile = imgFile;
+        return feedImg;
+    }
     
 }

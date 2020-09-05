@@ -15,6 +15,6 @@ public class FeedModifyDto {
   private List<MultipartFile> insertImgFiles;
   private List<Long> removeImgFileIds;
   private List<Long> feedTagIds;
-  private Long catTagId;
+  private Long catId;
   
 }

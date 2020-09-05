@@ -96,6 +96,11 @@ public class ServantServiceImpl implements ServantService {
     return repo.findByEmail(loggedUserEmail).orElseThrow();
   }
 
+  @Override
+  public Boolean isExistNickname(String nickname) {
+    return repo.existsByNickname(nickname);
+  }
+
 	// @Override
 	// @Transactional
 	// public ProfileImgDto uploadProfileForSignup(ProfileUploadDto uploadDto, String userEmail) {

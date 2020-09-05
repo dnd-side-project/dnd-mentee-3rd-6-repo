@@ -8,5 +8,7 @@ import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 public interface FeedCommentService {
 
 	List<FeedCommentDto> getAllByFeed(Feed feed);
+
+	void deleteByFeed(Feed feed);
   
 }

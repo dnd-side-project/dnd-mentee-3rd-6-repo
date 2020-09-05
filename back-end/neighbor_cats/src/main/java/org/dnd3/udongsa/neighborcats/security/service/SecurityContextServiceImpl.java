@@ -1,6 +1,11 @@
 package org.dnd3.udongsa.neighborcats.security.service;
 
+import java.util.Objects;
+
+import org.dnd3.udongsa.neighborcats.exception.CustomException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +30,12 @@ public class SecurityContextServiceImpl implements SecurityContextService{
 
   @Override
   public String getLoggedUserEmail() {
-    // TODO Auto-generated method stub
-    return null;
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentPrincipalName = authentication.getName();
+    if(Objects.isNull(currentPrincipalName)){
+      throw new CustomException(HttpStatus.UNAUTHORIZED, "인증토큰이 올바르지 않습니다.");
+    }
+    return currentPrincipalName;
   }
 
   

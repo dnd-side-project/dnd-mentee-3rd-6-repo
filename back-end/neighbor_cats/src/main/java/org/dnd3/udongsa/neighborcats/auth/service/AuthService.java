@@ -10,5 +10,6 @@ public interface AuthService {
   SignUpResDto signUp(SignUpReqDto reqDto);
   Boolean isExistEmail(String email);
   SignInResDto signIn(SignInReqDto reqDto);
+  Boolean isExistNickname(String nickname);
   
 }

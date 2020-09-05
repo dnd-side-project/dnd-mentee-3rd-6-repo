@@ -8,7 +8,7 @@ import org.dnd3.udongsa.neighborcats.feed.dto.PagingDto;
 
 public interface FeedService {
 
-	PagingDto<FeedDto> findAll(FeedSearchDto serachDto);
+	PagingDto<FeedDto> findAll(FeedSearchDto searchDto);
 
 	FeedDto save(FeedSaveDto saveDto);
 
@@ -16,6 +16,6 @@ public interface FeedService {
 
 	FeedDto delete(Long id);
 
-	FeedDto modify(FeedModifyDto modifyDto);
+	FeedDto modify(Long id, FeedModifyDto modifyDto);
   
 }
