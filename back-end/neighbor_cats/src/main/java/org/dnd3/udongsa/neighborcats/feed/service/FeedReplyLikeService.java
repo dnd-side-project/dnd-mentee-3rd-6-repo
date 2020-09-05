@@ -10,6 +10,6 @@ public interface FeedReplyLikeService {
 
 	LikeDto like(FeedReplyLikeDto likeDto);
 
-	LikeDto unLike(FeedReplyLikeDto likeDto);
+	LikeDto unLike(Long replyId);
   
 }

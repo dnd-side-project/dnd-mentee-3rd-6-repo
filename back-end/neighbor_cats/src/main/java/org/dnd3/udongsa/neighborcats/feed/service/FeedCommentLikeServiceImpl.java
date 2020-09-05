@@ -57,17 +57,17 @@ public class FeedCommentLikeServiceImpl implements FeedCommentLikeService {
   }
 
   @Override
-  public LikeDto unLike(FeedCommentLikeDto likeDto) {
-    FeedComment feedComment = feedCommentDao.findById(likeDto.getCommentId());
+  public void deleteByComment(FeedComment comment) {
+    repo.deleteAllByFeedComment(comment);
+  }
+
+  @Override
+  public LikeDto unLike(Long commentId) {
+    FeedComment feedComment = feedCommentDao.findById(commentId);
     Servant servant = securityService.getLoggedUser();
     FeedCommentLike like = repo.findByFeedCommentAndServant(feedComment, servant);
     repo.delete(like);
     return new LikeDto(false);
-  }
-
-  @Override
-  public void deleteByComment(FeedComment comment) {
-    repo.deleteAllByFeedComment(comment);
   }
   
 }

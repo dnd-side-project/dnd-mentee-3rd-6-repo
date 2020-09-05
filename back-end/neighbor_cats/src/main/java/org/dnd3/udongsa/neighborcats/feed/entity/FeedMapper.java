@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
@@ -14,7 +15,7 @@ public class FeedMapper {
 
 	public static FeedDto map(Feed feed, List<ImgFileDto> imgDtos,
 			AuthorDto authorDto, Boolean isLike, long numberOfLikes, int numberOfComments, LocalDateTime createdDateTime,
-			String timeDesc) {
+			String timeDesc, List<FeedCommentDto> commentDtos) {
 
     FeedDto dto = new FeedDto();
     dto.setId(feed.getId());
@@ -25,9 +26,13 @@ public class FeedMapper {
     dto.setIsLike(isLike);
     dto.setNumberOfLikes(numberOfLikes);
     dto.setNumberOfComments(numberOfComments);
-    if(Objects.nonNull(createdDateTime))
+    if(Objects.nonNull(createdDateTime)){
       dto.setCreatedDateTime(createdDateTime.toString());
+    }
     dto.setTimeDesc(timeDesc);
+    if(Objects.nonNull(commentDtos)){
+      dto.setComments(commentDtos);
+    }
 		return dto;
 	}
 

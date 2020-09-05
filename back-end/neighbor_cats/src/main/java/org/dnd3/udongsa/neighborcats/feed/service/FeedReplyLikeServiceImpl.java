@@ -43,9 +43,9 @@ public class FeedReplyLikeServiceImpl implements FeedReplyLikeService {
   }
 
   @Override
-  public LikeDto unLike(FeedReplyLikeDto likeDto) {
+  public LikeDto unLike(Long replyId) {
     Servant servant = securityService.getLoggedUser();
-    FeedReply feedReply = feedReplyRepo.findById(likeDto.getReplyId()).orElseThrow();
+    FeedReply feedReply = feedReplyRepo.findById(replyId).orElseThrow();
     FeedReplyLike like = repo.findByServantAndFeedReply(servant, feedReply);
     repo.delete(like);
     return new LikeDto(false);

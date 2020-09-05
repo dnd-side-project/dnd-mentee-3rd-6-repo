@@ -13,8 +13,8 @@ public interface FeedLikeService {
 
 	FeedLikeDto like(FeedLikeReqDto reqDto);
 
-	FeedLikeDto unLike(FeedLikeReqDto reqDto);
-
 	Boolean isLikeByServant(Servant loggedUser, Feed feed);
+
+	FeedLikeDto unLike(Long feedId);
   
 }

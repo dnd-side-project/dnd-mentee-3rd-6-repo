@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.address.Address;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
+import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedModifyDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
@@ -72,22 +73,10 @@ public class FeedServiceImpl implements FeedService {
     }
     List<FeedDto> feedDtos = new ArrayList<>();
     for(Feed feed : pageFeeds.getContent()){
-      feedDtos.add(toDto(feed));
+      feedDtos.add(toDto(feed, false));
     } 
     PagingDto<FeedDto> pagingDto = PagingMapper.map(pageFeeds, feedDtos);
     return pagingDto;
-  }
-
-  private FeedDto toDto(Feed feed){
-    List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
-    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
-    Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
-    long numberOfLikes = feed.getLikes().size();
-    int numberOfComments = feed.getComments().size();
-    LocalDateTime createdDateTime = feed.getCreatedAt();
-    String timeDesc = timeDescService.generate(createdDateTime);
-    FeedDto feedDto = FeedMapper.map(feed, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc);
-    return feedDto;
   }
 
   @Override
@@ -107,7 +96,7 @@ public class FeedServiceImpl implements FeedService {
       validateCat(saveDto.getCatIds());
       feedCatService.save(saveDto.getCatIds(), feed);
     }
-    return toDto(feed);
+    return toDto(feed, true);
   }
 
   private void validateCat(List<Long> catIds) {
@@ -123,7 +112,23 @@ public class FeedServiceImpl implements FeedService {
   @Transactional(readOnly = true)
   public FeedDto findById(Long id) {
     Feed feed = repo.findById(id).orElseThrow();
-    return toDto(feed);
+    return toDto(feed, true);
+  }
+
+  private FeedDto toDto(Feed feed, boolean withComments){
+    List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
+    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
+    Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
+    long numberOfLikes = feed.getLikes().size();
+    int numberOfComments = feed.getComments().size();
+    LocalDateTime createdDateTime = feed.getCreatedAt();
+    String timeDesc = timeDescService.generate(createdDateTime);
+    List<FeedCommentDto> comments = new ArrayList<>();
+    if(withComments){
+      comments = commentService.getAllByFeed(feed);
+    }
+    FeedDto feedDto = FeedMapper.map(feed, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc, comments);
+    return feedDto;
   }
 
   @Override
@@ -178,7 +183,7 @@ public class FeedServiceImpl implements FeedService {
     if(imgFileDtos.size() == 0){
       throw new CustomException(HttpStatus.BAD_REQUEST, "이미지를 한 개 이상 업로드해야 합니다.");
     }
-    return toDto(persist);
+    return toDto(persist, true);
   }
 
 

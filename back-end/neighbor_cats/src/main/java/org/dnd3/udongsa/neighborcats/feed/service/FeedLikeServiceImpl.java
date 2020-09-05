@@ -45,17 +45,17 @@ public class FeedLikeServiceImpl implements FeedLikeService {
   }
 
   @Override
-  public FeedLikeDto unLike(FeedLikeReqDto reqDto) {
-    Servant servant = securityService.getLoggedUser();
-    Feed feed = feedDao.findById(reqDto.getFeedId());
-    FeedLike feedLike = repo.findByServantAndFeed(servant, feed);
-    repo.delete(feedLike);
-    return new FeedLikeDto(false);
+  public Boolean isLikeByServant(Servant loggedUser, Feed feed) {
+    return repo.existsByFeedAndServant(feed, loggedUser);
   }
 
   @Override
-  public Boolean isLikeByServant(Servant loggedUser, Feed feed) {
-    return repo.existsByFeedAndServant(feed, loggedUser);
+  public FeedLikeDto unLike(Long feedId) {
+    Servant servant = securityService.getLoggedUser();
+    Feed feed = feedDao.findById(feedId);
+    FeedLike feedLike = repo.findByServantAndFeed(servant, feed);
+    repo.delete(feedLike);
+    return new FeedLikeDto(false);
   }
   
 }

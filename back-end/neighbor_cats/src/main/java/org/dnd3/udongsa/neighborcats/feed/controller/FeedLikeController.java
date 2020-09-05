@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class FeedLikeController {
   }
 
   @DeleteMapping("")
-  public FeedLikeDto delete(@RequestBody FeedLikeReqDto reqDto){
-    return likeService.unLike(reqDto);
+  public FeedLikeDto delete(@RequestParam("feedId") Long feedId){
+    return likeService.unLike(feedId);
   }
 }

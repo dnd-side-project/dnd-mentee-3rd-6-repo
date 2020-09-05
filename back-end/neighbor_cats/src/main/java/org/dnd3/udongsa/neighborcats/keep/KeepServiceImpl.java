@@ -31,17 +31,17 @@ public class KeepServiceImpl implements KeepService{
   }
 
   @Override
-  public KeepDto delete(KeepReqDto keepReqDto) {
-    Servant servant = securityService.getLoggedUser();
-    Feed feed = feedDao.findById(keepReqDto.getFeedId());
-    Keep keep = repo.findByServantAndFeed(servant, feed);
-    repo.delete(keep);
-    return new KeepDto(false);
+  public void deleteByFeed(Feed feed) {
+    repo.deleteAllByFeed(feed);
   }
 
   @Override
-  public void deleteByFeed(Feed feed) {
-    repo.deleteAllByFeed(feed);
+  public KeepDto delete(Long feedId) {
+    Servant servant = securityService.getLoggedUser();
+    Feed feed = feedDao.findById(feedId);
+    Keep keep = repo.findByServantAndFeed(servant, feed);
+    repo.delete(keep);
+    return new KeepDto(false);
   }
   
 }

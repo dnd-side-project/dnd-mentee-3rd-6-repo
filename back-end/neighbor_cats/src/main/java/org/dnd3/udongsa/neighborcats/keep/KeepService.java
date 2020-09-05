@@ -6,8 +6,8 @@ public interface KeepService {
 
 	KeepDto save(KeepReqDto keepReqDto);
 
-	KeepDto delete(KeepReqDto keepReqDto);
-
 	void deleteByFeed(Feed feed);
+
+	KeepDto delete(Long feedId);
   
 }

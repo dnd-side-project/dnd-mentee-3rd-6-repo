@@ -22,6 +22,6 @@ public class FeedDto {
   private int numberOfComments = 0;
   private String createdDateTime;
   private String timeDesc = "0분전";
-  private List<Object> comments = new ArrayList<>();
+  private List<FeedCommentDto> comments = new ArrayList<>();
 
 }
