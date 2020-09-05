@@ -3,10 +3,9 @@ package org.dnd3.udongsa.neighborcats.feed.service;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedLikeDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedLikeReqDto;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
+import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 
 public interface FeedLikeService {
-
-	Boolean isLikeByServant(String loggedUserEmail, Feed feed);
 
 	Long getNumberOfLikes(Feed feed);
 
@@ -15,5 +14,7 @@ public interface FeedLikeService {
 	FeedLikeDto like(FeedLikeReqDto reqDto);
 
 	FeedLikeDto unLike(FeedLikeReqDto reqDto);
+
+	Boolean isLikeByServant(Servant loggedUser, Feed feed);
   
 }

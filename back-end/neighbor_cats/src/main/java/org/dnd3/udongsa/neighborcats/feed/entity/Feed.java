@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,10 +40,10 @@ public class Feed {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "feed")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "feed")
     List<FeedLike> likes = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "feed")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "feed")
     List<FeedComment> comments = new ArrayList<>();
 
     protected static Feed of(String content, Servant author){

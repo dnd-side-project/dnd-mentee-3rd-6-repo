@@ -9,7 +9,6 @@ import org.dnd3.udongsa.neighborcats.feed.repository.FeedLike;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedLikeRepo;
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +18,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedLikeServiceImpl implements FeedLikeService {
 
-  private final ServantService servantService;
   private final FeedLikeRepo repo;
   private final SecurityContextService securityService;
   private final FeedDao feedDao;
-
-  @Override
-  public Boolean isLikeByServant(String loggedUserEmail, Feed feed) {
-    Servant servant = servantService.findServantByEmail(loggedUserEmail);
-    return repo.existsByFeedAndServant(feed, servant);
-  }
 
   @Override
   public Long getNumberOfLikes(Feed feed) {
@@ -59,6 +51,11 @@ public class FeedLikeServiceImpl implements FeedLikeService {
     FeedLike feedLike = repo.findByServantAndFeed(servant, feed);
     repo.delete(feedLike);
     return new FeedLikeDto(false);
+  }
+
+  @Override
+  public Boolean isLikeByServant(Servant loggedUser, Feed feed) {
+    return repo.existsByFeedAndServant(feed, loggedUser);
   }
   
 }

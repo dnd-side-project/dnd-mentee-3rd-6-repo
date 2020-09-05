@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.address.Address;
-import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
-import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedModifyDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
@@ -29,7 +27,6 @@ import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
 import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.dnd3.udongsa.neighborcats.tag.Tag;
-import org.dnd3.udongsa.neighborcats.tag.TagDto;
 import org.dnd3.udongsa.neighborcats.util.TimeDescService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,17 +79,14 @@ public class FeedServiceImpl implements FeedService {
   }
 
   private FeedDto toDto(Feed feed){
-    TagDto tagDto = feedTagService.findTagDtoByFeed(feed);
-    List<FeedCommentDto> comments = commentService.getAllByFeed(feed);
     List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
     AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
-    Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUserEmail(), feed);
-    long numberOfLikes = feedLikeService.getNumberOfLikes(feed);
-    int numberOfComments = comments.size();
+    Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
+    long numberOfLikes = feed.getLikes().size();
+    int numberOfComments = feed.getComments().size();
     LocalDateTime createdDateTime = feed.getCreatedAt();
     String timeDesc = timeDescService.generate(createdDateTime);
-    List<CatDto> catDtos = feedCatService.findAllByFeed(feed);
-    FeedDto feedDto = FeedMapper.map(feed, tagDto, comments, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc, catDtos);
+    FeedDto feedDto = FeedMapper.map(feed, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc);
     return feedDto;
   }
 
