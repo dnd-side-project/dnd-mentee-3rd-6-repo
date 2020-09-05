@@ -19,7 +19,7 @@ public class AuthFieldDesc {
     return fields;
   }
 
-  public static List<FieldDescriptor> getSignInResDesc(){
+  public static List<FieldDescriptor> getSignResDesc(){
     List<FieldDescriptor> fields = new ArrayList<>();
     fields.add(fieldWithPath("accessToken").type(JsonFieldType.STRING).description("인증 토큰"));
     fields.add(fieldWithPath("id").type(JsonFieldType.NUMBER).description("식별자"));

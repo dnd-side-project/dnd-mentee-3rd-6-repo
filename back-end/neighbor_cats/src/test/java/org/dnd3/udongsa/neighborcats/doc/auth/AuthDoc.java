@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
+import org.dnd3.udongsa.neighborcats.auth.dto.SignResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
 import org.dnd3.udongsa.neighborcats.doc.APIDocTest;
 import org.dnd3.udongsa.neighborcats.role.ERole;
@@ -51,7 +51,7 @@ public class AuthDoc extends APIDocTest {
     reqDto.setEmail(userEmail);
     reqDto.setPassword(password);
 
-    SignInResDto resDto = new SignInResDto();
+    SignResDto resDto = new SignResDto();
     resDto.setAccessToken("abc1234def");
     resDto.setId(1L);
     resDto.setName("홍길동");
@@ -83,7 +83,7 @@ public class AuthDoc extends APIDocTest {
                       getDocumentRequest(), 
                       getDocumentResponse(),
                       requestFields(AuthFieldDesc.getSignInReqDesc()),
-                      responseFields(AuthFieldDesc.getSignInResDesc())));
+                      responseFields(AuthFieldDesc.getSignResDesc())));
   }
 
   // @Test
@@ -163,7 +163,7 @@ public class AuthDoc extends APIDocTest {
     reqMap.add("catNeutralized", "TRUE");
     reqMap.add("catWeight", "3.5");
 
-    SignUpResDto resDto = new SignUpResDto();
+    SignResDto resDto = new SignResDto();
     resDto.setId(1L);
     resDto.setPhoneNumber("01012345678");
     resDto.setName("홍길동");
@@ -196,7 +196,7 @@ public class AuthDoc extends APIDocTest {
       getDocumentResponse(),
       requestParameters(AuthFieldDesc.getSignUpReqDesc()),
       requestParts(partWithName("catProfileImg").description("고양이 프로필 이미지 파일")),
-      responseFields(AuthFieldDesc.getSignUpResDesc())));
+      responseFields(AuthFieldDesc.getSignResDesc())));
 
   }
 
