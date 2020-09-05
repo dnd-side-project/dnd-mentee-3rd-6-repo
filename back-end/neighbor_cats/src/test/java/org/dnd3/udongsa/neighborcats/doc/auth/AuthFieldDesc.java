@@ -32,6 +32,7 @@ public class AuthFieldDesc {
     fields.add(fieldWithPath("profileImgUrl").type(JsonFieldType.STRING).description("프로필 이미지 경로"));
     fields.add(fieldWithPath("roles[].id").type(JsonFieldType.NUMBER).description("Role 식별자"));
     fields.add(fieldWithPath("roles[].name").type(JsonFieldType.STRING).description("Role 명칭"));
+    fields.add(fieldWithPath("cats[]").type(JsonFieldType.ARRAY).description("소유한 고양이 정보"));
     return fields;
   }
 

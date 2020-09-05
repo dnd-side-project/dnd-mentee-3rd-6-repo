@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public SignInResDto signIn(SignInReqDto reqDto) {
     ServantDto servantDto = servantService.findByEmail(reqDto.getEmail());
-
+    
     if(servantService.isMatchPassword(reqDto.getPassword(), servantDto.getId())){
       throw new CustomException(HttpStatus.BAD_REQUEST, "Password가 틀렸습니다.");
     }
@@ -76,7 +76,8 @@ public class AuthServiceImpl implements AuthService {
       servantDto.getPhoneNumber(), 
       servantDto.getProfileImgUrl(), 
       servantDto.getIsServant(),
-      servantDto.getRoles());
+      servantDto.getRoles(),
+      servantDto.getCats());
   }
 
   @Override
