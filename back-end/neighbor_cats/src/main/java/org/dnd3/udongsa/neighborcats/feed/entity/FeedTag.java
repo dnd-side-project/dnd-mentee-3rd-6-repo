@@ -1,11 +1,13 @@
 package org.dnd3.udongsa.neighborcats.feed.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.dnd3.udongsa.neighborcats.tag.Tag;
 
@@ -22,8 +24,8 @@ public class FeedTag {
     @JoinColumn
     private Tag tag;
 
-    @ManyToOne
-    @JoinColumn
+    @OneToOne
+    @JoinColumn(unique = true)
     private Feed feed;
 
     public static FeedTag of(Tag tag, Feed feed){
@@ -31,6 +33,10 @@ public class FeedTag {
         feedTag.tag = tag;
         feedTag.feed = feed;
         return feedTag;
+    }
+
+    public void updateTag(Tag tag){
+        this.tag = tag;
     }
     
 }

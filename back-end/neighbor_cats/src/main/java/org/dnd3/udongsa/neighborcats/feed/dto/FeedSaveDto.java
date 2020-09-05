@@ -13,7 +13,7 @@ public class FeedSaveDto {
   
   private String content;
   private List<MultipartFile> imgFiles;
-  private List<Long> tagIds;
-  private Long catId;
+  private Long tagId;
+  private List<Long> catIds;
   
 }

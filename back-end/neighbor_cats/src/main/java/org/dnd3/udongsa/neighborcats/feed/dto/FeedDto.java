@@ -17,7 +17,7 @@ public class FeedDto {
   
   private Long id = 0L;
   private String content = "";
-  private List<TagDto> feedTags = new ArrayList<>(); 
+  private TagDto tag = new TagDto(); 
   private List<ImgFileDto> images = new ArrayList<>();
   private AuthorDto author = new AuthorDto();
   private List<FeedCommentDto> comments = new ArrayList<>(); 
@@ -26,6 +26,6 @@ public class FeedDto {
   private int numberOfComments = 0;
   private String createdDateTime;
   private String timeDesc = "0분전";
-  private CatDto cat;
+  private List<CatDto> cats = new ArrayList<>();
 
 }

@@ -24,4 +24,6 @@ public interface CatService {
 
   Cat findCatById(Long catTagId);
 
+  List<Cat> findAllByIds(List<Long> catIds);
+
 }

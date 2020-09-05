@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
-import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedCommentDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
@@ -16,15 +15,15 @@ import org.dnd3.udongsa.neighborcats.tag.TagDto;
 
 public class FeedMapper {
 
-	public static FeedDto map(Feed feed, List<TagDto> tagDtos, List<FeedCommentDto> comments, List<ImgFileDto> imgDtos,
+	public static FeedDto map(Feed feed, TagDto tagDto, List<FeedCommentDto> comments, List<ImgFileDto> imgDtos,
 			AuthorDto authorDto, Boolean isLike, long numberOfLikes, int numberOfComments, LocalDateTime createdDateTime,
-			String timeDesc, CatDto catDto) {
+			String timeDesc, List<CatDto> catDtos) {
 
     FeedDto dto = new FeedDto();
     dto.setId(feed.getId());
     dto.setContent(feed.getContent());
-    if(Objects.nonNull(tagDtos))
-      dto.setFeedTags(tagDtos);
+    if(Objects.nonNull(tagDto))
+      dto.setTag(tagDto);
     if(Objects.nonNull(imgDtos))
       dto.setImages(imgDtos);
     dto.setAuthor(authorDto);
@@ -36,12 +35,12 @@ public class FeedMapper {
     if(Objects.nonNull(createdDateTime))
       dto.setCreatedDateTime(createdDateTime.toString());
     dto.setTimeDesc(timeDesc);
-    dto.setCat(catDto);
+    dto.setCats(catDtos);
 		return dto;
 	}
 
-	public static Feed map(FeedSaveDto saveDto, Servant author, Cat cat) {
-    return Feed.of(saveDto.getContent(), author, cat);
+	public static Feed map(FeedSaveDto saveDto, Servant author) {
+    return Feed.of(saveDto.getContent(), author);
   }
   
 }

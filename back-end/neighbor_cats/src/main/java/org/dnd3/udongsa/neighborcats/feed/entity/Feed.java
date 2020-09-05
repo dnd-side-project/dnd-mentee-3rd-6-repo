@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedLike;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,10 +33,6 @@ public class Feed {
     @JoinColumn
     private Servant author;
 
-    @ManyToOne
-    @JoinColumn
-    private Cat cat;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -50,17 +45,15 @@ public class Feed {
     @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "feed")
     List<FeedComment> comments = new ArrayList<>();
 
-    protected static Feed of(String content, Servant author, Cat cat){
+    protected static Feed of(String content, Servant author){
         Feed feed = new Feed();
         feed.content = content;
         feed.author = author;
-        feed.cat = cat;
         return feed;
     }
 
-	public void update(String modifyContent, Cat modifyCat) {
+	public void update(String modifyContent) {
         this.content = modifyContent;
-        this.cat = modifyCat;
 	}
 
 }

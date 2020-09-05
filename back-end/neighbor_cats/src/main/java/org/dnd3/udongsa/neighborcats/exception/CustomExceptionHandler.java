@@ -3,6 +3,7 @@ package org.dnd3.udongsa.neighborcats.exception;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -109,6 +110,18 @@ public class CustomExceptionHandler{
         httpStatus, 
         "입력값을 확인해주세요.",
         errors);
+    return ResponseEntity.status(httpStatus).body(response);
+  }
+
+  @ExceptionHandler(NoSuchElementException.class)
+  public ResponseEntity<Object> noSuchElementExceptionHandle(NoSuchElementException ex){
+    ex.printStackTrace();
+    HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    CustomExceptionResponse response = new CustomExceptionResponse(
+      LocalDateTime.now(), 
+      httpStatus, 
+      "해당 데이터를 찾지 못했습니다.",
+      ex.getMessage());
     return ResponseEntity.status(httpStatus).body(response);
   }
   
