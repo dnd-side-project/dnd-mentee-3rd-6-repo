@@ -20,5 +20,5 @@ public interface FeedCommentService {
 	FeedCommentDto deleteById(Long id);
 
 	FeedCommentDto modify(Long id, FeedCommentModifyDto modifyDto);
-  
+
 }

@@ -11,5 +11,7 @@ public interface FeedLikeRepo extends JpaRepository<FeedLike, Long>{
 	long countByFeed(Feed feed);
 
 	void deleteAllByFeed(Feed feed);
+
+	FeedLike findByServantAndFeed(Servant servant, Feed feed);
   
 }

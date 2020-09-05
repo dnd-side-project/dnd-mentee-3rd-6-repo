@@ -36,4 +36,11 @@ public class FeedCommentLike {
   @UpdateTimestamp
   private LocalDateTime updatedDateTime;
 
+  public static FeedCommentLike of(FeedComment feedComment, Servant servant){
+    FeedCommentLike like = new FeedCommentLike();
+    like.feedComment = feedComment;
+    like.servant = servant;
+    return like;
+  }
+
 }
