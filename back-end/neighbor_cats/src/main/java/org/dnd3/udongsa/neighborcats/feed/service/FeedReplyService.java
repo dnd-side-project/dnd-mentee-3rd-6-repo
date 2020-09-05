@@ -10,5 +10,7 @@ public interface FeedReplyService {
 	List<ReplyDto> getAllByComment(FeedComment comment);
 
 	void deleteByComments(List<FeedComment> comments);
+
+	void deleteByComment(FeedComment comment);
   
 }

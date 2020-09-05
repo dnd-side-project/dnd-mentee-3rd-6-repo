@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignResDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
 import org.dnd3.udongsa.neighborcats.doc.APIDocTest;
 import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.role.Role;

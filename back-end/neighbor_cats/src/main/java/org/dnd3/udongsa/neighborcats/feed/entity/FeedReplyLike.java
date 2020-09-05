@@ -1,49 +1,42 @@
 package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 
-@Entity
-@Getter
-public class FeedReply {
-  
+@Entity @Getter
+public class FeedReplyLike {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String content;
+  @ManyToOne
+  @JoinColumn
+  private Servant servant;
 
   @ManyToOne
   @JoinColumn
-  private FeedComment feedComment;
-
-  @OneToMany(mappedBy = "feedReply", cascade = CascadeType.REFRESH)
-  private List<FeedReplyLike> likes = new ArrayList<>();
-
-  @ManyToOne
-  @JoinColumn
-  private Servant author;
+  private FeedReply feedReply;
 
   @CreationTimestamp
-  private LocalDateTime createdDateTime;
+  private LocalDateTime createdAt;
 
-  @UpdateTimestamp
-  private LocalDateTime updatedDateTime;
+  public static FeedReplyLike of(Servant servant, FeedReply feedReply){
+    FeedReplyLike like = new FeedReplyLike();
+    like.servant = servant;
+    like.feedReply = feedReply;
+    return like;
+  }
   
 }

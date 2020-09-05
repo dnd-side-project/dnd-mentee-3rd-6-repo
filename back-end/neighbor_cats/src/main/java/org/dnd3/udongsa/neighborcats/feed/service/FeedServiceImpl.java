@@ -17,7 +17,6 @@ import org.dnd3.udongsa.neighborcats.feed.dto.PagingDto;
 import org.dnd3.udongsa.neighborcats.feed.entity.EFilterType;
 import org.dnd3.udongsa.neighborcats.feed.entity.ESortType;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
-import org.dnd3.udongsa.neighborcats.feed.entity.FeedImg;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedMapper;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedRepository;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
