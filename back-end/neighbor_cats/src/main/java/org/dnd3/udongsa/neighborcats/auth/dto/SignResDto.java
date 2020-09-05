@@ -1,16 +1,19 @@
 package org.dnd3.udongsa.neighborcats.auth.dto;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.role.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
-public class SignInResDto {
+@Data @AllArgsConstructor @NoArgsConstructor
+public class SignResDto {
 
   private String accessToken = "";
   private Long id = 0L;
@@ -22,5 +25,6 @@ public class SignInResDto {
   private String profileImgUrl = "";
   private Boolean isServant = false;
   private Set<Role> roles = new HashSet<>(); 
+  private List<CatDto> cats = new ArrayList<>();
 
 }

@@ -3,9 +3,8 @@ package org.dnd3.udongsa.neighborcats.auth;
 import javax.validation.Valid;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignInResDto;
+import org.dnd3.udongsa.neighborcats.auth.dto.SignResDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
-import org.dnd3.udongsa.neighborcats.auth.dto.SignUpResDto;
 import org.dnd3.udongsa.neighborcats.auth.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +26,12 @@ public class AuthController {
 
   @PostMapping(value="/sign-up")
   @ResponseStatus(code = HttpStatus.CREATED)
-  public SignUpResDto signUp(@Valid SignUpReqDto reqDto) {
+  public SignResDto signUp(@Valid SignUpReqDto reqDto) {
     return service.signUp(reqDto);
   }
 
   @PostMapping("/sign-in")
-	public SignInResDto signIn(@Valid @RequestBody SignInReqDto reqDto){
+	public SignResDto signIn(@Valid @RequestBody SignInReqDto reqDto){
 		return service.signIn(reqDto);
   }
   

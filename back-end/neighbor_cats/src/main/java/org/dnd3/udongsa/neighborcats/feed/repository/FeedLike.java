@@ -17,20 +17,27 @@ import lombok.Getter;
 
 @Entity @Getter
 public class FeedLike {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn
-    private Servant servant;
-
-    @ManyToOne
-    @JoinColumn
-    private Feed feed; 
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@ManyToOne
+	@JoinColumn
+	private Servant servant;
+	
+	@ManyToOne
+	@JoinColumn
+	private Feed feed; 
+	
+	@CreationTimestamp
+	private LocalDateTime createdAt;
+	
+	public static FeedLike of(Servant servant, Feed feed){
+		FeedLike feedLike = new FeedLike();
+		feedLike.servant = servant;
+		feedLike.feed = feed;
+		return feedLike;
+	}
+    
 }

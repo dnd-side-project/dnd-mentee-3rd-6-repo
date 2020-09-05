@@ -13,7 +13,9 @@ import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
 import org.hibernate.annotations.CreationTimestamp;
 
-@Entity
+import lombok.Getter;
+
+@Entity @Getter
 public class Keep {
 
     @Id
@@ -30,5 +32,12 @@ public class Keep {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public static Keep of(Servant servant, Feed feed){
+        Keep keep = new Keep();
+        keep.servant = servant;
+        keep.feed = feed;
+        return keep;
+    }
     
 }

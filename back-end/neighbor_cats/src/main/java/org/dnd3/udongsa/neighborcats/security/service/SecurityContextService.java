@@ -1,5 +1,7 @@
 package org.dnd3.udongsa.neighborcats.security.service;
 
+import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
+
 public interface SecurityContextService {
 
   /**
@@ -10,5 +12,7 @@ public interface SecurityContextService {
   public boolean setAuthentication(String userEmail);
 
   public String getLoggedUserEmail();
+
+public Servant getLoggedUser();
   
 }

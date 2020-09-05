@@ -70,5 +70,10 @@ public class CatServiceImpl implements CatService {
   public Cat findCatById(Long catId) {
     return catRepo.findById(catId).orElseThrow();
   }
+
+  @Override
+  public List<Cat> findAllByIds(List<Long> catIds) {
+    return catRepo.findAllById(catIds);
+  }
   
 }

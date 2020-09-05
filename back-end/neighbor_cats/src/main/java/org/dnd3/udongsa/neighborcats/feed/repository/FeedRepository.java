@@ -15,5 +15,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long>{
 
   @Query("SELECT f FROM Feed f ORDER BY f.likes.size DESC, f.comments.size DESC")
   Page<Feed> findByOrderByLikesAndCountOfComments(Pageable pageable);
+
+  Page<Feed> findAll(Pageable pageable);
   
 }

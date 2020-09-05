@@ -21,4 +21,5 @@ public class FeedCommentDto {
   private String createdDateTime;
   private String timeDesc;
   private AuthorDto author = new AuthorDto();
+  
 }

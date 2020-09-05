@@ -1,8 +1,6 @@
 package org.dnd3.udongsa.neighborcats.feed.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedTag;
@@ -11,6 +9,7 @@ import org.dnd3.udongsa.neighborcats.tag.Tag;
 import org.dnd3.udongsa.neighborcats.tag.TagDto;
 import org.dnd3.udongsa.neighborcats.tag.TagService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,24 +21,23 @@ public class FeedTagServiceImpl implements FeedTagService {
   private final TagService tagService;
 
   @Override
-  public List<TagDto> getAllByFeed(Feed feed) {
-    List<FeedTag> tags = repo.findAllByFeed(feed);
-    return tags.stream().map(feedTag -> {
-      Tag tag = feedTag.getTag();
-      return new TagDto(tag.getId(), tag.getName());
-    }).collect(Collectors.toList());
+  @Transactional(readOnly = true)
+  public TagDto findTagDtoByFeed(Feed feed) {
+    FeedTag feedTag = repo.findByFeed(feed);
+    if(Objects.isNull(feedTag)){
+      return new TagDto();
+    }
+    Tag tag = feedTag.getTag();
+    return new TagDto(tag.getId(), tag.getName());
   }
 
   @Override
-  public List<TagDto> save(List<Long> tagIds, Feed feed) {
-    List<TagDto> tagDtos = new ArrayList<>();
-    List<Tag> tags = tagService.findAll(tagIds);
-    for (Tag tag : tags) {
-      FeedTag feedTag = FeedTag.of(tag, feed);
-      repo.save(feedTag);
-      tagDtos.add(new TagDto(tag.getId(), tag.getName()));
-    }
-    return tagDtos;
+  @Transactional
+  public TagDto save(Long tagId, Feed feed) {
+    Tag tag = tagService.findById(tagId);
+    FeedTag feedTag = FeedTag.of(tag, feed);
+    repo.save(feedTag);
+    return new TagDto(tag.getId(), tag.getName());
   }
 
   @Override
@@ -48,34 +46,16 @@ public class FeedTagServiceImpl implements FeedTagService {
   }
 
   @Override
-  public void update(Feed feed, List<Long> modifyTagIds) {
-    List<Tag> modifyTags = tagService.findAll(modifyTagIds);
-    List<Tag> persistTags = repo.findAllByFeed(feed).stream().map(feedTag -> feedTag.getTag())
-        .collect(Collectors.toList());
-    List<Tag> removeTags = new ArrayList<>();
-    for (Tag tag : persistTags) {
-      if (!modifyTags.contains(tag)) {
-        removeTags.add(tag);
-      }
-    }
-    for (Tag tag : removeTags) {
-      FeedTag feedTag = repo.findByTagAndFeed(tag, feed);
-      repo.delete(feedTag);
-    }
-
-    List<Tag> insertTags = new ArrayList<>();
-    for (Tag tag : modifyTags) {
-      if (!persistTags.contains(tag)) {
-        insertTags.add(tag);
-      }
-    }
-    for (Tag tag : insertTags) {
-      FeedTag feedTag = FeedTag.of(tag, feed);
-      repo.save(feedTag);
-    }
+  @Transactional
+  public void update(Feed feed, Long modifyTagId) {
+    Tag modifyTag = tagService.findById(modifyTagId);
+    FeedTag persist = repo.findByFeed(feed);
+    persist.updateTag(modifyTag);
+    repo.save(persist);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Tag findTagByTagId(Long tagId) {
     return tagService.findById(tagId);
   }
