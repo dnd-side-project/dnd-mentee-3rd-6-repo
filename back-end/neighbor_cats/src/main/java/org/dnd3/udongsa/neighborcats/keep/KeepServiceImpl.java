@@ -38,5 +38,10 @@ public class KeepServiceImpl implements KeepService{
     repo.delete(keep);
     return new KeepDto(false);
   }
+
+  @Override
+  public void deleteByFeed(Feed feed) {
+    repo.deleteAllByFeed(feed);
+  }
   
 }

@@ -9,5 +9,7 @@ public interface KeepRepository extends JpaRepository<Keep, Long>{
 	boolean existsByServantAndFeed(Servant servant, Feed feed);
 
 	Keep findByServantAndFeed(Servant servant, Feed feed);
+
+	void deleteAllByFeed(Feed feed);
   
 }

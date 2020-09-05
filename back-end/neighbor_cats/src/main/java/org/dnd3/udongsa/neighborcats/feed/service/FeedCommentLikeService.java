@@ -17,5 +17,7 @@ public interface FeedCommentLikeService {
 	LikeDto like(FeedCommentLikeDto likeDto);
 
 	LikeDto unLike(FeedCommentLikeDto likeDto);
+
+	void deleteByComment(FeedComment comment);
   
 }

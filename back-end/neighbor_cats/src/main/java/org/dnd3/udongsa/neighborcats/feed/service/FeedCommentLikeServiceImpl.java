@@ -64,5 +64,10 @@ public class FeedCommentLikeServiceImpl implements FeedCommentLikeService {
     repo.delete(like);
     return new LikeDto(false);
   }
+
+  @Override
+  public void deleteByComment(FeedComment comment) {
+    repo.deleteAllByFeedComment(comment);
+  }
   
 }

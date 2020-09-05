@@ -20,6 +20,7 @@ import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedMapper;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedRepository;
 import org.dnd3.udongsa.neighborcats.imgfile.dto.ImgFileDto;
+import org.dnd3.udongsa.neighborcats.keep.KeepService;
 import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
@@ -54,6 +55,7 @@ public class FeedServiceImpl implements FeedService {
   private final TimeDescService timeDescService;
   private final ServantService servantService;
   private final FeedCatService feedCatService;
+  private final KeepService keepService;
 
   @Override
   @Transactional(readOnly = true)
@@ -140,6 +142,7 @@ public class FeedServiceImpl implements FeedService {
     feedImgService.deleteByFeed(feed);
     feedLikeService.deleteByFeed(feed);
     feedCatService.deleteByFeed(feed);
+    keepService.deleteByFeed(feed);
     FeedDto feedDto = new FeedDto();
     feedDto.setId(feed.getId());
     repo.delete(feed);

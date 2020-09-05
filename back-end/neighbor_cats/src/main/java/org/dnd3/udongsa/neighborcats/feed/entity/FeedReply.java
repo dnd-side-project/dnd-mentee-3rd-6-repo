@@ -45,5 +45,13 @@ public class FeedReply {
 
   @UpdateTimestamp
   private LocalDateTime updatedDateTime;
+
+  public static FeedReply of(String content, FeedComment feedComment, Servant author){
+    FeedReply feedReply = new FeedReply();
+    feedReply.content = content;
+    feedReply.feedComment = feedComment;
+    feedReply.author = author;
+    return feedReply;
+  }
   
 }

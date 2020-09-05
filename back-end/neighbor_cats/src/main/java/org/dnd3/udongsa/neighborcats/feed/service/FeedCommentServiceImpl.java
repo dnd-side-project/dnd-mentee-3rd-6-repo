@@ -18,6 +18,7 @@ import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
 import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.dnd3.udongsa.neighborcats.util.TimeDescService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   private final FeedDao feedDao;
 
   @Override
+  @Transactional(readOnly = true)
   public List<FeedCommentDto> getAllByFeed(Feed feed) {
     List<FeedComment> comments = repo.findAllByFeed(feed);
     List<FeedCommentDto> dtos = new ArrayList<>();
@@ -44,6 +46,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   }
 
   @Override
+  @Transactional
   public void deleteByFeed(Feed feed) {
     List<FeedComment> comments = repo.findAllByFeed(feed);
     commentLikeService.deleteByComments(comments);
@@ -52,6 +55,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   }
 
   @Override
+  @Transactional
   public FeedCommentDto save(FeedSaveCommentDto saveDto) {
     Servant author = servantService.findServantByEmail(securityService.getLoggedUserEmail());
     Feed feed = feedDao.findById(saveDto.getFeedId());
@@ -74,15 +78,18 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<FeedCommentDto> getAll(Long feedId) {
     Feed feed = feedDao.findById(feedId);
     return getAllByFeed(feed);
   }
 
   @Override
+  @Transactional
   public FeedCommentDto deleteById(Long id) {
     FeedComment comment = repo.findById(id).orElseThrow();
     replyService.deleteByComment(comment);
+    commentLikeService.deleteByComment(comment);
     repo.delete(comment);
     FeedCommentDto dto = new FeedCommentDto();
     dto.setId(comment.getId());
@@ -90,6 +97,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   }
 
   @Override
+  @Transactional
   public FeedCommentDto modify(Long id, FeedCommentModifyDto modifyDto) {
     FeedComment comment = repo.findById(id).orElseThrow();
     comment.updateContent(modifyDto.getContent());
