@@ -49,7 +49,7 @@ const EmailPasswordForm = ({
                     </p>
                   )
                 }
-                addonpx="80px"
+                flex={0.93}
                 type="email"
                 name="email"
                 placeholder="이메일을 입력해 주세요"
@@ -83,7 +83,7 @@ const EmailPasswordForm = ({
                     </p>
                   )
                 }
-                addonpx="80px"
+                flex={0.93}
                 type="password"
                 name="password"
                 placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
@@ -111,9 +111,10 @@ const EmailPasswordForm = ({
                       </p>
                     )
                   }
-                  addonpx="80px"
+                  flex={0.93}
                   type="password"
                   name="password-check"
+                  placeholder="* 숫자, 영어, 혹은 특수문자 8자리 이상"
                   value={passwordCheck}
                   onChange={onChangePasswordCheck}
                   top="16px"
