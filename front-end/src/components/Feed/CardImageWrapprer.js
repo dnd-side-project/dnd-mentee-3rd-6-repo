@@ -94,9 +94,9 @@ const CardImageWrapprer = ({ feed }) => {
         {feed.images.map((image) => (
           <div key={image.id} className="img-box">
             <img
-              src={`${process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL}${
-                image.url
-              }`}
+              src={`${
+                process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : null
+              }${image.url}`}
               alt={image}
             />
           </div>
