@@ -109,6 +109,7 @@ const ServantInfoAddressFormContainer = () => {
       marker.setMap(myMap);
 
       const content =
+        // eslint-disable-next-line no-useless-concat
         '<div class="info-map">' + '<p>현재 위치가 아닌가요?</p>' + '<span/>' + '</div>';
       const position = new kakao.maps.LatLng(geoLat, geoLon); // 인포윈도우 표시 위치입니다
 

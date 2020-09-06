@@ -6,9 +6,9 @@ import NullIcon from '../lib/style/NullIcon';
 import AppLayout from '../components/common/AppLayout';
 import FeedHeadContainer from '../containers/Feed/FeedHeadContainer';
 import FeedCardListContainer from '../containers/Feed/FeedCardListContainer';
-import CommentHeadContainer from '../containers/Feed/Comment/CommentHeadContainer';
-import CommentListContainer from '../containers/Feed/Comment/CommentListContainer';
-import CommentFormContainer from '../containers/Feed/Comment/CommentFormContainer';
+import CommentHeadContainer from '../containers/Comment/CommentHeadContainer';
+import CommentListContainer from '../containers/Comment/CommentListContainer';
+import CommentFormContainer from '../containers/Comment/CommentFormContainer';
 import { FeedWrapper, CommentWrapper } from '../components/Feed/styles';
 
 const FeedPage = () => {

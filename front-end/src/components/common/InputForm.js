@@ -35,7 +35,8 @@ export const InputForm = styled(Input)`
   border-radius: 0;
 
   border-bottom: 1px solid ${({ value }) => (value ? pallete.primary[1] : pallete.gray[3])};
-  border-bottom: 1px solid ${({ bordercolor }) => bordercolor && pallete.ui[1]};
+  border-bottom: ${({ bordercolor }) =>
+    bordercolor === 'true' ? `1px solid ${pallete.ui[1]}` : null};
 
   &:focus {
     border-bottom: 1px solid ${pallete.secondary[2]};
@@ -129,9 +130,9 @@ export const InputForm = styled(Input)`
         padding: 4px 10px;
 
         font-style: normal;
-        font-weight: bold;
-        font-size: 10px;
-        line-height: 14px;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 15px;
         text-align: center;
         ${({ authbtn, value }) => {
           return authbtn && value.length === 11
@@ -147,7 +148,7 @@ export const InputForm = styled(Input)`
 
         border: none;
 
-        width: 88px;
+        width: 102px;
         height: 27px;
 
         border-radius: 14px;

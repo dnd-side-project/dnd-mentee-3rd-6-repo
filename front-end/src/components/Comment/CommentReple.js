@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LIkeIcon from '../../../lib/style/feedIcon/LIkeIcon';
-import { CommentItem } from '../styles';
-import RepleIcon from '../../../lib/style/feedIcon/RepleIcon';
+import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
+import { CommentItem } from '../Feed/styles';
+import RepleIcon from '../../lib/style/feedIcon/RepleIcon';
 
-const CommentReple = ({ reple, onClickLikeReple, onClickUnlikeReple }) => {
+const CommentReple = ({ reple, commentId, onClickLikeReply, onClickUnlikeReply }) => {
   return (
     <CommentItem reple>
       <span className="comment-reple">
@@ -14,7 +14,12 @@ const CommentReple = ({ reple, onClickLikeReple, onClickUnlikeReple }) => {
         <dt>
           <div className="comment-block__img">
             <div>
-              <img src={reple.author.profileImg} alt={reple.author.nickName} />
+              <img
+                src={`${process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL}${
+                  reple.author.profileImg
+                }`}
+                alt={reple.author.nickName}
+              />
             </div>
             <div>
               <span>{reple.author.nickName}</span>
@@ -24,7 +29,11 @@ const CommentReple = ({ reple, onClickLikeReple, onClickUnlikeReple }) => {
           <div className="comment-block__like">
             <button
               type="button"
-              onClick={reple.isLike ? onClickUnlikeReple(reple.id) : onClickLikeReple(reple.id)}
+              onClick={
+                reple.isLike
+                  ? onClickUnlikeReply(commentId, reple.id)
+                  : onClickLikeReply(commentId, reple.id)
+              }
             >
               <LIkeIcon like={reple.isLike} />
             </button>
@@ -52,8 +61,9 @@ CommentReple.prototype = {
     timeDesc: PropTypes.string,
     author: PropTypes.object,
   }).isRequired,
-  onClickLikeReple: PropTypes.func.isRequired,
-  onClickUnlikeReple: PropTypes.func.isRequired,
+  commentId: PropTypes.number.isRequired,
+  onClickLikeReply: PropTypes.func.isRequired,
+  onClickUnlikeReply: PropTypes.func.isRequired,
 };
 
 export default CommentReple;

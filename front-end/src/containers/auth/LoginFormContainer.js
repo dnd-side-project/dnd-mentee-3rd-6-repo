@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from '../../components/auth/LoginForm';
@@ -10,6 +10,14 @@ const LoginFormContainer = () => {
   const { logInLoading, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
+
+  const [emailValid, setEmailValid] = useState('');
+  const [passwordValid, setPasswordValid] = useState('');
+
+  useEffect(() => {
+    setEmailValid(logInError?.message === 'Email이 존재하지 않습니다.');
+    setPasswordValid(logInError?.message === 'Password가 틀렸습니다.');
+  }, [logInError]);
 
   const onSubmitLogIn = useCallback(() => {
     dispatch({
@@ -23,6 +31,8 @@ const LoginFormContainer = () => {
       onSubmitLogIn={onSubmitLogIn}
       email={email}
       password={password}
+      emailValid={emailValid}
+      passwordValid={passwordValid}
       onChangeEmail={onChangeEmail}
       onChangePassword={onChangePassword}
       logInLoading={logInLoading}

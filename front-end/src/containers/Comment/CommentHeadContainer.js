@@ -1,15 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import CommentHead from '../../../components/Feed/Comment/CommentHead';
+import CommentHead from '../../components/Comment/CommentHead';
 
 const CommentHeadContainer = () => {
   const {
-    Feeds: { contents },
-    feedId,
+    FeedById: { content, author, timeDesc },
+    getCommentLoading,
   } = useSelector((state) => state.feed);
 
-  const { content, author, timeDesc } = contents.find((v) => v.id === feedId);
+  if (getCommentLoading) {
+    return <h1>로딩 중</h1>;
+  }
 
   return <CommentHead content={content} author={author} timeDesc={timeDesc} />;
 };

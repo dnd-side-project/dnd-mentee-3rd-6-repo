@@ -46,11 +46,13 @@ const IdentifyForm = ({
               <br />
               <InputForm
                 addonAfter={
-                  <Button onClick={onClcikAuthNumber} disabled={!isSubmitted}>
-                    {!identifyDone ? '인증번호 받기' : '인증번호 재전송'}
-                  </Button>
+                  isSubmitted && (
+                    <Button onClick={onClcikAuthNumber}>
+                      {!identifyDone ? '인증번호 받기' : '인증번호 재전송'}
+                    </Button>
+                  )
                 }
-                flex={0.75}
+                flex={0.7}
                 authbtn="true"
                 type="tel"
                 name="phone-number"

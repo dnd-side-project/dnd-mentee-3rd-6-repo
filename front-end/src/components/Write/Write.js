@@ -21,13 +21,13 @@ import FootIcon from '../../lib/style/feedIcon/FootIcon';
 
 const Write = ({
   feedTags,
-  onFinishFeed,
+  onFinishNextPage,
   imageInputRef,
-  videoInputRef,
+  // videoInputRef,
   onChangeImage,
-  onChangeVideo,
+  // onChangeVideo,
   onClickImage,
-  onClickVideo,
+  // onClickVideo,
   previewPath,
   onClickClose,
   checkId,
@@ -39,7 +39,7 @@ const Write = ({
   click,
 }) => {
   return (
-    <WriteForm onFinish={onFinishFeed}>
+    <WriteForm onFinish={onFinishNextPage}>
       <WriteWrapper>
         <div>
           <WriteTag>
@@ -54,7 +54,7 @@ const Write = ({
                       checkId={checkId}
                       onClick={onClickWriteTag(feedTag.id)}
                     >
-                      {feedTag.name}
+                      {`#${feedTag.name}`}
                     </TagButton>
                   </li>
                 ))}
@@ -100,8 +100,8 @@ const Write = ({
         accept="video/*"
         name=""
         hidden
-        ref={videoInputRef}
-        onChange={onChangeVideo}
+        // ref={videoInputRef}
+        // onChange={onChangeVideo}
       />
       <ButtonsWrapper>
         <div>
@@ -117,7 +117,7 @@ const Write = ({
           <button className="input-btn" type="button" onClick={onClickImage}>
             <ImageIcon />
           </button>
-          <button className="input-btn" type="button" onClick={onClickVideo}>
+          <button className="input-btn" type="button">
             <VideoIcon />
           </button>
         </div>
@@ -127,7 +127,7 @@ const Write = ({
           buttonType="submit"
           loading={false}
           buttonText="다음 단계로"
-          disabled={!text}
+          disabled={!(text && previewPath[0])}
         />
       </ButtonsWrapper>
     </WriteForm>
@@ -136,7 +136,7 @@ const Write = ({
 
 Write.prototype = {
   feedTags: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onFinishFeed: PropTypes.func.isRequired,
+  onFinishNextPage: PropTypes.func.isRequired,
   imageInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   videoInputRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   onChangeImage: PropTypes.func.isRequired,
