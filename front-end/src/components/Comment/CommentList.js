@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'antd';
 
 import CommentReple from './CommentReple';
-import { CommentItem } from '../styles';
-import LIkeIcon from '../../../lib/style/feedIcon/LIkeIcon';
+import { CommentItem } from '../Feed/styles';
+import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
 
 const CommentItemId = ({
   comment,
   onClickLikeComment,
   onClickUnlikeComment,
-  onClickLikeReple,
-  onClickUnlikeReple,
+  onClickReply,
+  onClickLikeReply,
+  onClickUnlikeReply,
 }) => {
   return (
     <>
@@ -19,7 +21,12 @@ const CommentItemId = ({
           <dt>
             <div className="comment-block__img">
               <div>
-                <img src={comment.author.profileImg} alt={comment.author.nickName} />
+                <img
+                  src={`${
+                    process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL
+                  }${comment.author.profileImg}`}
+                  alt={comment.author.nickName}
+                />
               </div>
               <div>
                 <span>{comment.author.nickName}</span>
@@ -42,7 +49,11 @@ const CommentItemId = ({
             <div>
               <span>{comment.timeDesc}</span>
               <span>{`좋아요 ${comment.numberOfLikes}개`}</span>
-              <span>답글 달기</span>
+              <span>
+                <Button type="button" onClick={onClickReply(comment.id)}>
+                  답글 달기
+                </Button>
+              </span>
             </div>
           </dd>
         </dl>
@@ -51,8 +62,9 @@ const CommentItemId = ({
         <CommentReple
           key={reple.id}
           reple={reple}
-          onClickLikeReple={onClickLikeReple}
-          onClickUnlikeReple={onClickUnlikeReple}
+          commentId={comment.id}
+          onClickLikeReply={onClickLikeReply}
+          onClickUnlikeReply={onClickUnlikeReply}
         />
       ))}
     </>
@@ -63,8 +75,9 @@ const CommentList = ({
   comments,
   onClickLikeComment,
   onClickUnlikeComment,
-  onClickLikeReple,
-  onClickUnlikeReple,
+  onClickReply,
+  onClickLikeReply,
+  onClickUnlikeReply,
 }) => {
   return (
     <ul>
@@ -74,8 +87,9 @@ const CommentList = ({
           comment={comment}
           onClickLikeComment={onClickLikeComment}
           onClickUnlikeComment={onClickUnlikeComment}
-          onClickLikeReple={onClickLikeReple}
-          onClickUnlikeReple={onClickUnlikeReple}
+          onClickReply={onClickReply}
+          onClickLikeReply={onClickLikeReply}
+          onClickUnlikeReply={onClickUnlikeReply}
         />
       ))}
     </ul>
@@ -97,16 +111,18 @@ CommentItemId.prototype = {
   }).isRequired,
   onClickLikeComment: PropTypes.func.isRequired,
   onClickUnlikeComment: PropTypes.func.isRequired,
-  onClickLikeReple: PropTypes.func.isRequired,
-  onClickUnlikeReple: PropTypes.func.isRequired,
+  onClickReply: PropTypes.func.isRequired,
+  onClickLikeReply: PropTypes.func.isRequired,
+  onClickUnlikeReply: PropTypes.func.isRequired,
 };
 
 CommentList.prototype = {
   comments: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClickLikeComment: PropTypes.func.isRequired,
   onClickUnlikeComment: PropTypes.func.isRequired,
-  onClickLikeReple: PropTypes.func.isRequired,
-  onClickUnlikeReple: PropTypes.func.isRequired,
+  onClickReply: PropTypes.func.isRequired,
+  onClickLikeReply: PropTypes.func.isRequired,
+  onClickUnlikeReply: PropTypes.func.isRequired,
 };
 
 export default CommentList;

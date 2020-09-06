@@ -168,10 +168,6 @@ export const CardItem = styled.li`
   &:first-child {
     margin-top: 0;
   }
-
-  &:last-child {
-    margin-bottom: 90px;
-  }
 `;
 
 export const CardTitle = styled.div`
@@ -250,71 +246,6 @@ export const CardTitle = styled.div`
     line-height: 16px;
 
     color: ${pallete.primary[1]};
-  }
-`;
-
-export const CardImage = styled.div`
-  position: relative;
-  width: 100%;
-  height: 375px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 12px;
-
-  overflow: hidden;
-
-  .slick-list {
-    width: 100vw;
-    height: auto;
-  }
-
-  .slick-slide {
-    width: 100vw;
-    height: auto;
-  }
-
-  .feed-card__img-index {
-    position: absolute;
-    top: 18px;
-    right: 22px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 25px;
-    width: 38px;
-    background: rgba(31, 31, 31, 0.7);
-    border-radius: 14px;
-
-    font-style: normal;
-    font-weight: 500;
-    font-size: 11px;
-    line-height: 15px;
-
-    color: ${pallete.primary[3]};
-
-    z-index: 999;
-  }
-`;
-
-export const CardImageBox = styled.div`
-  width: 100vw;
-  height: 375px;
-
-  overflow: hidden;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: auto;
-    height: 100%;
   }
 `;
 
@@ -636,4 +567,18 @@ export const CommentInput = styled.div`
       color: ${pallete.gray[3]};
     }
   }
+`;
+
+export const LastFeed = styled.h1`
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 30px;
+
+  text-align: center;
+
+  color: ${pallete.primary[1]};
+
+  margin-top: 30px;
+  margin-bottom: 13vh;
 `;

@@ -15,6 +15,8 @@ const LoginForm = ({
   onChangePassword,
   password,
   logInError,
+  emailValid,
+  passwordValid,
 }) => {
   return (
     <>
@@ -31,7 +33,7 @@ const LoginForm = ({
                 onChange={onChangeEmail}
                 value={email}
                 top="16px"
-                borderColor={logInError?.message === 'Email이 존재하지 않습니다.'}
+                bordercolor={`${emailValid}`}
                 required
               />
             </div>
@@ -47,7 +49,7 @@ const LoginForm = ({
                 onChange={onChangePassword}
                 value={password}
                 top="16px"
-                borderColor={logInError?.message === 'Password가 틀렸습니다.'}
+                bordercolor={`${passwordValid}`}
                 required
               />
               {logInError && (
@@ -72,13 +74,15 @@ const LoginForm = ({
 };
 
 LoginForm.prototype = {
+  logInError: PropTypes.bool.isRequired,
   logInLoading: PropTypes.bool.isRequired,
   onSubmitLogin: PropTypes.func.isRequired,
   email: PropTypes.string.isRequired,
   onChangeEmail: PropTypes.func.isRequired,
   password: PropTypes.string.isRequired,
   onChangePassword: PropTypes.func.isRequired,
-  isNotMatch: PropTypes.bool.isRequired,
+  emailValid: PropTypes.bool.isRequired,
+  passwordValid: PropTypes.bool.isRequired,
 };
 
 export default LoginForm;

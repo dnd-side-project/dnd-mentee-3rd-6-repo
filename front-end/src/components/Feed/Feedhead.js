@@ -27,7 +27,7 @@ const FeedTag = ({ feedTag, onClickFeedTag, checkFeedTag, checkSortType }) => {
         checkId={feedTag.id}
         onClick={onClickFeedTag(feedTag.id)}
       >
-        {feedTag.name}
+        {`${checkFeedTag ? '#' : ''}${feedTag.name}`}
       </TagButton>
     </li>
   );

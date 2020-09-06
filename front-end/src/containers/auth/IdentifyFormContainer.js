@@ -127,6 +127,7 @@ const IdentifyFormContainer = () => {
       alert('인증번호가 다릅니다.');
     }
   }, [authNumber, dispatch, phoneNumber, username]);
+
   return (
     <IdentifyForm
       username={username}

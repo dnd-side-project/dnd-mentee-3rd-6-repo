@@ -1,40 +1,50 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import produce from 'immer';
 
 import Write from '../../components/Write/Write';
 import useInput from '../../hooks/useInput';
-import { NEXT_WRITE_PAGE } from '../../modules/write';
+import { NEXT_WRITE_PAGE, GO_BACK_FEED_PAGE } from '../../modules/write';
 
 const WriteContainer = () => {
-  const [files, setFiles] = useState({
-    file: [],
-    previewPath: [],
-  });
-  const [checkId, setCheckId] = useState(1);
-  const [text, onChangeText] = useInput('');
   const [focus, setFocus] = useState(false);
-  const [click, setClick] = useState(false);
+
+  const dispatch = useDispatch();
+  const { feedTags } = useSelector((state) => state.feed);
+  const { imgFiles, path, tagId, content, prevClick, prevId } = useSelector((state) => state.write);
+
+  const [click, setClick] = useState(prevClick || false);
+  const [checkId, setCheckId] = useState(tagId || 1);
+  const [text, onChangeText] = useInput(content || '');
+
+  const [files, setFiles] = useState({
+    file: imgFiles || [],
+    previewPath: path || [],
+  });
 
   const { file, previewPath } = files;
 
-  const dispatch = useDispatch();
-  const { feedTags } = useSelector((state) => state.feed.feedAllTags);
-
   const imageInputRef = useRef();
-  const videoInputRef = useRef();
-  const nextId = useRef(0);
+  // const videoInputRef = useRef();
+  const nextId = useRef(prevId || 0);
+
+  useEffect(() => {
+    if (!feedTags) {
+      dispatch({
+        type: GO_BACK_FEED_PAGE,
+      });
+    }
+  }, [dispatch, feedTags]);
 
   const onClickImage = useCallback(() => {
-    console.log('이미지');
     imageInputRef.current.click();
     setClick(true);
   }, []);
 
-  const onClickVideo = useCallback(() => {
-    console.log('비디오');
-    videoInputRef.current.click();
-  }, []);
+  // const onClickVideo = useCallback(() => {
+  //   console.log('비디오');
+  //   videoInputRef.current.click();
+  // }, []);
 
   const onChangeImage = useCallback((e) => {
     [].forEach.call(e.target.files, (f) => {
@@ -57,7 +67,7 @@ const WriteContainer = () => {
     });
   }, []);
 
-  const onChangeVideo = useCallback(() => {}, []);
+  // const onChangeVideo = useCallback(() => {}, []);
 
   const onClickClose = useCallback(
     (index) => () => {
@@ -70,7 +80,7 @@ const WriteContainer = () => {
     [file, files, previewPath],
   );
 
-  /* 피드 태그 호출 */
+  /* 피드 태그 선택 */
   const onClickWriteTag = useCallback(
     (index) => () => {
       setCheckId(index);
@@ -82,23 +92,34 @@ const WriteContainer = () => {
     setFocus((prev) => !prev);
   }, []);
 
-  const onFinishFeed = useCallback(() => {
+  const onFinishNextPage = useCallback(() => {
     dispatch({
       type: NEXT_WRITE_PAGE,
+      data: {
+        imgFiles: file,
+        path: previewPath,
+        tagId: checkId,
+        content: text,
+        prevClick: click,
+        prevId: nextId,
+      },
     });
-    setClick(false);
-  }, [dispatch]);
+  }, [checkId, click, dispatch, file, previewPath, text]);
+
+  if (!feedTags) {
+    return null;
+  }
 
   return (
     <Write
       feedTags={feedTags}
-      onFinishFeed={onFinishFeed}
+      onFinishNextPage={onFinishNextPage}
       imageInputRef={imageInputRef}
-      videoInputRef={videoInputRef}
+      // videoInputRef={videoInputRef}
       onChangeImage={onChangeImage}
-      onChangeVideo={onChangeVideo}
+      // onChangeVideo={onChangeVideo}
       onClickImage={onClickImage}
-      onClickVideo={onClickVideo}
+      // onClickVideo={onClickVideo}
       previewPath={previewPath}
       onClickClose={onClickClose}
       checkId={checkId}

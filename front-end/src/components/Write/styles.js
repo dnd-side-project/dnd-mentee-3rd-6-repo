@@ -467,6 +467,11 @@ export const CatTagItem = styled.li`
   }
 `;
 
+export const CatTagNullBox = styled.div`
+  width: 216px;
+  height: 33px;
+`;
+
 export const CatTagTooltip = styled.div`
   @keyframes showTooltip {
     0% {

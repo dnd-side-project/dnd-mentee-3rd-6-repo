@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CardTitle, CardContent, CardContentText, CommentHeader } from '../styles';
+import { CardTitle, CardContent, CardContentText, CommentHeader } from '../Feed/styles';
 
 const CommentHead = ({ content, author, timeDesc }) => {
   return (
@@ -9,7 +9,12 @@ const CommentHead = ({ content, author, timeDesc }) => {
       <CardTitle comment>
         <dl className="feed-card__title-column">
           <dt>
-            <img src={author.profileImg} alt={author.nickName} />
+            <img
+              src={`${process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL}${
+                author.profileImg
+              }`}
+              alt={author.nickName}
+            />
           </dt>
           <dd>
             <span>{author.nickName}</span>

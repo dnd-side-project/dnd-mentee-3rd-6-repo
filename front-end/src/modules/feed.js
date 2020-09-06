@@ -1,6 +1,7 @@
-import { put, delay, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
+import { put, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
+import { GO_BACK_FEED_PAGE } from './write';
 
 export const initialSate = {
   pageIndex: 1,
@@ -8,110 +9,51 @@ export const initialSate = {
   tagIndex: 1,
   sortIndex: 1,
   filterTypes: [
-    {
-      id: 1,
-      name: '우리동네',
-    },
-    {
-      id: 2,
-      name: '전체',
-    },
-    {
-      id: 3,
-      name: '내친구',
-    },
+    { id: 1, name: '우리동네' },
+    { id: 2, name: '전체' },
+    { id: 3, name: '내친구' },
   ],
   sortTypes: [
-    {
-      id: 1,
-      name: '인기글',
-    },
-    {
-      id: 2,
-      name: '전체글',
-    },
+    { id: 1, name: '인기글' },
+    { id: 2, name: '전체글' },
   ],
   feedTags: null,
-  Feeds: {
-    pageNumber: 0,
-    pageSize: 10,
-    totalPages: 50,
-    isLast: false,
-    isFirst: true,
-    contents: [
-      {
-        id: 1,
-        content: '연탄이는 오늘도 식빵 굽굽',
-        images: [
-          {
-            id: 1,
-            url: 'https://cdn.pixabay.com/photo/2014/11/30/14/11/kitty-551554_1280.jpg',
-          },
-          {
-            id: 2,
-            url: 'https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg',
-          },
-        ],
-        author: {
-          id: 1,
-          nickName: '연탄범벅 연탄이네',
-          profileImg: 'https://i.ytimg.com/vi/IMaRld3s0CY/maxresdefault.jpg',
-          addressName: '분당구 정자 2동',
-        },
-        comments: [
-          {
-            id: 2,
-            content: '넘 귀여운거 아닌가요?!',
-            numberOfLikes: 10,
-            isLike: false,
-            numberOfReplies: 1,
-            createdDateTime: '2020-01-02T21:23:00',
-            timeDesc: '3시간 전',
-            author: {
-              id: 1,
-              nickName: '연탄범벅 연탄이네',
-              profileImg: 'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
-              addressName: '수지구 풍덕천동',
-            },
-            replies: [
-              {
-                id: 3,
-                content: '까미랑 보리랑',
-                numberOfLikes: 3,
-                isLike: false,
-                createdDateTime: '2020-01-02T21:23:00',
-                timeDesc: '5시간 전',
-                author: {
-                  id: 1,
-                  nickName: '연탄범벅 연탄이네',
-                  profileImg: 'https://cdn.pixabay.com/photo/2016/01/20/13/05/cat-1151519_1280.jpg',
-                  addressName: '수지구 풍덕천동',
-                },
-              },
-            ],
-          },
-        ],
-        isLike: true,
-        numberOfLikes: 15,
-        numberOfComments: 6,
-        createdDateTime: '2020-01-02T21:23:00',
-        timeDesc: '6시간전',
-      },
-    ],
-  },
-  feedId: null,
+  Feeds: {},
+  FeedById: {},
+  commentId: null,
   getFeedTagLoading: false, // 피드 태그 불러오기
   getFeedTagDone: false,
   getFeedTagError: null,
   getFeedListLoading: false, // 필터 리스트 불러오기
   getFeedListDone: false,
   getFeedListError: null,
+  getCommentLoading: false, // 댓글 페이지 불러오기
+  getCommentDone: false,
+  getCommentError: null,
   likeFeedLoading: false, // 좋아요
   likeFeedDone: false,
   likeFeedError: null,
   unLikeFeedLoading: false, // 좋아요 취소
   unLikeFeedDone: false,
   unLikeFeedError: null,
+  likeCommentLoading: false, // 댓글 좋아요
+  likeCommentDone: false,
+  likeCommentError: null,
+  unLikeCommentLoading: false, // 댓글 좋아요 취소
+  unLikeCommentDone: false,
+  unLikeCommentError: null,
+  likeReplyLoading: false, // 대댓글 좋아요
+  likeReplyDone: false,
+  likeReplyError: null,
+  unLikeReplyLoading: false, // 대댓글 좋아요 취소
+  unLikeReplyDone: false,
+  unLikeReplyError: null,
+  addFeedLoading: false, // 피드글 작성
+  addFeedDone: false,
+  addFeedError: null,
+  addCommentLoading: false, // 피드 댓글 작성
+  addCommentDone: false,
+  addCommentError: null,
 };
 
 export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
@@ -130,6 +72,10 @@ export const GET_FEED_LIST_3_REQUEST = 'feed/GET_FEED_LIST_3_REQUEST';
 export const GET_FEED_LIST_3_SUCCESS = 'feed/GET_FEED_LIST_3_SUCCESS';
 export const GET_FEED_LIST_3_FAILURE = 'feed/GET_FEED_LIST_3_FAILURE';
 
+export const GET_COMMENT_REQUEST = 'feed/GET_COMMENT_REQUEST';
+export const GET_COMMENT_SUCCESS = 'feed/GET_COMMENT_SUCCESS';
+export const GET_COMMENT_FAILURE = 'feed/GET_COMMENT_FAILURE';
+
 export const LIKE_FEED_REQUEST = 'feed/LIKE_FEED_REQUEST';
 export const LIKE_FEED_SUCCESS = 'feed/LIKE_FEED_SUCCESS';
 export const LIKE_FEED_FAILURE = 'feed/LIKE_FEED_FAILURE';
@@ -146,18 +92,31 @@ export const UNLIKE_COMMENT_REQUEST = 'feed/UNLIKE_COMMENT_REQUEST';
 export const UNLIKE_COMMENT_SUCCESS = 'feed/UNLIKE_COMMENT_SUCCESS';
 export const UNLIKE_COMMENT_FAILURE = 'feed/UNLIKE_COMMENT_FAILURE';
 
-export const LIKE_REPLE_REQUEST = 'feed/LIKE_REPLE_REQUEST';
-export const LIKE_REPLE_SUCCESS = 'feed/LIKE_REPLE_SUCCESS';
-export const LIKE_REPLE_FAILURE = 'feed/LIKE_REPLE_FAILURE';
+export const LIKE_REPLY_REQUEST = 'feed/LIKE_REPLY_REQUEST';
+export const LIKE_REPLY_SUCCESS = 'feed/LIKE_REPLY_SUCCESS';
+export const LIKE_REPLY_FAILURE = 'feed/LIKE_REPLY_FAILURE';
 
-export const UNLIKE_REPLE_REQUEST = 'feed/UNLIKE_REPLE_REQUEST';
-export const UNLIKE_REPLE_SUCCESS = 'feed/UNLIKE_REPLE_SUCCESS';
-export const UNLIKE_REPLE_FAILURE = 'feed/UNLIKE_REPLE_FAILURE';
+export const UNLIKE_REPLY_REQUEST = 'feed/UNLIKE_REPLY_REQUEST';
+export const UNLIKE_REPLY_SUCCESS = 'feed/UNLIKE_REPLY_SUCCESS';
+export const UNLIKE_REPLY_FAILURE = 'feed/UNLIKE_REPLY_FAILURE';
 
-export const GO_BACK_LOGIN_PAGE = 'GO_BACK_LOGIN_PAGE';
-export const NEXT_FEED_PAGE = 'feed/NEXT_FEED_PAGE';
+export const ADD_FEED_REQUEST = 'feed/ADD_FEED_REQUEST';
+export const ADD_FEED_SUCCESS = 'feed/ADD_FEED_SUCCESS';
+export const ADD_FEED_FAILURE = 'feed/ADD_FEED_FAILURE';
+
+export const ADD_COMMENT_REQUEST = 'feed/ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'feed/ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'feed/ADD_COMMENT_FAILURE';
+
+export const ADD_REPLY_COMMENT_REQUEST = 'feed/ADD_REPLY_COMMENT_REQUEST';
+export const ADD_REPLY_COMMENT_SUCCESS = 'feed/ADD_REPLY_COMMENT_SUCCESS';
+export const ADD_REPLY_COMMENT_FAILURE = 'feed/ADD_REPLY_COMMENT_FAILURE';
+
+export const ON_REPLY = 'feed/ON_REPLY';
+export const OFF_REPLY = 'feed/OFF_REPLY';
+export const GO_BACK_LOG_IN_PAGE = 'GO_BACK_LOG_IN_PAGE';
+export const CURRENT_FEED_PAGE = 'feed/CURRENT_FEED_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
-export const COMMENT_PAGE = 'feed/COMMENT_PAGE';
 
 function* goBackLoginPage() {
   const history = yield getContext('history');
@@ -184,28 +143,34 @@ function* getFeedTag(action) {
   }
 }
 
-const getFeedList1PI = ({ filterTypeId, feedTagId }) => {
+const getFeedList1API = ({ filterId, tagId, pageNumber, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
+
   const params = {
-    filterTypeId,
-    feedTagId,
+    filterType: filterTypeList[filterId - 1],
+    tagId,
+    pageNumber: pageNumber || 0,
+    pageSize: 10,
   };
-  return axios.get('', { params });
+
+  return axios.get('/feeds', { params, headers });
 };
 
 function* getFeedList1(action) {
   try {
-    // const result = yield call(getFeedList1PI, action);
+    const result = yield call(getFeedList1API, action.data);
     yield put({
       type: GET_FEED_LIST_1_SUCCESS,
-      data: {
-        filterId: action.data.filterId,
-        tagId: action.data.tagId,
-        // Feeds: result.data,
-      },
+      data: result.data,
     });
     yield put({
-      type: NEXT_FEED_PAGE,
-      data: action.data.filterId,
+      type: CURRENT_FEED_PAGE,
+      data: {
+        pageIndex: action.data.filterId,
+        filterIndex: action.data.filterId,
+        tagIndex: action.data.tagId,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -216,28 +181,34 @@ function* getFeedList1(action) {
   }
 }
 
-const getFeedList2API = ({ filterTypeId, feedTagId }) => {
+const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
+  const sortList = ['POPULAR', 'LATEST'];
+
   const params = {
-    filterTypeId,
-    feedTagId,
+    filterType: filterTypeList[filterId - 1],
+    sortType: sortList[sortId - 1],
+    pageNumber: pageNumber || 0,
+    pageSize: 10,
   };
-  return axios.get('', { params });
+  return axios.get('/feeds', { params, headers });
 };
 
 function* getFeedList2(action) {
   try {
-    // const result = yield call(getFeedList2, action);
+    const result = yield call(getFeedList2API, action.data);
     yield put({
       type: GET_FEED_LIST_2_SUCCESS,
-      data: {
-        filterId: action.data.filterId,
-        sortId: action.data.sortId,
-        // Feeds: result.data,
-      },
+      data: result.data,
     });
     yield put({
-      type: NEXT_FEED_PAGE,
-      data: action.data.filterId,
+      type: CURRENT_FEED_PAGE,
+      data: {
+        pageIndex: action.data.filterId,
+        filterIndex: action.data.filterId,
+        sortIndex: action.data.sortId,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -248,27 +219,31 @@ function* getFeedList2(action) {
   }
 }
 
-const getFeedList3API = ({ filterTypeId, feedTagId }) => {
+const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
+
   const params = {
-    filterTypeId,
-    feedTagId,
+    filterType: filterTypeList[filterId - 1],
+    pageNumber: pageNumber || 0,
+    pageSize: 10,
   };
-  return axios.get('', { params });
+  return axios.get('/feeds', { params, headers });
 };
 
 function* getFeedList3(action) {
   try {
-    // const result = yield call(getFeedList3API, action);
+    const result = yield call(getFeedList3API, action.data);
     yield put({
       type: GET_FEED_LIST_3_SUCCESS,
-      data: {
-        filterId: action.data.filterId,
-        // Feeds: result.data,
-      },
+      data: result.data,
     });
     yield put({
-      type: NEXT_FEED_PAGE,
-      data: action.data.filterId,
+      type: CURRENT_FEED_PAGE,
+      data: {
+        pageIndex: action.data.filterId,
+        filterIndex: action.data.filterId,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -279,18 +254,45 @@ function* getFeedList3(action) {
   }
 }
 
-const likeFeedAPI = (data) => {
-  // data 는 postId
-  return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
+const getCommentAPI = ({ feedId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+
+  return axios.get(`/feeds/${feedId}`, { headers });
+};
+
+function* getComment(action) {
+  try {
+    const result = yield call(getCommentAPI, action.data);
+    yield put({
+      type: GET_COMMENT_SUCCESS,
+      data: {
+        FeedById: result.data,
+        feedId: action.data.feedId,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: GET_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const likeFeedAPI = ({ feedId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const data = {
+    feedId,
+  };
+
+  return axios.post('/feed-likes', data, { headers });
 };
 
 function* likeFeed(action) {
   try {
-    // const result = yield call(likeFeedAPI, action.data);
-    yield delay(500);
+    yield call(likeFeedAPI, action.data);
     yield put({
       type: LIKE_FEED_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      data: action.data.feedId,
     });
   } catch (error) {
     yield put({
@@ -300,17 +302,19 @@ function* likeFeed(action) {
   }
 }
 
-const unlikeFeedAPI = (data) => {
-  return axios.delete(`/post/${data}/like`); // 최대한 요청, 응답을 가볍게 만들기 위해 두번 쨰 파라미터(data)는 제외(넣어도 되긴 함)
+const unlikeFeedAPI = ({ accessToken, feedId }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const params = { feedId };
+
+  return axios.delete('/feed-likes', { params, headers });
 };
 
 function* unlikeFeed(action) {
   try {
-    // const result = yield call(unlikeFeedAPI, action.data);
-    yield delay(500);
+    yield call(unlikeFeedAPI, action.data);
     yield put({
       type: UNLIKE_FEED_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      data: action.data.feedId,
     });
   } catch (error) {
     yield put({
@@ -320,18 +324,21 @@ function* unlikeFeed(action) {
   }
 }
 
-const likeCommentAPI = (data) => {
-  // data 는 postId
-  return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
+const likeCommentAPI = ({ commentId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const data = {
+    commentId,
+  };
+
+  return axios.post('/comment-likes', data, { headers });
 };
 
 function* likeComment(action) {
   try {
-    // const result = yield call(likeCommentAPI, action.data);
-    yield delay(500);
+    yield call(likeCommentAPI, action.data);
     yield put({
       type: LIKE_COMMENT_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      data: action.data.commentId,
     });
   } catch (error) {
     yield put({
@@ -341,17 +348,19 @@ function* likeComment(action) {
   }
 }
 
-const unlikeCommentAPI = (data) => {
-  return axios.delete(`/post/${data}/like`); // 최대한 요청, 응답을 가볍게 만들기 위해 두번 쨰 파라미터(data)는 제외(넣어도 되긴 함)
+const unlikeCommentAPI = ({ commentId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const params = { commentId };
+
+  return axios.delete('/comment-likes', { params, headers });
 };
 
 function* unlikeComment(action) {
   try {
-    // const result = yield call(unlikeCommentAPI, action.data);
-    yield delay(500);
+    yield call(unlikeCommentAPI, action.data);
     yield put({
       type: UNLIKE_COMMENT_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      data: action.data.commentId,
     });
   } catch (error) {
     yield put({
@@ -361,49 +370,141 @@ function* unlikeComment(action) {
   }
 }
 
-const likeRepleAPI = (data) => {
-  // data 는 postId
-  return axios.patch(`/post/${data}/like`); // 게시글에 일부분을 수정하기 떄문에 patch
+const likeReplyAPI = ({ replyId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const data = {
+    replyId,
+  };
+
+  return axios.post('/reply-likes', data, { headers });
 };
 
-function* likeReple(action) {
+function* likeReply(action) {
+  console.log(action.data);
   try {
-    // const result = yield call(likeRepleAPI, action.data);
-    yield delay(500);
+    yield call(likeReplyAPI, action.data);
     yield put({
-      type: LIKE_REPLE_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      type: LIKE_REPLY_SUCCESS,
+      data: {
+        commentId: action.data.commentId,
+        replyId: action.data.replyId,
+      },
     });
   } catch (error) {
     yield put({
-      type: LIKE_REPLE_FAILURE,
+      type: LIKE_REPLY_FAILURE,
       data: error.response.data,
     });
   }
 }
 
-const unlikeRepleAPI = (data) => {
-  return axios.delete(`/post/${data}/like`); // 최대한 요청, 응답을 가볍게 만들기 위해 두번 쨰 파라미터(data)는 제외(넣어도 되긴 함)
+const unlikeReplyAPI = ({ replyId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const params = { replyId };
+
+  return axios.delete('/reply-likes', { params, headers });
 };
 
-function* unlikeReple(action) {
+function* unlikeReply(action) {
   try {
-    // const result = yield call(unlikeRepleAPI, action.data);
-    yield delay(500);
+    yield call(unlikeReplyAPI, action.data);
     yield put({
-      type: UNLIKE_REPLE_SUCCESS,
-      data: action.data, // 게시글들의 배열이 들어 있음
+      type: UNLIKE_REPLY_SUCCESS,
+      data: {
+        commentId: action.data.commentId,
+        replyId: action.data.replyId,
+      },
     });
   } catch (error) {
     yield put({
-      type: UNLIKE_REPLE_FAILURE,
+      type: UNLIKE_REPLY_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const addFeedAPI = (data) => {
+  const headers = { Authorization: `Bearer ${data.accessToken}` };
+
+  return axios.post('/feeds', data.formData, { headers });
+};
+
+function* addFeed(action) {
+  try {
+    const result = yield call(addFeedAPI, action.data);
+    yield put({
+      type: ADD_FEED_SUCCESS,
+      data: {
+        contents: result.data,
+        tagIndex: action.data.tagId,
+      },
+    });
+    yield put({
+      type: GO_BACK_FEED_PAGE,
+    });
+  } catch (error) {
+    yield put({
+      type: ADD_FEED_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const addCommentAPI = ({ content, feedId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const data = { feedId, content };
+
+  return axios.post('/feed-comments', data, { headers });
+};
+
+function* addComment(action) {
+  try {
+    const result = yield call(addCommentAPI, action.data);
+    yield put({
+      type: ADD_COMMENT_SUCCESS,
+      data: {
+        comments: result.data,
+        feedId: action.data.feedId,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: ADD_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const addReplyCommentAPI = ({ content, commentId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  const data = { commentId, content };
+
+  return axios.post('/replies', data, { headers });
+};
+
+function* addReplyComment(action) {
+  try {
+    const result = yield call(addReplyCommentAPI, action.data);
+    yield put({
+      type: ADD_REPLY_COMMENT_SUCCESS,
+      data: {
+        replies: result.data,
+        commentId: action.data.commentId,
+      },
+    });
+    yield put({
+      type: OFF_REPLY,
+    });
+  } catch (error) {
+    yield put({
+      type: ADD_REPLY_COMMENT_FAILURE,
       data: error.response.data,
     });
   }
 }
 
 function* watchGoBackLoginPage() {
-  yield takeLatest(GO_BACK_LOGIN_PAGE, goBackLoginPage);
+  yield takeLatest(GO_BACK_LOG_IN_PAGE, goBackLoginPage);
 }
 
 function* watchGetFeedTag() {
@@ -438,12 +539,28 @@ function* watchUnlikeComment() {
   yield takeLatest(UNLIKE_COMMENT_REQUEST, unlikeComment);
 }
 
-function* watchLikeReple() {
-  yield takeLatest(LIKE_REPLE_REQUEST, likeReple);
+function* watchLikeReply() {
+  yield takeLatest(LIKE_REPLY_REQUEST, likeReply);
 }
 
-function* watchUnlikeReple() {
-  yield takeLatest(UNLIKE_REPLE_REQUEST, unlikeReple);
+function* watchUnlikeReply() {
+  yield takeLatest(UNLIKE_REPLY_REQUEST, unlikeReply);
+}
+
+function* watchAddFeed() {
+  yield takeLatest(ADD_FEED_REQUEST, addFeed);
+}
+
+function* watchGetComment() {
+  yield takeLatest(GET_COMMENT_REQUEST, getComment);
+}
+
+function* watchAddComment() {
+  yield takeLatest(ADD_COMMENT_REQUEST, addComment);
+}
+
+function* watchAddReplyComment() {
+  yield takeLatest(ADD_REPLY_COMMENT_REQUEST, addReplyComment);
 }
 
 export function* feedSaga() {
@@ -452,13 +569,17 @@ export function* feedSaga() {
     fork(watchGetFeedList1),
     fork(watchGetFeedList2),
     fork(watchGetFeedList3),
+    fork(watchGetComment),
     fork(watchGoBackLoginPage),
     fork(watchLikeFeed),
     fork(watchUnlikeFeed),
     fork(watchLikeComment),
     fork(watchUnlikeComment),
-    fork(watchLikeReple),
-    fork(watchUnlikeReple),
+    fork(watchLikeReply),
+    fork(watchUnlikeReply),
+    fork(watchAddFeed),
+    fork(watchAddComment),
+    fork(watchAddReplyComment),
   ]);
 }
 
@@ -488,9 +609,7 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_1_SUCCESS:
-        draft.filterIndex = action.data.filterId;
-        draft.tagIndex = action.data.tagId;
-        // draft.Feeds = action.data.Feeds;
+        draft.Feeds = action.data;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
@@ -505,9 +624,7 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_2_SUCCESS:
-        draft.filterIndex = action.data.filterId;
-        draft.sortIndex = action.data.sortId;
-        // draft.Feeds = action.data.Feeds;
+        draft.Feeds = action.data;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
@@ -522,14 +639,29 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_3_SUCCESS:
-        draft.filterIndex = action.data.filterId;
-        // draft.Feeds = action.data.Feeds;
+        draft.Feeds = action.data;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
       case GET_FEED_LIST_3_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
+        break;
+      /* 댓글 화면 불러오기 */
+      case GET_COMMENT_REQUEST:
+        draft.getCommentLoading = true;
+        draft.getCommentDone = false;
+        draft.getCommentError = null;
+        break;
+      case GET_COMMENT_SUCCESS:
+        draft.FeedById = action.data.FeedById;
+        draft.pageIndex = 4;
+        draft.getCommentLoading = false;
+        draft.getCommentDone = true;
+        break;
+      case GET_COMMENT_FAILURE:
+        draft.getCommentLoading = false;
+        draft.getCommentError = action.error;
         break;
       /* 좋아요 */
       case LIKE_FEED_REQUEST:
@@ -538,15 +670,17 @@ const feed = (state = initialSate, action) => {
         draft.likeFeedError = null;
         break;
       case LIKE_FEED_SUCCESS: {
-        const getFeed = draft.Feeds.find((value) => value.id === action.data.feedId); // 피드글 가져옴
-        getFeed.Likers.push({ id: action.data.userId });
+        const getFeedById = draft.Feeds.contents.find((v) => v.id === action.data);
+        getFeedById.isLike = true;
+        getFeedById.numberOfLikes += 1;
+
         draft.likeFeedLoading = false;
         draft.likeFeedDone = true;
         break;
       }
       case LIKE_FEED_FAILURE:
         draft.likeFeedLoading = false;
-        draft.likeFeedDone = action.error;
+        draft.likeFeedError = action.error;
         break;
       /* 좋아요 취소 */
       case UNLIKE_FEED_REQUEST:
@@ -555,8 +689,10 @@ const feed = (state = initialSate, action) => {
         draft.unLikeFeedError = null;
         break;
       case UNLIKE_FEED_SUCCESS: {
-        const getFeed = draft.Feeds.find((value) => value.id === action.data.feedId);
-        getFeed.Likers = getFeed.Likers.filter((value) => value.id !== action.data.userId);
+        const getFeedById = draft.Feeds.contents.find((v) => v.id === action.data);
+        getFeedById.isLike = false;
+        getFeedById.numberOfLikes -= 1;
+
         draft.unLikeFeedLoading = false;
         draft.unLikeFeedDone = true;
         break;
@@ -565,18 +701,155 @@ const feed = (state = initialSate, action) => {
         draft.unLikeFeedLoading = false;
         draft.unLikeFeedError = action.error;
         break;
-      /* 다음 페이지 이동 */
-      case NEXT_FEED_PAGE:
-        draft.pageIndex = action.data;
+      /* 댓글 좋아요 */
+      case LIKE_COMMENT_REQUEST:
+        draft.likeCommentLoading = true;
+        draft.likeCommentDone = false;
+        draft.likeCommentError = null;
+        break;
+      case LIKE_COMMENT_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data);
+        getCommentById.isLike = true;
+        getCommentById.numberOfLikes += 1;
+
+        draft.likeCommentLoading = false;
+        draft.likeCommentDone = true;
+        break;
+      }
+      case LIKE_COMMENT_FAILURE:
+        draft.likeFeedLoading = false;
+        draft.likeCommentError = action.error;
+        break;
+      /* 댓글 좋아요 취소 */
+      case UNLIKE_COMMENT_REQUEST:
+        draft.unLikeCommentLoading = true;
+        draft.unLikeCommentDone = false;
+        draft.unLikeCommentError = null;
+        break;
+      case UNLIKE_COMMENT_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data);
+        getCommentById.isLike = false;
+        getCommentById.numberOfLikes -= 1;
+
+        draft.unLikeCommentLoading = false;
+        draft.unLikeCommentDone = true;
+        break;
+      }
+      case UNLIKE_COMMENT_FAILURE:
+        draft.unLikeCommentLoading = false;
+        draft.unLikeCommentError = action.error;
+        break;
+      /* 대댓글 좋아요 */
+      case LIKE_REPLY_REQUEST:
+        draft.likeReplyLoading = true;
+        draft.likeReplyDone = false;
+        draft.likeReplyError = null;
+        break;
+      case LIKE_REPLY_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data.commentId);
+        const getReplyById = getCommentById.replies.find((v) => v.id === action.data.replyId);
+        getReplyById.isLike = true;
+        getReplyById.numberOfLikes += 1;
+
+        draft.likeReplyLoading = false;
+        draft.likeReplyDone = true;
+        break;
+      }
+      case LIKE_REPLY_FAILURE:
+        draft.likeReplyLoading = false;
+        draft.likeReplyError = action.error;
+        break;
+      /* 대댓글 좋아요 취소 */
+      case UNLIKE_REPLY_REQUEST:
+        draft.unLikeReplyLoading = true;
+        draft.unLikeReplyDone = false;
+        draft.unLikeReplyError = null;
+        break;
+      case UNLIKE_REPLY_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data.commentId);
+        const getReplyById = getCommentById.replies.find((v) => v.id === action.data.replyId);
+        getReplyById.isLike = false;
+        getReplyById.numberOfLikes -= 1;
+
+        draft.unLikeReplyLoading = false;
+        draft.unLikeReplyDone = true;
+        break;
+      }
+      case UNLIKE_REPLY_FAILURE:
+        draft.unLikeReplyLoading = false;
+        draft.unLikeReplyError = action.error;
+        break;
+      /* 피드 글 등록 */
+      case ADD_FEED_REQUEST:
+        draft.addFeedLoading = true;
+        draft.addFeedDone = false;
+        draft.addFeedError = null;
+        break;
+      case ADD_FEED_SUCCESS:
+        draft.Feeds.contents.unshift(action.data.contents);
+        draft.tagIndex = action.data.tagIndex;
+        draft.addFeedLoading = false;
+        draft.addFeedDone = true;
+        break;
+      case ADD_FEED_FAILURE:
+        draft.addFeedLoading = false;
+        draft.addFeedError = action.error;
+        break;
+      /* 피드 댓글 등록 */
+      case ADD_COMMENT_REQUEST:
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+      case ADD_COMMENT_SUCCESS: {
+        const getFeedById = draft.Feeds.contents.find((v) => v.id === action.data.feedId);
+        draft.FeedById.comments.push(action.data.comments);
+        getFeedById.numberOfComments += 1;
+
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
+      }
+      case ADD_COMMENT_FAILURE:
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
+      /* 피드 댓글 등록 */
+      case ADD_REPLY_COMMENT_REQUEST:
+        draft.addReplyCommentLoading = true;
+        draft.addReplyCommentDone = false;
+        draft.addReplyCommentError = null;
+        break;
+      case ADD_REPLY_COMMENT_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data.commentId);
+        getCommentById.replies.push(action.data.replies);
+
+        draft.addReplyCommentLoading = false;
+        draft.addReplyCommentDone = true;
+        break;
+      }
+      case ADD_REPLY_COMMENT_FAILURE:
+        draft.addReplyCommentLoading = false;
+        draft.addReplyCommentError = action.error;
+        break;
+      /* 대댓글 켜기 */
+      case ON_REPLY:
+        draft.commentId = action.data;
+        break;
+      /* 대댓글 끄기 */
+      case OFF_REPLY:
+        draft.commentId = null;
+        break;
+      /* 현재 페이지 등록 */
+      case CURRENT_FEED_PAGE:
+        draft.pageIndex = action.data.pageIndex;
+        draft.filterIndex = action.data.filterIndex;
+        draft.tagIndex = action.data?.tagIndex ? action.data.tagIndex : 1;
+        draft.sortIndex = action.data?.sortIndex ? action.data.sortIndex : 1;
         break;
       /* 이전 페이지 이동 */
       case PREV_FEED_PAGE:
         draft.pageIndex = action.data;
-        break;
-      /* 댓글 화면 이동 */
-      case COMMENT_PAGE:
-        draft.feedId = action.data;
-        draft.pageIndex = 4;
         break;
       default:
         break;

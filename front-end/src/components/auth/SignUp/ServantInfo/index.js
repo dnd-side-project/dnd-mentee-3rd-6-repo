@@ -39,7 +39,7 @@ const ServantInfoForm = ({
                   onChange={onChangeNickName}
                   onBlur={onBlurCheckNickName}
                   ref={nickNameInputRef}
-                  borderColor={NickNameValidData}
+                  bordercolor={`${NickNameValidData}`}
                   top="16px"
                   color="true"
                   required

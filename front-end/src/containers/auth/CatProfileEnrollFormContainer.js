@@ -11,11 +11,10 @@ const CatProfileEnrollFormContainer = () => {
   const [catBirthday, onChangeCatBirthday] = useInput('');
   const [catNeutralized, setCatNeutralized] = useState('TRUE');
 
-  const [currentDay, setCurrentDay] = useState('');
-
+  const [catIdName, setCatIdName] = useState('');
   const [catKindCheck, setCatKindCheck] = useState(null);
-
   const [selectCheck, setSelectCheck] = useState(false);
+  const [currentDay, setCurrentDay] = useState('');
 
   const dispatch = useDispatch();
 
@@ -54,9 +53,11 @@ const CatProfileEnrollFormContainer = () => {
   /* 페이지 6 - 냥이 품종 선택 */
   const onClickCatKindCheck = useCallback(
     (index) => () => {
-      setCatKindCheck(() => index);
+      setCatKindCheck(index);
+      const catKicd = CatKindId.find((v) => v.id === index);
+      setCatIdName(catKicd.name);
     },
-    [],
+    [CatKindId],
   );
 
   /* 페이지 6 - 냥이 성별 선택 */
@@ -96,6 +97,7 @@ const CatProfileEnrollFormContainer = () => {
         selectCheck={selectCheck}
         CatKindId={CatKindId}
         catKindCheck={catKindCheck}
+        catIdName={catIdName}
         onClickCatKindCheck={onClickCatKindCheck}
         catWeight={catWeight}
         onChangeCatWeight={onChangeCatWeight}
