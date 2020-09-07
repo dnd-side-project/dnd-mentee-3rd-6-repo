@@ -54,6 +54,12 @@ export const initialSate = {
   addCommentLoading: false, // 피드 댓글 작성
   addCommentDone: false,
   addCommentError: null,
+  removeCommentLoading: false, // 댓글 삭제
+  removeCommentDone: false,
+  removeCommentError: null,
+  removeReplyLoading: false, // 대댓글 삭제
+  removeReplyDone: false,
+  removeReplyError: null,
 };
 
 export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
@@ -107,6 +113,14 @@ export const ADD_FEED_FAILURE = 'feed/ADD_FEED_FAILURE';
 export const ADD_COMMENT_REQUEST = 'feed/ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'feed/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'feed/ADD_COMMENT_FAILURE';
+
+export const REMOVE_COMMENT_REQUEST = 'feed/REMOVE_COMMENT_REQUEST';
+export const REMOVE_COMMENT_SUCCESS = 'feed/REMOVE_COMMENT_SUCCESS';
+export const REMOVE_COMMENT_FAILURE = 'feed/REMOVE_COMMENT_FAILURE';
+
+export const REMOVE_REPLY_REQUEST = 'feed/REMOVE_REPLY_REQUEST';
+export const REMOVE_REPLY_SUCCESS = 'feed/REMOVE_REPLY_SUCCESS';
+export const REMOVE_REPLY_FAILURE = 'feed/REMOVE_REPLY_FAILURE';
 
 export const ADD_REPLY_COMMENT_REQUEST = 'feed/ADD_REPLY_COMMENT_REQUEST';
 export const ADD_REPLY_COMMENT_SUCCESS = 'feed/ADD_REPLY_COMMENT_SUCCESS';
@@ -503,6 +517,54 @@ function* addReplyComment(action) {
   }
 }
 
+const removeCommentAPI = ({ commentId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+
+  return axios.delete(`/feed-comments/${commentId}`, { headers });
+};
+
+function* removeComment(action) {
+  try {
+    const result = yield call(removeCommentAPI, action.data);
+    yield put({
+      type: REMOVE_COMMENT_SUCCESS,
+      data: {
+        feedId: action.data.feedId,
+        id: result.data.id,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: REMOVE_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const removeReplyAPI = ({ replyId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+
+  return axios.delete(`/replies/${replyId}`, { headers });
+};
+
+function* removeReply(action) {
+  try {
+    const result = yield call(removeReplyAPI, action.data);
+    yield put({
+      type: REMOVE_REPLY_SUCCESS,
+      data: {
+        commentId: action.data.commentId,
+        id: result.data.id,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: REMOVE_REPLY_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
 function* watchGoBackLoginPage() {
   yield takeLatest(GO_BACK_LOG_IN_PAGE, goBackLoginPage);
 }
@@ -563,6 +625,14 @@ function* watchAddReplyComment() {
   yield takeLatest(ADD_REPLY_COMMENT_REQUEST, addReplyComment);
 }
 
+function* watchRemoveComment() {
+  yield takeLatest(REMOVE_COMMENT_REQUEST, removeComment);
+}
+
+function* watchRemoveReply() {
+  yield takeLatest(REMOVE_REPLY_REQUEST, removeReply);
+}
+
 export function* feedSaga() {
   yield all([
     fork(watchGetFeedTag),
@@ -580,6 +650,8 @@ export function* feedSaga() {
     fork(watchAddFeed),
     fork(watchAddComment),
     fork(watchAddReplyComment),
+    fork(watchRemoveComment),
+    fork(watchRemoveReply),
   ]);
 }
 
@@ -831,6 +903,44 @@ const feed = (state = initialSate, action) => {
       case ADD_REPLY_COMMENT_FAILURE:
         draft.addReplyCommentLoading = false;
         draft.addReplyCommentError = action.error;
+        break;
+      /* 댓글 삭제 */
+      case REMOVE_COMMENT_REQUEST:
+        draft.removeCommentLoading = true;
+        draft.removeCommentDone = false;
+        draft.removeCommentError = null;
+        break;
+      case REMOVE_COMMENT_SUCCESS: {
+        draft.FeedById.comments = draft.FeedById.comments.filter((v) => v.id !== action.data.id);
+
+        const getFeedById = draft.Feeds.contents.find((v) => v.id === action.data.feedId);
+        getFeedById.numberOfComments -= 1;
+
+        draft.removeCommentLoading = false;
+        draft.removeCommentDone = true;
+        break;
+      }
+      case REMOVE_COMMENT_FAILURE:
+        draft.removeCommentLoading = false;
+        draft.removeCommentError = action.error;
+        break;
+      /* 대댓글 삭제 */
+      case REMOVE_REPLY_REQUEST:
+        draft.removeCommentLoading = true;
+        draft.removeCommentDone = false;
+        draft.removeCommentError = null;
+        break;
+      case REMOVE_REPLY_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data.commentId);
+        getCommentById.replies = getCommentById.replies.filter((v) => v.id !== action.data.id);
+
+        draft.removeCommentLoading = false;
+        draft.removeCommentDone = true;
+        break;
+      }
+      case REMOVE_REPLY_FAILURE:
+        draft.removeCommentLoading = false;
+        draft.removeCommentError = action.error;
         break;
       /* 대댓글 켜기 */
       case ON_REPLY:

@@ -266,6 +266,13 @@ export const CardIcon = styled.div`
     .icon--item {
       display: flex;
 
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 16px;
+
+      color: ${pallete.primary[1]};
+
       button {
         margin-right: 4px;
         padding: 0;
@@ -454,14 +461,6 @@ export const CommentItem = styled.li`
           }
         }
       }
-
-      .comment-block__like {
-        button {
-          border: none;
-          background: none;
-          outline: none;
-        }
-      }
     }
 
     dd {
@@ -478,7 +477,10 @@ export const CommentItem = styled.li`
             `}
 
       div:first-child {
-        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 15px;
 
         font-style: normal;
         font-weight: 500;
@@ -486,6 +488,12 @@ export const CommentItem = styled.li`
         line-height: 19px;
 
         color: ${pallete.primary[1]};
+
+        button {
+          border: none;
+          background: none;
+          outline: none;
+        }
       }
 
       div:last-child {
@@ -503,6 +511,25 @@ export const CommentItem = styled.li`
           &:first-child {
             margin-left: 0;
           }
+
+          &:last-child {
+            button {
+              border: none;
+              background: none;
+              outline: none;
+
+              font-style: normal;
+              font-weight: 500;
+              font-size: 11px;
+              line-height: 15px;
+
+              color: ${pallete.gray[5]};
+
+              &:active {
+                color: ${pallete.gray[4]};
+              }
+            }
+          }
         }
       }
     }
@@ -510,6 +537,116 @@ export const CommentItem = styled.li`
 
   &:last-child {
     margin-bottom: 80px;
+  }
+`;
+
+export const MoreGroup = styled.div`
+  @keyframes showModal {
+    0% {
+      transform: scale(0);
+    }
+    90% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  position: relative;
+
+  & > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+
+    color: ${pallete.gray[4]};
+
+    font-size: 24px;
+
+    &:active {
+      color: ${pallete.secondary[2]};
+    }
+  }
+
+  & .more-modal {
+    position: absolute;
+    top: 30px;
+    right: -10px;
+    width: 109px;
+    height: 84px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+
+    background: ${pallete.primary[3]};
+
+    ${({ comment, reply, more }) =>
+      comment || reply === more
+        ? css`
+            animation: showModal 0.2s forwards;
+          `
+        : css`
+            animation: none;
+          `}
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      width: 100%;
+      height: 100%;
+
+      li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 42px;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 19px;
+        text-align: center;
+
+        color: ${pallete.primary[1]};
+
+        & > button {
+          border: none;
+          background: none;
+          outline: none;
+          padding: 0;
+
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 19px;
+          text-align: center;
+
+          &:active {
+            color: ${pallete.secondary[1]};
+            transform: scale(0.95);
+            transition: all 0.125s;
+          }
+        }
+
+        &:last-child {
+          border-top: 1px solid ${pallete.gray[3]};
+        }
+      }
+    }
   }
 `;
 
@@ -534,10 +671,10 @@ export const CommentInput = styled.div`
 
     margin-right: 19px;
 
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: ${pallete.gray[3]};
+    background: ${pallete.primary[3]};
 
     overflow: hidden;
 
@@ -565,6 +702,49 @@ export const CommentInput = styled.div`
       line-height: 16px;
 
       color: ${pallete.gray[3]};
+    }
+  }
+`;
+
+export const ReplyBox = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 70px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 50px;
+  width: 100%;
+
+  padding: 0 20px;
+
+  background: ${pallete.gray[1]};
+
+  & span:first-child {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: ${pallete.gray[4]};
+
+    strong {
+      font-weight: bold;
+    }
+  }
+
+  & span:last-child {
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border: none;
+      background: none;
+      outline: none;
+      padding: 0;
     }
   }
 `;
