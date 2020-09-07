@@ -10,9 +10,9 @@ const CommentHead = ({ content, author, timeDesc }) => {
         <dl className="feed-card__title-column">
           <dt>
             <img
-              src={`${process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL}${
-                author.profileImg
-              }`}
+              src={`${
+                process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
+              }${author.profileImg}`}
               alt={author.nickName}
             />
           </dt>
