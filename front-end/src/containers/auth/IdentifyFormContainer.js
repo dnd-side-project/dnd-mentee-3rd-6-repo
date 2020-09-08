@@ -19,6 +19,7 @@ const IdentifyFormContainer = () => {
   const [phoneNumber, onChangePhoneNumber] = useInput('');
   const [authNumber, onChangeAuthNumber] = useInput('');
 
+  const [resRecaptcha, setResRecaptcha] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timeCheck, setTimeCheck] = useState(false);
   const [timeString, setTimeString] = useState('');
@@ -68,31 +69,31 @@ const IdentifyFormContainer = () => {
   /* 페이지 1 - 리캡챠 설정 */
   const setUpRecaptcha = useCallback(() => {
     firebase.auth().languageCode = 'ko';
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
       callback: () => {
         setTimeCheck((prev) => !prev);
       },
     });
+    return recaptchaVerifier;
   }, []);
 
   /* 페이지 1 - 인증번호 받기 */
   const onClcikAuthNumber = useCallback(async () => {
-    await dispatch({
-      type: IDENTIFY_REQUEST,
-    });
-    await setUpRecaptcha();
     try {
+      dispatch({
+        type: IDENTIFY_REQUEST,
+      });
+      const recaptcha = await setUpRecaptcha();
       const koreaPhoneNumber = `+82 ${phoneNumber}`;
-      await firebase
-        .auth()
-        .signInWithPhoneNumber(koreaPhoneNumber, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          dispatch({
-            type: IDENTIFY_SUCCESS,
-          });
+      const res = await firebase.auth().signInWithPhoneNumber(koreaPhoneNumber, recaptcha);
+
+      if (res) {
+        setResRecaptcha(res);
+        return dispatch({
+          type: IDENTIFY_SUCCESS,
         });
+      }
     } catch (error) {
       dispatch({
         type: IDENTIFY_FAILURE,
@@ -103,30 +104,30 @@ const IdentifyFormContainer = () => {
 
   /* 페이지 1 - 인증번호 확인 */
   const onSubmitCheckAuthNumber = useCallback(async () => {
-    dispatch({
-      type: NUMBER_VERIFY_REQUEST,
-    });
     try {
-      await window.confirmationResult.confirm(authNumber).then((result) => {
-        const { user } = result;
-        console.log(user);
+      dispatch({
+        type: NUMBER_VERIFY_REQUEST,
+      });
+      const res = await resRecaptcha.confirm(authNumber);
+
+      if (res) {
         // 2페이지 이동
-        dispatch({
+        return dispatch({
           type: NUMBER_VERIFY_SUCCESS,
           data: {
             name: username,
             phoneNumber,
           },
         });
-      });
+      }
     } catch (error) {
       dispatch({
         type: NUMBER_VERIFY_FAILURE,
         error,
       });
-      alert('인증번호가 다릅니다.');
+      alert('올바른 인증번호를 입력해 주세요.');
     }
-  }, [authNumber, dispatch, phoneNumber, username]);
+  }, [authNumber, dispatch, phoneNumber, resRecaptcha, username]);
 
   return (
     <IdentifyForm

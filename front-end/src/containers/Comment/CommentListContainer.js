@@ -10,17 +10,21 @@ import {
   REMOVE_COMMENT_REQUEST,
   REMOVE_REPLY_REQUEST,
 } from '../../modules/feed';
+import { ACCESS_TOKEN } from '../../modules/user';
 
 const CommentListContainer = () => {
   const [moreId, setMoreId] = useState(null);
   const [moreReplyId, setMoreReplyId] = useState(null);
 
   const dispatch = useDispatch();
+
+  const { id: userId } = useSelector((state) => state.user.userInfo);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
   const {
     FeedById: { comments, id: feedId },
     getCommentLoading,
   } = useSelector((state) => state.feed);
-  const { accessToken, id: userId } = useSelector((state) => state.user.userInfo);
 
   const onClickReply = useCallback(
     (index) => () => {

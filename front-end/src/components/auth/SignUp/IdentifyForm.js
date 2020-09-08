@@ -47,7 +47,7 @@ const IdentifyForm = ({
               <InputForm
                 addonAfter={
                   isSubmitted && (
-                    <Button onClick={onClcikAuthNumber}>
+                    <Button loading={identifyLoading} onClick={onClcikAuthNumber}>
                       {!identifyDone ? '인증번호 받기' : '인증번호 재전송'}
                     </Button>
                   )
@@ -92,7 +92,7 @@ const IdentifyForm = ({
           top="5vh"
           bottom="5vh"
           buttonType="submit"
-          loading={identifyLoading || numberVerifyLoading}
+          loading={numberVerifyLoading}
           buttonText="다음 단계로"
           disabled={!(authNumber.toString().length === 6 && username)}
         />

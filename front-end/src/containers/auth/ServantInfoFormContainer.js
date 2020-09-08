@@ -79,14 +79,16 @@ const ServantInfoFormContainer = () => {
     await formData.append('addressDepth2', addressDepth2);
     await formData.append('addressDepth3', addressDepth3);
     await formData.append('addressDepth4', addressDepth4);
-    await formData.append('catName', catName);
-    await formData.append('catFeatures', catFeatures);
-    await formData.append('catKindId', catKindId);
-    await formData.append('catWeight', catWeight);
-    await formData.append('catGender', catGender);
-    await formData.append('catBirthday', catBirthday);
-    await formData.append('catNeutralized', catNeutralized);
-    await formData.append('catProfileImg', catProfileImg);
+    if (isServant) {
+      await formData.append('catName', catName);
+      await formData.append('catFeatures', catFeatures);
+      await formData.append('catKindId', catKindId);
+      await formData.append('catWeight', catWeight);
+      await formData.append('catGender', catGender);
+      await formData.append('catBirthday', catBirthday);
+      await formData.append('catNeutralized', catNeutralized);
+      await formData.append('catProfileImg', catProfileImg);
+    }
 
     return dispatch({
       type: SIGN_UP_REQUEST,

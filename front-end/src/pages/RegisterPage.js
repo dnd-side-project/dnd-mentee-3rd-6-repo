@@ -14,8 +14,8 @@ import ServantInfoAddressFormContainer from '../containers/auth/ServantInfoAddre
 const RegisterPage = () => {
   const { pageIndex } = useSelector((state) => state.auth);
 
-  const lines = ['68px', '88px', null, null, null, null, '128px', null];
-  const highLightTitles = ['우동집', '집사님이', null, null, null, null, '이웃집사들을', null];
+  const lines = ['88px', '88px', null, null, null, null, '128px', null];
+  const highLightTitles = ['우동집에', '집사님이', null, null, null, null, '이웃집사들을', null];
   const titles = [
     '오신걸 환영합니다',
     '누군지 궁금해요!',

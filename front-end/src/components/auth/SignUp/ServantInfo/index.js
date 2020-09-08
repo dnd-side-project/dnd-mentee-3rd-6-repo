@@ -45,7 +45,7 @@ const ServantInfoForm = ({
                   required
                 />
                 {NickNameValidData === null ? null : NickNameValidData ? (
-                  <ErrorMessage>이미 사용중인 닉네임 입니다 (다 지우고 검사하기)</ErrorMessage>
+                  <ErrorMessage>이미 사용중인 닉네임 입니다</ErrorMessage>
                 ) : (
                   <CleanMessage>사용 가능한 닉네임 입니다</CleanMessage>
                 )}
