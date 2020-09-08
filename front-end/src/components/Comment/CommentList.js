@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
 
-import CommentReple from './CommentReple';
-import { CommentItem } from '../Feed/styles';
+import CommentReply from './CommentReply';
+import { CommentItem, MoreGroup } from '../Feed/styles';
 import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
 
 const CommentItemId = ({
@@ -13,6 +13,13 @@ const CommentItemId = ({
   onClickReply,
   onClickLikeReply,
   onClickUnlikeReply,
+  moreId,
+  onClickMore,
+  moreReplyId,
+  onClickMoreReply,
+  onClickRemoveComment,
+  onClickRemoveReply,
+  userId,
 }) => {
   return (
     <>
@@ -23,7 +30,7 @@ const CommentItemId = ({
               <div>
                 <img
                   src={`${
-                    process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL
+                    process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
                   }${comment.author.profileImg}`}
                   alt={comment.author.nickName}
                 />
@@ -33,7 +40,29 @@ const CommentItemId = ({
                 <span>{comment.author.addressName}</span>
               </div>
             </div>
-            <div className="comment-block__like">
+            <MoreGroup comment={comment.id} more={moreId}>
+              <button type="button" onClick={onClickMore(comment.id)}>
+                <MoreOutlined />
+              </button>
+              {comment.id === moreId && (
+                <span className="more-modal">
+                  <ul>
+                    {userId === comment.author.id && (
+                      <li>
+                        <button type="button" onClick={onClickRemoveComment}>
+                          댓글 삭제
+                        </button>
+                      </li>
+                    )}
+                    <li>신고하기</li>
+                  </ul>
+                </span>
+              )}
+            </MoreGroup>
+          </dt>
+          <dd>
+            <div>
+              <span>{comment.content}</span>
               <button
                 type="button"
                 onClick={
@@ -43,28 +72,31 @@ const CommentItemId = ({
                 <LIkeIcon like={comment.isLike} />
               </button>
             </div>
-          </dt>
-          <dd>
-            <div>{comment.content}</div>
             <div>
               <span>{comment.timeDesc}</span>
               <span>{`좋아요 ${comment.numberOfLikes}개`}</span>
               <span>
-                <Button type="button" onClick={onClickReply(comment.id)}>
-                  답글 달기
-                </Button>
+                {userId !== comment.author.id && (
+                  <button type="button" onClick={onClickReply(comment.id)}>
+                    답글 쓰기
+                  </button>
+                )}
               </span>
             </div>
           </dd>
         </dl>
       </CommentItem>
-      {comment.replies.map((reple) => (
-        <CommentReple
-          key={reple.id}
-          reple={reple}
+      {comment.replies.map((reply) => (
+        <CommentReply
+          key={reply.id}
+          reply={reply}
           commentId={comment.id}
           onClickLikeReply={onClickLikeReply}
           onClickUnlikeReply={onClickUnlikeReply}
+          moreReplyId={moreReplyId}
+          onClickMoreReply={onClickMoreReply}
+          onClickRemoveReply={onClickRemoveReply}
+          userId={userId}
         />
       ))}
     </>
@@ -78,6 +110,13 @@ const CommentList = ({
   onClickReply,
   onClickLikeReply,
   onClickUnlikeReply,
+  moreId,
+  onClickMore,
+  moreReplyId,
+  onClickMoreReply,
+  onClickRemoveComment,
+  onClickRemoveReply,
+  userId,
 }) => {
   return (
     <ul>
@@ -90,6 +129,13 @@ const CommentList = ({
           onClickReply={onClickReply}
           onClickLikeReply={onClickLikeReply}
           onClickUnlikeReply={onClickUnlikeReply}
+          moreId={moreId}
+          onClickMore={onClickMore}
+          moreReplyId={moreReplyId}
+          onClickMoreReply={onClickMoreReply}
+          onClickRemoveComment={onClickRemoveComment}
+          onClickRemoveReply={onClickRemoveReply}
+          userId={userId}
         />
       ))}
     </ul>
@@ -114,6 +160,13 @@ CommentItemId.prototype = {
   onClickReply: PropTypes.func.isRequired,
   onClickLikeReply: PropTypes.func.isRequired,
   onClickUnlikeReply: PropTypes.func.isRequired,
+  moreId: PropTypes.number.isRequired,
+  onClickMore: PropTypes.func.isRequired,
+  moreReplyId: PropTypes.number.isRequired,
+  onClickMoreReply: PropTypes.func.isRequired,
+  onClickRemoveComment: PropTypes.func.isRequired,
+  onClickRemoveReply: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };
 
 CommentList.prototype = {
@@ -123,6 +176,13 @@ CommentList.prototype = {
   onClickReply: PropTypes.func.isRequired,
   onClickLikeReply: PropTypes.func.isRequired,
   onClickUnlikeReply: PropTypes.func.isRequired,
+  moreId: PropTypes.number.isRequired,
+  onClickMore: PropTypes.func.isRequired,
+  moreReplyId: PropTypes.number.isRequired,
+  onClickMoreReply: PropTypes.func.isRequired,
+  onClickRemoveComment: PropTypes.func.isRequired,
+  onClickRemoveReply: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };
 
 export default CommentList;

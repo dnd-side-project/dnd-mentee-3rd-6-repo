@@ -58,9 +58,9 @@ function* logIn(action) {
   }
 }
 
-const logOutAPI = (data) => {
-  return axios.post('/auth/sign-out', data);
-};
+// const logOutAPI = (data) => {
+//   return axios.post('/auth/sign-out', data);
+// };
 
 function* logOut(action) {
   try {

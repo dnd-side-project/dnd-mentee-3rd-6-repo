@@ -45,11 +45,11 @@ const Btn = styled(Button)`
   }
 
   &:hover {
-    background: ${pallete.gray[3]};
+    background: ${pallete.primary[2]};
   }
 
   &:focus {
-    background: ${pallete.gray[3]};
+    background: ${pallete.primary[2]};
   }
 
   &:active {

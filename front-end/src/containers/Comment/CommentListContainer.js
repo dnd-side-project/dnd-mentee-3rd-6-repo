@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommentList from '../../components/Comment/CommentList';
 import {
@@ -7,15 +7,20 @@ import {
   LIKE_REPLY_REQUEST,
   UNLIKE_REPLY_REQUEST,
   ON_REPLY,
+  REMOVE_COMMENT_REQUEST,
+  REMOVE_REPLY_REQUEST,
 } from '../../modules/feed';
 
 const CommentListContainer = () => {
+  const [moreId, setMoreId] = useState(null);
+  const [moreReplyId, setMoreReplyId] = useState(null);
+
   const dispatch = useDispatch();
   const {
-    FeedById: { comments },
+    FeedById: { comments, id: feedId },
     getCommentLoading,
   } = useSelector((state) => state.feed);
-  const { accessToken } = useSelector((state) => state.user.userInfo);
+  const { accessToken, id: userId } = useSelector((state) => state.user.userInfo);
 
   const onClickReply = useCallback(
     (index) => () => {
@@ -81,6 +86,51 @@ const CommentListContainer = () => {
     [accessToken, dispatch],
   );
 
+  const onClickMore = useCallback(
+    (id) => () => {
+      setMoreId(id);
+      if (id === moreId) {
+        setMoreId(null);
+      }
+    },
+    [moreId],
+  );
+
+  const onClickMoreReply = useCallback(
+    (id) => () => {
+      setMoreReplyId(id);
+      if (id === moreReplyId) {
+        setMoreReplyId(null);
+      }
+    },
+    [moreReplyId],
+  );
+
+  const onClickRemoveComment = useCallback(() => {
+    dispatch({
+      type: REMOVE_COMMENT_REQUEST,
+      data: {
+        feedId,
+        commentId: moreId,
+        accessToken,
+      },
+    });
+  }, [accessToken, dispatch, feedId, moreId]);
+
+  const onClickRemoveReply = useCallback(
+    (id) => () => {
+      dispatch({
+        type: REMOVE_REPLY_REQUEST,
+        data: {
+          commentId: id,
+          replyId: moreReplyId,
+          accessToken,
+        },
+      });
+    },
+    [accessToken, dispatch, moreReplyId],
+  );
+
   if (getCommentLoading) {
     return <h1>로딩 중</h1>;
   }
@@ -93,6 +143,13 @@ const CommentListContainer = () => {
       onClickReply={onClickReply}
       onClickLikeReply={onClickLikeReply}
       onClickUnlikeReply={onClickUnlikeReply}
+      moreId={moreId}
+      onClickMore={onClickMore}
+      moreReplyId={moreReplyId}
+      onClickMoreReply={onClickMoreReply}
+      onClickRemoveComment={onClickRemoveComment}
+      onClickRemoveReply={onClickRemoveReply}
+      userId={userId}
     />
   );
 };
