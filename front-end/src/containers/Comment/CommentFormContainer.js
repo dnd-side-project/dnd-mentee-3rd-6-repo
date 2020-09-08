@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommentForm from '../../components/Comment/CommentForm';
 import useInput from '../../hooks/useInput';
 import { ADD_COMMENT_REQUEST, ADD_REPLY_COMMENT_REQUEST, OFF_REPLY } from '../../modules/feed';
+import { ACCESS_TOKEN } from '../../modules/user';
 
 const CommentFormContainer = () => {
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
   const [user, setUser] = useState('');
 
   const dispatch = useDispatch();
-  const { profileImgUrl, nickName, accessToken } = useSelector((state) => state.user.userInfo);
+  const { profileImgUrl, nickName } = useSelector((state) => state.user.userInfo);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
   const {
     FeedById: { id, comments },
     commentId,

@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from '../../components/auth/LoginForm';
 import useInput from '../../hooks/useInput';
-import { LOG_IN_REQUEST } from '../../modules/user';
+import { LOG_IN_REQUEST, ACCESS_TOKEN, GO_TO_FEED } from '../../modules/user';
 
 const LoginFormContainer = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
   const dispatch = useDispatch();
   const { logInLoading, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
@@ -13,6 +15,14 @@ const LoginFormContainer = () => {
 
   const [emailValid, setEmailValid] = useState('');
   const [passwordValid, setPasswordValid] = useState('');
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch({
+        type: GO_TO_FEED,
+      });
+    }
+  }, [accessToken, dispatch]);
 
   useEffect(() => {
     setEmailValid(logInError?.message === 'Email이 존재하지 않습니다.');

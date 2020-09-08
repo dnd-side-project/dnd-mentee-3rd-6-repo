@@ -9,10 +9,11 @@ import {
   GET_FEED_LIST_2_REQUEST,
   GET_FEED_LIST_3_REQUEST,
 } from '../../modules/feed';
+import { ACCESS_TOKEN } from '../../modules/user';
 
 const FeedHeadContainer = () => {
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((state) => state.user.userInfo);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
   const {
     Feeds,
     feedTags,

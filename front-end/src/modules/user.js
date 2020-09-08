@@ -1,4 +1,4 @@
-import { delay, put, takeLatest, getContext, all, fork, call } from 'redux-saga/effects';
+import { put, takeLatest, getContext, all, fork, call } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
 import { RESET_AUTH_INFO } from './auth';
@@ -16,6 +16,9 @@ export const initialSate = {
   signUpLoading: false, // 회원가입 시도 중
   signUpDone: false,
   signUpError: null,
+  loadUserInfoLoading: false, // 유저 정보 가져오기
+  loadUserInfoDone: false,
+  loadUserInfoError: null,
 };
 
 /* 액션 */
@@ -24,15 +27,18 @@ export const LOG_IN_REQUEST = 'user/LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'user/LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'user/LOG_IN_FAILURE';
 
-export const LOG_OUT_REQUEST = 'user/LOG_OUT_REQUEST';
-export const LOG_OUT_SUCCESS = 'user/LOG_OUT_SUCCESS';
-export const LOG_OUT_FAILURE = 'user/LOG_OUT_FAILURE';
+export const LOG_OUT = 'user/LOG_OUT';
 
 export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
+export const LOAD_USER_INFO_REQUEST = 'user/LOAD_USER_INFO_REQUEST';
+export const LOAD_USER_INFO_SUCCESS = 'user/LOAD_USER_INFO_SUCCESS';
+export const LOAD_USER_INFO_FAILURE = 'user/LOAD_USER_INFO_FAILURE';
+
 export const GO_TO_FEED = 'user/GO_TO_FEED';
+export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 
 /* 사가 */
 
@@ -53,25 +59,6 @@ function* logIn(action) {
   } catch (error) {
     yield put({
       type: LOG_IN_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
-// const logOutAPI = (data) => {
-//   return axios.post('/auth/sign-out', data);
-// };
-
-function* logOut(action) {
-  try {
-    // const result = yield call(logOutAPI, action.data);
-    yield delay(1000);
-    yield put({
-      type: LOG_OUT_SUCCESS,
-    });
-  } catch (error) {
-    yield put({
-      type: LOG_OUT_FAILURE,
       error: error.response.data,
     });
   }
@@ -103,6 +90,28 @@ function* signUp(action) {
   }
 }
 
+const loadUserInfoAPI = (data) => {
+  const headers = { Authorization: `Bearer ${data}` };
+
+  return axios.get('/auth/me', { headers });
+};
+
+function* loadUserInfo(action) {
+  try {
+    const result = yield call(loadUserInfoAPI, action.data);
+    yield put({
+      type: LOAD_USER_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_USER_INFO_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 function* goTo() {
   const history = yield getContext('history');
   history.push('/feed');
@@ -112,12 +121,12 @@ function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
-function* watchLogOut() {
-  yield takeLatest(LOG_OUT_REQUEST, logOut);
-}
-
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
+}
+
+function* watchUserInfo() {
+  yield takeLatest(LOAD_USER_INFO_REQUEST, loadUserInfo);
 }
 
 function* watchGoTo() {
@@ -125,7 +134,7 @@ function* watchGoTo() {
 }
 
 export function* userSaga() {
-  yield all([fork(watchGoTo), fork(watchLogIn), fork(watchLogOut), fork(watchSignUp)]);
+  yield all([fork(watchGoTo), fork(watchLogIn), fork(watchSignUp), fork(watchUserInfo)]);
 }
 
 /* 리듀서 */
@@ -140,7 +149,7 @@ const user = (state = initialSate, action) => {
         draft.logInError = null;
         break;
       case LOG_IN_SUCCESS:
-        draft.userInfo = action.data;
+        localStorage.setItem(ACCESS_TOKEN, action.data.accessToken);
         draft.logInLoading = false;
         draft.logInDone = true;
         break;
@@ -149,19 +158,11 @@ const user = (state = initialSate, action) => {
         draft.logInError = action.error;
         break;
       /* 로그아웃 */
-      case LOG_OUT_REQUEST:
-        draft.logOutLoading = true;
-        draft.logOutDone = false;
-        draft.logOutError = null;
-        break;
-      case LOG_OUT_SUCCESS:
+      case LOG_OUT:
+        localStorage.setItem(ACCESS_TOKEN, null);
         draft.userInfo = null;
         draft.logOutLoading = false;
         draft.logOutDone = true;
-        break;
-      case LOG_OUT_FAILURE:
-        draft.logOutLoading = false;
-        draft.logOutError = action.error;
         break;
       /* 최종 회원가입 */
       case SIGN_UP_REQUEST:
@@ -170,14 +171,28 @@ const user = (state = initialSate, action) => {
         draft.signUpError = null;
         break;
       case SIGN_UP_SUCCESS:
-        draft.userInfo = action.data;
+        localStorage.setItem(ACCESS_TOKEN, action.data.accessToken);
         draft.signUpLoading = false;
         draft.signUpDone = true;
-        draft.userInfoAPIPostData = null;
         break;
       case SIGN_UP_FAILURE:
         draft.signUpLoading = false;
         draft.signUpError = action.error;
+        break;
+      /* 유저 정보 가져오기 */
+      case LOAD_USER_INFO_REQUEST:
+        draft.loadUserInfoLoading = true;
+        draft.loadUserInfoDone = false;
+        draft.loadUserInfoError = null;
+        break;
+      case LOAD_USER_INFO_SUCCESS:
+        draft.userInfo = action.data;
+        draft.loadUserInfoLoading = false;
+        draft.loadUserInfoDone = true;
+        break;
+      case LOAD_USER_INFO_FAILURE:
+        draft.loadUserInfoLoading = false;
+        draft.loadUserInfoError = action.error;
         break;
       default:
         break;

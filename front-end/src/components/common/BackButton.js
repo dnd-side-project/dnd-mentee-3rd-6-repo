@@ -33,7 +33,7 @@ const BackButton = ({ history, page }) => {
   /* 1. 회원가입 */
   const onClickRegister = useCallback(() => {
     if (registerIndex <= 1) {
-      return history.push('/');
+      return history.replace('/');
     }
     if (!isServant && registerIndex === 7) {
       return dispatch({
@@ -56,7 +56,7 @@ const BackButton = ({ history, page }) => {
   /* 3. 글쓰기 */
   const onClickWrite = useCallback(() => {
     if (writeIndex <= 1) {
-      return history.push('/feed');
+      return history.replace('/feed');
     }
 
     return dispatch({

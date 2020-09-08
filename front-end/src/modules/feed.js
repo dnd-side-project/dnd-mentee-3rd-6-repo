@@ -134,7 +134,7 @@ export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 
 function* goBackLoginPage() {
   const history = yield getContext('history');
-  history.push('/');
+  history.replace('/');
 }
 
 const getFeedTagAPI = () => {
@@ -206,6 +206,7 @@ const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
     pageNumber: pageNumber || 0,
     pageSize: 10,
   };
+
   return axios.get('/feeds', { params, headers });
 };
 
@@ -242,6 +243,7 @@ const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
     pageNumber: pageNumber || 0,
     pageSize: 10,
   };
+
   return axios.get('/feeds', { params, headers });
 };
 
@@ -394,7 +396,6 @@ const likeReplyAPI = ({ replyId, accessToken }) => {
 };
 
 function* likeReply(action) {
-  console.log(action.data);
   try {
     yield call(likeReplyAPI, action.data);
     yield put({
