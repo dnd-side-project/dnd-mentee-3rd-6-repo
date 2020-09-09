@@ -6,8 +6,7 @@ import {
   GO_BACK_LOG_IN_PAGE,
   GET_FEED_TAG_REQUEST,
   GET_FEED_LIST_1_REQUEST,
-  GET_FEED_LIST_2_REQUEST,
-  GET_FEED_LIST_3_REQUEST,
+  getFeedListCreateAction,
 } from '../../modules/feed';
 import { ACCESS_TOKEN } from '../../modules/user';
 
@@ -64,32 +63,7 @@ const FeedHeadContainer = () => {
     (index) => () => {
       if (index !== checkFilterType) {
         setCheckFilterType(index);
-        index === 1 &&
-          dispatch({
-            type: GET_FEED_LIST_1_REQUEST,
-            data: {
-              filterId: index,
-              tagId: checkFeedTag,
-              accessToken,
-            },
-          });
-        index === 2 &&
-          dispatch({
-            type: GET_FEED_LIST_2_REQUEST,
-            data: {
-              filterId: index,
-              sortId: checkSortType,
-              accessToken,
-            },
-          });
-        index === 3 &&
-          dispatch({
-            type: GET_FEED_LIST_3_REQUEST,
-            data: {
-              filterId: index,
-              accessToken,
-            },
-          });
+        dispatch(getFeedListCreateAction(accessToken, index, checkFeedTag, checkSortType));
       }
     },
     [accessToken, checkFeedTag, checkFilterType, checkSortType, dispatch],
@@ -101,25 +75,11 @@ const FeedHeadContainer = () => {
       if (checkFilterType === 1) {
         setCheckFeedTag(index);
         index !== checkFeedTag &&
-          dispatch({
-            type: GET_FEED_LIST_1_REQUEST,
-            data: {
-              filterId: checkFilterType,
-              tagId: index,
-              accessToken,
-            },
-          });
+          dispatch(getFeedListCreateAction(accessToken, checkFilterType, index));
       } else {
         setCheckSortType(index);
         index !== checkSortType &&
-          dispatch({
-            type: GET_FEED_LIST_2_REQUEST,
-            data: {
-              filterId: checkFilterType,
-              sortId: index,
-              accessToken,
-            },
-          });
+          dispatch(getFeedListCreateAction(accessToken, checkFilterType, null, index));
       }
     },
     [accessToken, checkFeedTag, checkFilterType, checkSortType, dispatch],
