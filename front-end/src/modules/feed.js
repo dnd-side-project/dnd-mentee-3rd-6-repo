@@ -1,7 +1,7 @@
 import { put, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
-import { GO_BACK_FEED_PAGE } from './write';
+import { GO_BACK_FEED_PAGE, RESET_WRITE_PAGE } from './write';
 
 export const initialSate = {
   pageIndex: 1,
@@ -132,6 +132,25 @@ export const GO_BACK_LOG_IN_PAGE = 'GO_BACK_LOG_IN_PAGE';
 export const CURRENT_FEED_PAGE = 'feed/CURRENT_FEED_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 
+export const getFeedListCreateAction = (accessToken, filterId, tagId, sortId, pageNumber) => {
+  const filterTypeActionList = [
+    GET_FEED_LIST_1_REQUEST,
+    GET_FEED_LIST_2_REQUEST,
+    GET_FEED_LIST_3_REQUEST,
+  ];
+
+  return {
+    type: filterTypeActionList[filterId - 1],
+    data: {
+      accessToken,
+      filterId,
+      tagId: filterId === 1 ? tagId : null,
+      sortId: filterId === 2 ? sortId : null,
+      pageNumber,
+    },
+  };
+};
+
 function* goBackLoginPage() {
   const history = yield getContext('history');
   history.replace('/');
@@ -157,7 +176,7 @@ function* getFeedTag(action) {
   }
 }
 
-const getFeedList1API = ({ filterId, tagId, pageNumber, accessToken }) => {
+const getFeedList1API = ({ accessToken, filterId, tagId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
 
@@ -174,10 +193,20 @@ const getFeedList1API = ({ filterId, tagId, pageNumber, accessToken }) => {
 function* getFeedList1(action) {
   try {
     const result = yield call(getFeedList1API, action.data);
-    yield put({
-      type: GET_FEED_LIST_1_SUCCESS,
-      data: result.data,
-    });
+    if (action.data.pageNumber) {
+      yield put({
+        type: GET_FEED_LIST_1_SUCCESS,
+        data: {
+          contents: result.data.contents,
+          pageNumber: action.data.pageNumber,
+        },
+      });
+    } else {
+      yield put({
+        type: GET_FEED_LIST_1_SUCCESS,
+        data: result.data,
+      });
+    }
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -195,7 +224,7 @@ function* getFeedList1(action) {
   }
 }
 
-const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
+const getFeedList2API = ({ accessToken, filterId, sortId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
   const sortList = ['POPULAR', 'LATEST'];
@@ -213,10 +242,21 @@ const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
 function* getFeedList2(action) {
   try {
     const result = yield call(getFeedList2API, action.data);
-    yield put({
-      type: GET_FEED_LIST_2_SUCCESS,
-      data: result.data,
-    });
+
+    action.data.pageNumber
+      ? yield put({
+          type: GET_FEED_LIST_2_SUCCESS,
+          data: {
+            contents: result.data.contents,
+            isLast: result.data.isLast,
+            pageNumber: action.data.pageNumber,
+          },
+        })
+      : yield put({
+          type: GET_FEED_LIST_2_SUCCESS,
+          data: result.data,
+        });
+
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -234,7 +274,7 @@ function* getFeedList2(action) {
   }
 }
 
-const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
+const getFeedList3API = ({ accessToken, filterId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
 
@@ -250,10 +290,22 @@ const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
 function* getFeedList3(action) {
   try {
     const result = yield call(getFeedList3API, action.data);
-    yield put({
-      type: GET_FEED_LIST_3_SUCCESS,
-      data: result.data,
-    });
+
+    if (action.data.pageNumber) {
+      yield put({
+        type: GET_FEED_LIST_3_SUCCESS,
+        data: {
+          contents: result.data.contents,
+          pageNumber: action.data.pageNumber,
+        },
+      });
+    } else {
+      yield put({
+        type: GET_FEED_LIST_3_SUCCESS,
+        data: result.data,
+      });
+    }
+
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -457,6 +509,9 @@ function* addFeed(action) {
     yield put({
       type: GO_BACK_FEED_PAGE,
     });
+    yield put({
+      type: RESET_WRITE_PAGE,
+    });
   } catch (error) {
     yield put({
       type: ADD_FEED_FAILURE,
@@ -575,15 +630,15 @@ function* watchGetFeedTag() {
 }
 
 function* watchGetFeedList1() {
-  yield throttle(5000, GET_FEED_LIST_1_REQUEST, getFeedList1);
+  yield takeLatest(GET_FEED_LIST_1_REQUEST, getFeedList1);
 }
 
 function* watchGetFeedList2() {
-  yield throttle(5000, GET_FEED_LIST_2_REQUEST, getFeedList2);
+  yield throttle(3000, GET_FEED_LIST_2_REQUEST, getFeedList2);
 }
 
 function* watchGetFeedList3() {
-  yield throttle(5000, GET_FEED_LIST_3_REQUEST, getFeedList3);
+  yield takeLatest(GET_FEED_LIST_3_REQUEST, getFeedList3);
 }
 
 function* watchLikeFeed() {
@@ -681,11 +736,14 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_1_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_1_SUCCESS: {
+        action.data.pageNumber
+          ? draft.Feeds.contents.push(action.data.contents)
+          : (draft.Feeds = action.data);
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_1_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
@@ -696,11 +754,15 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_2_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_2_SUCCESS: {
+        action.data.pageNumber
+          ? action.data.contents.forEach((v) => draft.Feeds.contents.push(v))
+          : (draft.Feeds = action.data);
+        draft.Feeds.isLast = action.data.isLast;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_2_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
@@ -711,11 +773,14 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_3_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_3_SUCCESS: {
+        action.data.pageNumber
+          ? draft.Feeds.contents.push(action.data.contents)
+          : (draft.Feeds = action.data);
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_3_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;

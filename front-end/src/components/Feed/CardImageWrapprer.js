@@ -28,6 +28,10 @@ export const CardImage = styled.div`
   }
 
   .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 100vw;
     height: auto;
   }
@@ -67,8 +71,8 @@ export const CardImage = styled.div`
     align-items: center;
 
     img {
-      width: auto;
-      height: ${({ value }) => `${value}px`};
+      width: ${({ value }) => `${value}px`};
+      height: auto;
     }
   }
 `;

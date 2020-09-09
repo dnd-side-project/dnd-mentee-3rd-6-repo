@@ -107,4 +107,4 @@ FeedCardList.prototype = {
   isLast: PropTypes.bool.isRequired,
 };
 
-export default FeedCardList;
+export default React.memo(FeedCardList);
