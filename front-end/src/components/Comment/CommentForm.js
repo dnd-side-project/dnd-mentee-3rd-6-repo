@@ -63,4 +63,4 @@ CommentForm.prototype = {
   onClickCancelReply: PropTypes.func.isRequired,
 };
 
-export default CommentForm;
+export default React.memo(CommentForm);

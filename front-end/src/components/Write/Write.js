@@ -154,4 +154,4 @@ Write.prototype = {
   click: PropTypes.bool.isRequired,
 };
 
-export default Write;
+export default React.memo(Write);

@@ -20,6 +20,8 @@ const CommentItemId = ({
   onClickRemoveComment,
   onClickRemoveReply,
   userId,
+  replyScrollRef,
+  commentHeightId,
 }) => {
   return (
     <>
@@ -47,14 +49,15 @@ const CommentItemId = ({
               {comment.id === moreId && (
                 <span className="more-modal">
                   <ul>
-                    {userId === comment.author.id && (
+                    {userId === comment.author.id ? (
                       <li>
                         <button type="button" onClick={onClickRemoveComment}>
                           댓글 삭제
                         </button>
                       </li>
+                    ) : (
+                      <li>신고하기</li>
                     )}
-                    <li>신고하기</li>
                   </ul>
                 </span>
               )}
@@ -97,6 +100,8 @@ const CommentItemId = ({
           onClickMoreReply={onClickMoreReply}
           onClickRemoveReply={onClickRemoveReply}
           userId={userId}
+          replyScrollRef={replyScrollRef}
+          commentHeightId={commentHeightId}
         />
       ))}
     </>
@@ -117,9 +122,12 @@ const CommentList = ({
   onClickRemoveComment,
   onClickRemoveReply,
   userId,
+  commentScrollRef,
+  replyScrollRef,
+  commentHeightId,
 }) => {
   return (
-    <ul>
+    <ul ref={commentScrollRef}>
       {comments.map((comment) => (
         <CommentItemId
           key={comment.id}
@@ -136,6 +144,8 @@ const CommentList = ({
           onClickRemoveComment={onClickRemoveComment}
           onClickRemoveReply={onClickRemoveReply}
           userId={userId}
+          replyScrollRef={replyScrollRef}
+          commentHeightId={commentHeightId}
         />
       ))}
     </ul>
@@ -167,6 +177,8 @@ CommentItemId.prototype = {
   onClickRemoveComment: PropTypes.func.isRequired,
   onClickRemoveReply: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
+  replyScrollRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  commentHeightId: PropTypes.number.isRequired,
 };
 
 CommentList.prototype = {
@@ -183,6 +195,9 @@ CommentList.prototype = {
   onClickRemoveComment: PropTypes.func.isRequired,
   onClickRemoveReply: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
+  commentScrollRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  replyScrollRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  commentHeightId: PropTypes.number.isRequired,
 };
 
-export default CommentList;
+export default React.memo(CommentList);

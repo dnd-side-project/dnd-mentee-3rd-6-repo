@@ -14,7 +14,6 @@ import {
 import LIkeIcon from '../../lib/style/feedIcon/LIkeIcon';
 import ComentIcon from '../../lib/style/feedIcon/ComentIcon';
 import SaveIcon from '../../lib/style/feedIcon/SaveIcon';
-import HighLight from '../common/HighLight';
 import CardImageWrapprer from './CardImageWrapprer';
 
 const FeedCardList = ({ contents, onClickLike, onClickUnlike, onClickComment, isLast }) => {
@@ -74,16 +73,7 @@ const FeedCardList = ({ contents, onClickLike, onClickUnlike, onClickComment, is
           </CardItem>
         ))}
       </CardList>
-      {isLast && (
-        <LastFeed>
-          <HighLight line="120px">
-            더 이상 내용이 <span className="line" />
-          </HighLight>
-          없어요
-          <br />
-          (｡•́︿•̀｡)
-        </LastFeed>
-      )}
+      {isLast && <LastFeed>아직 올라온 글이 없다냥 ㅠ_ㅠ</LastFeed>}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { put, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
+import { put, takeLatest, all, fork, call, getContext } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
 import { GO_BACK_FEED_PAGE, RESET_WRITE_PAGE } from './write';
@@ -20,7 +20,9 @@ export const initialSate = {
   feedTags: null,
   Feeds: {},
   FeedById: {},
+  pageNumber: 1,
   commentId: null,
+  scrollLocation: 0,
   getFeedTagLoading: false, // 피드 태그 불러오기
   getFeedTagDone: false,
   getFeedTagError: null,
@@ -54,6 +56,9 @@ export const initialSate = {
   addCommentLoading: false, // 피드 댓글 작성
   addCommentDone: false,
   addCommentError: null,
+  addReplyCommentLoading: false, // 피드 대댓글 작성
+  addReplyCommentDone: false,
+  addReplyCommentError: null,
   removeCommentLoading: false, // 댓글 삭제
   removeCommentDone: false,
   removeCommentError: null,
@@ -132,7 +137,14 @@ export const GO_BACK_LOG_IN_PAGE = 'GO_BACK_LOG_IN_PAGE';
 export const CURRENT_FEED_PAGE = 'feed/CURRENT_FEED_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 
-export const getFeedListCreateAction = (accessToken, filterId, tagId, sortId, pageNumber) => {
+export const getFeedListCreateAction = (
+  accessToken,
+  filterId,
+  tagId,
+  sortId,
+  pageNumber,
+  scrollLocation,
+) => {
   const filterTypeActionList = [
     GET_FEED_LIST_1_REQUEST,
     GET_FEED_LIST_2_REQUEST,
@@ -147,6 +159,7 @@ export const getFeedListCreateAction = (accessToken, filterId, tagId, sortId, pa
       tagId: filterId === 1 ? tagId : null,
       sortId: filterId === 2 ? sortId : null,
       pageNumber,
+      scrollLocation,
     },
   };
 };
@@ -193,20 +206,20 @@ const getFeedList1API = ({ accessToken, filterId, tagId, pageNumber }) => {
 function* getFeedList1(action) {
   try {
     const result = yield call(getFeedList1API, action.data);
-    if (action.data.pageNumber) {
-      yield put({
-        type: GET_FEED_LIST_1_SUCCESS,
-        data: {
-          contents: result.data.contents,
-          pageNumber: action.data.pageNumber,
-        },
-      });
-    } else {
-      yield put({
-        type: GET_FEED_LIST_1_SUCCESS,
-        data: result.data,
-      });
-    }
+    action.data.pageNumber
+      ? yield put({
+          type: GET_FEED_LIST_1_SUCCESS,
+          data: {
+            contents: result.data.contents,
+            isLast: result.data.isLast,
+            pageNumber: action.data.pageNumber,
+            scrollLocation: action.data.scrollLocation,
+          },
+        })
+      : yield put({
+          type: GET_FEED_LIST_1_SUCCESS,
+          data: result.data,
+        });
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -250,6 +263,7 @@ function* getFeedList2(action) {
             contents: result.data.contents,
             isLast: result.data.isLast,
             pageNumber: action.data.pageNumber,
+            scrollLocation: action.data.scrollLocation,
           },
         })
       : yield put({
@@ -291,20 +305,20 @@ function* getFeedList3(action) {
   try {
     const result = yield call(getFeedList3API, action.data);
 
-    if (action.data.pageNumber) {
-      yield put({
-        type: GET_FEED_LIST_3_SUCCESS,
-        data: {
-          contents: result.data.contents,
-          pageNumber: action.data.pageNumber,
-        },
-      });
-    } else {
-      yield put({
-        type: GET_FEED_LIST_3_SUCCESS,
-        data: result.data,
-      });
-    }
+    action.data.pageNumber
+      ? yield put({
+          type: GET_FEED_LIST_3_SUCCESS,
+          data: {
+            contents: result.data.contents,
+            isLast: result.data.isLast,
+            pageNumber: action.data.pageNumber,
+            scrollLocation: action.data.scrollLocation,
+          },
+        })
+      : yield put({
+          type: GET_FEED_LIST_3_SUCCESS,
+          data: result.data,
+        });
 
     yield put({
       type: CURRENT_FEED_PAGE,
@@ -336,6 +350,7 @@ function* getComment(action) {
       data: {
         FeedById: result.data,
         feedId: action.data.feedId,
+        scrollLocation: action.data.scrollLocation,
       },
     });
   } catch (error) {
@@ -634,7 +649,7 @@ function* watchGetFeedList1() {
 }
 
 function* watchGetFeedList2() {
-  yield throttle(3000, GET_FEED_LIST_2_REQUEST, getFeedList2);
+  yield takeLatest(GET_FEED_LIST_2_REQUEST, getFeedList2);
 }
 
 function* watchGetFeedList3() {
@@ -732,14 +747,20 @@ const feed = (state = initialSate, action) => {
         break;
       /* 피드 리스트(우리 동네) 가져오기 */
       case GET_FEED_LIST_1_REQUEST:
-        draft.getFeedListLoading = true;
+        draft.getFeedListLoading = !action.data.pageNumber;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_1_SUCCESS: {
-        action.data.pageNumber
-          ? draft.Feeds.contents.push(action.data.contents)
-          : (draft.Feeds = action.data);
+        if (action.data.pageNumber) {
+          action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
+          draft.pageNumber += 1;
+        } else {
+          draft.Feeds = action.data;
+          draft.pageNumber = 1;
+        }
+        draft.Feeds.isLast = action.data.isLast;
+        draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
@@ -750,15 +771,20 @@ const feed = (state = initialSate, action) => {
         break;
       /* 피드 리스트(전체) 가져오기 */
       case GET_FEED_LIST_2_REQUEST:
-        draft.getFeedListLoading = true;
+        draft.getFeedListLoading = !action.data.pageNumber;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_2_SUCCESS: {
-        action.data.pageNumber
-          ? action.data.contents.forEach((v) => draft.Feeds.contents.push(v))
-          : (draft.Feeds = action.data);
+        if (action.data.pageNumber) {
+          action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
+          draft.pageNumber += 1;
+        } else {
+          draft.Feeds = action.data;
+          draft.pageNumber = 1;
+        }
         draft.Feeds.isLast = action.data.isLast;
+        draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
@@ -769,14 +795,20 @@ const feed = (state = initialSate, action) => {
         break;
       /* 피드 리스트(내 친구) 가져오기 */
       case GET_FEED_LIST_3_REQUEST:
-        draft.getFeedListLoading = true;
+        draft.getFeedListLoading = !action.data.pageNumber;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_3_SUCCESS: {
-        action.data.pageNumber
-          ? draft.Feeds.contents.push(action.data.contents)
-          : (draft.Feeds = action.data);
+        if (action.data.pageNumber) {
+          action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
+          draft.pageNumber += 1;
+        } else {
+          draft.Feeds = action.data;
+          draft.pageNumber = 1;
+        }
+        draft.Feeds.isLast = action.data.isLast;
+        draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
@@ -793,6 +825,7 @@ const feed = (state = initialSate, action) => {
         break;
       case GET_COMMENT_SUCCESS:
         draft.FeedById = action.data.FeedById;
+        draft.scrollLocation = action.data.scrollLocation;
         draft.pageIndex = 4;
         draft.getCommentLoading = false;
         draft.getCommentDone = true;
