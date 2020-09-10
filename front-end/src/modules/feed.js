@@ -1,7 +1,7 @@
 import { put, takeLatest, throttle, all, fork, call, getContext } from 'redux-saga/effects';
 import axios from 'axios';
 import produce from 'immer';
-import { GO_BACK_FEED_PAGE } from './write';
+import { GO_BACK_FEED_PAGE, RESET_WRITE_PAGE } from './write';
 
 export const initialSate = {
   pageIndex: 1,
@@ -54,6 +54,12 @@ export const initialSate = {
   addCommentLoading: false, // 피드 댓글 작성
   addCommentDone: false,
   addCommentError: null,
+  removeCommentLoading: false, // 댓글 삭제
+  removeCommentDone: false,
+  removeCommentError: null,
+  removeReplyLoading: false, // 대댓글 삭제
+  removeReplyDone: false,
+  removeReplyError: null,
 };
 
 export const GET_FEED_TAG_REQUEST = 'feed/GET_FEED_TAG_REQUEST';
@@ -108,6 +114,14 @@ export const ADD_COMMENT_REQUEST = 'feed/ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'feed/ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'feed/ADD_COMMENT_FAILURE';
 
+export const REMOVE_COMMENT_REQUEST = 'feed/REMOVE_COMMENT_REQUEST';
+export const REMOVE_COMMENT_SUCCESS = 'feed/REMOVE_COMMENT_SUCCESS';
+export const REMOVE_COMMENT_FAILURE = 'feed/REMOVE_COMMENT_FAILURE';
+
+export const REMOVE_REPLY_REQUEST = 'feed/REMOVE_REPLY_REQUEST';
+export const REMOVE_REPLY_SUCCESS = 'feed/REMOVE_REPLY_SUCCESS';
+export const REMOVE_REPLY_FAILURE = 'feed/REMOVE_REPLY_FAILURE';
+
 export const ADD_REPLY_COMMENT_REQUEST = 'feed/ADD_REPLY_COMMENT_REQUEST';
 export const ADD_REPLY_COMMENT_SUCCESS = 'feed/ADD_REPLY_COMMENT_SUCCESS';
 export const ADD_REPLY_COMMENT_FAILURE = 'feed/ADD_REPLY_COMMENT_FAILURE';
@@ -118,9 +132,28 @@ export const GO_BACK_LOG_IN_PAGE = 'GO_BACK_LOG_IN_PAGE';
 export const CURRENT_FEED_PAGE = 'feed/CURRENT_FEED_PAGE';
 export const PREV_FEED_PAGE = 'feed/PREV_FEED_PAGE';
 
+export const getFeedListCreateAction = (accessToken, filterId, tagId, sortId, pageNumber) => {
+  const filterTypeActionList = [
+    GET_FEED_LIST_1_REQUEST,
+    GET_FEED_LIST_2_REQUEST,
+    GET_FEED_LIST_3_REQUEST,
+  ];
+
+  return {
+    type: filterTypeActionList[filterId - 1],
+    data: {
+      accessToken,
+      filterId,
+      tagId: filterId === 1 ? tagId : null,
+      sortId: filterId === 2 ? sortId : null,
+      pageNumber,
+    },
+  };
+};
+
 function* goBackLoginPage() {
   const history = yield getContext('history');
-  history.push('/');
+  history.replace('/');
 }
 
 const getFeedTagAPI = () => {
@@ -143,7 +176,7 @@ function* getFeedTag(action) {
   }
 }
 
-const getFeedList1API = ({ filterId, tagId, pageNumber, accessToken }) => {
+const getFeedList1API = ({ accessToken, filterId, tagId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
 
@@ -160,10 +193,20 @@ const getFeedList1API = ({ filterId, tagId, pageNumber, accessToken }) => {
 function* getFeedList1(action) {
   try {
     const result = yield call(getFeedList1API, action.data);
-    yield put({
-      type: GET_FEED_LIST_1_SUCCESS,
-      data: result.data,
-    });
+    if (action.data.pageNumber) {
+      yield put({
+        type: GET_FEED_LIST_1_SUCCESS,
+        data: {
+          contents: result.data.contents,
+          pageNumber: action.data.pageNumber,
+        },
+      });
+    } else {
+      yield put({
+        type: GET_FEED_LIST_1_SUCCESS,
+        data: result.data,
+      });
+    }
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -181,7 +224,7 @@ function* getFeedList1(action) {
   }
 }
 
-const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
+const getFeedList2API = ({ accessToken, filterId, sortId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
   const sortList = ['POPULAR', 'LATEST'];
@@ -192,16 +235,28 @@ const getFeedList2API = ({ filterId, sortId, pageNumber, accessToken }) => {
     pageNumber: pageNumber || 0,
     pageSize: 10,
   };
+
   return axios.get('/feeds', { params, headers });
 };
 
 function* getFeedList2(action) {
   try {
     const result = yield call(getFeedList2API, action.data);
-    yield put({
-      type: GET_FEED_LIST_2_SUCCESS,
-      data: result.data,
-    });
+
+    action.data.pageNumber
+      ? yield put({
+          type: GET_FEED_LIST_2_SUCCESS,
+          data: {
+            contents: result.data.contents,
+            isLast: result.data.isLast,
+            pageNumber: action.data.pageNumber,
+          },
+        })
+      : yield put({
+          type: GET_FEED_LIST_2_SUCCESS,
+          data: result.data,
+        });
+
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -219,7 +274,7 @@ function* getFeedList2(action) {
   }
 }
 
-const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
+const getFeedList3API = ({ accessToken, filterId, pageNumber }) => {
   const headers = { Authorization: `Bearer ${accessToken}` };
   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
 
@@ -228,16 +283,29 @@ const getFeedList3API = ({ filterId, pageNumber, accessToken }) => {
     pageNumber: pageNumber || 0,
     pageSize: 10,
   };
+
   return axios.get('/feeds', { params, headers });
 };
 
 function* getFeedList3(action) {
   try {
     const result = yield call(getFeedList3API, action.data);
-    yield put({
-      type: GET_FEED_LIST_3_SUCCESS,
-      data: result.data,
-    });
+
+    if (action.data.pageNumber) {
+      yield put({
+        type: GET_FEED_LIST_3_SUCCESS,
+        data: {
+          contents: result.data.contents,
+          pageNumber: action.data.pageNumber,
+        },
+      });
+    } else {
+      yield put({
+        type: GET_FEED_LIST_3_SUCCESS,
+        data: result.data,
+      });
+    }
+
     yield put({
       type: CURRENT_FEED_PAGE,
       data: {
@@ -380,7 +448,6 @@ const likeReplyAPI = ({ replyId, accessToken }) => {
 };
 
 function* likeReply(action) {
-  console.log(action.data);
   try {
     yield call(likeReplyAPI, action.data);
     yield put({
@@ -441,6 +508,9 @@ function* addFeed(action) {
     });
     yield put({
       type: GO_BACK_FEED_PAGE,
+    });
+    yield put({
+      type: RESET_WRITE_PAGE,
     });
   } catch (error) {
     yield put({
@@ -503,6 +573,54 @@ function* addReplyComment(action) {
   }
 }
 
+const removeCommentAPI = ({ commentId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+
+  return axios.delete(`/feed-comments/${commentId}`, { headers });
+};
+
+function* removeComment(action) {
+  try {
+    const result = yield call(removeCommentAPI, action.data);
+    yield put({
+      type: REMOVE_COMMENT_SUCCESS,
+      data: {
+        feedId: action.data.feedId,
+        id: result.data.id,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: REMOVE_COMMENT_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+const removeReplyAPI = ({ replyId, accessToken }) => {
+  const headers = { Authorization: `Bearer ${accessToken}` };
+
+  return axios.delete(`/replies/${replyId}`, { headers });
+};
+
+function* removeReply(action) {
+  try {
+    const result = yield call(removeReplyAPI, action.data);
+    yield put({
+      type: REMOVE_REPLY_SUCCESS,
+      data: {
+        commentId: action.data.commentId,
+        id: result.data.id,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: REMOVE_REPLY_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
 function* watchGoBackLoginPage() {
   yield takeLatest(GO_BACK_LOG_IN_PAGE, goBackLoginPage);
 }
@@ -512,15 +630,15 @@ function* watchGetFeedTag() {
 }
 
 function* watchGetFeedList1() {
-  yield throttle(5000, GET_FEED_LIST_1_REQUEST, getFeedList1);
+  yield takeLatest(GET_FEED_LIST_1_REQUEST, getFeedList1);
 }
 
 function* watchGetFeedList2() {
-  yield throttle(5000, GET_FEED_LIST_2_REQUEST, getFeedList2);
+  yield throttle(3000, GET_FEED_LIST_2_REQUEST, getFeedList2);
 }
 
 function* watchGetFeedList3() {
-  yield throttle(5000, GET_FEED_LIST_3_REQUEST, getFeedList3);
+  yield takeLatest(GET_FEED_LIST_3_REQUEST, getFeedList3);
 }
 
 function* watchLikeFeed() {
@@ -563,6 +681,14 @@ function* watchAddReplyComment() {
   yield takeLatest(ADD_REPLY_COMMENT_REQUEST, addReplyComment);
 }
 
+function* watchRemoveComment() {
+  yield takeLatest(REMOVE_COMMENT_REQUEST, removeComment);
+}
+
+function* watchRemoveReply() {
+  yield takeLatest(REMOVE_REPLY_REQUEST, removeReply);
+}
+
 export function* feedSaga() {
   yield all([
     fork(watchGetFeedTag),
@@ -580,6 +706,8 @@ export function* feedSaga() {
     fork(watchAddFeed),
     fork(watchAddComment),
     fork(watchAddReplyComment),
+    fork(watchRemoveComment),
+    fork(watchRemoveReply),
   ]);
 }
 
@@ -608,11 +736,14 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_1_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_1_SUCCESS: {
+        action.data.pageNumber
+          ? draft.Feeds.contents.push(action.data.contents)
+          : (draft.Feeds = action.data);
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_1_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
@@ -623,11 +754,15 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_2_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_2_SUCCESS: {
+        action.data.pageNumber
+          ? action.data.contents.forEach((v) => draft.Feeds.contents.push(v))
+          : (draft.Feeds = action.data);
+        draft.Feeds.isLast = action.data.isLast;
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_2_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
@@ -638,11 +773,14 @@ const feed = (state = initialSate, action) => {
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
-      case GET_FEED_LIST_3_SUCCESS:
-        draft.Feeds = action.data;
+      case GET_FEED_LIST_3_SUCCESS: {
+        action.data.pageNumber
+          ? draft.Feeds.contents.push(action.data.contents)
+          : (draft.Feeds = action.data);
         draft.getFeedListLoading = false;
         draft.getFeedListDone = true;
         break;
+      }
       case GET_FEED_LIST_3_FAILURE:
         draft.getFeedListLoading = false;
         draft.getFeedListError = action.error;
@@ -831,6 +969,44 @@ const feed = (state = initialSate, action) => {
       case ADD_REPLY_COMMENT_FAILURE:
         draft.addReplyCommentLoading = false;
         draft.addReplyCommentError = action.error;
+        break;
+      /* 댓글 삭제 */
+      case REMOVE_COMMENT_REQUEST:
+        draft.removeCommentLoading = true;
+        draft.removeCommentDone = false;
+        draft.removeCommentError = null;
+        break;
+      case REMOVE_COMMENT_SUCCESS: {
+        draft.FeedById.comments = draft.FeedById.comments.filter((v) => v.id !== action.data.id);
+
+        const getFeedById = draft.Feeds.contents.find((v) => v.id === action.data.feedId);
+        getFeedById.numberOfComments -= 1;
+
+        draft.removeCommentLoading = false;
+        draft.removeCommentDone = true;
+        break;
+      }
+      case REMOVE_COMMENT_FAILURE:
+        draft.removeCommentLoading = false;
+        draft.removeCommentError = action.error;
+        break;
+      /* 대댓글 삭제 */
+      case REMOVE_REPLY_REQUEST:
+        draft.removeCommentLoading = true;
+        draft.removeCommentDone = false;
+        draft.removeCommentError = null;
+        break;
+      case REMOVE_REPLY_SUCCESS: {
+        const getCommentById = draft.FeedById.comments.find((v) => v.id === action.data.commentId);
+        getCommentById.replies = getCommentById.replies.filter((v) => v.id !== action.data.id);
+
+        draft.removeCommentLoading = false;
+        draft.removeCommentDone = true;
+        break;
+      }
+      case REMOVE_REPLY_FAILURE:
+        draft.removeCommentLoading = false;
+        draft.removeCommentError = action.error;
         break;
       /* 대댓글 켜기 */
       case ON_REPLY:

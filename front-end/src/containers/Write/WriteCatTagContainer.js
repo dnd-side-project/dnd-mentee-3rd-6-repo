@@ -2,12 +2,15 @@ import React, { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import WriteCatTag from '../../components/Write/WriteCatTag';
 import { ADD_FEED_REQUEST } from '../../modules/feed';
+import { ACCESS_TOKEN } from '../../modules/user';
 
 const WriteCatTagContainer = () => {
   const [check, setCheck] = useState([]);
 
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
   const dispatch = useDispatch();
-  const { cats, accessToken } = useSelector((state) => state.user.userInfo);
+  const { cats } = useSelector((state) => state.user.userInfo);
   const { content, imgFiles, tagId } = useSelector((state) => state.write);
   const { addFeedLoading } = useSelector((state) => state.feed);
 

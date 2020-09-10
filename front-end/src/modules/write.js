@@ -18,6 +18,7 @@ export const initialSate = {
 export const NEXT_WRITE_PAGE = 'write/NEXT_WRITE_PAGE';
 export const PREV_WRITE_PAGE = 'write/PREV_WRITE_PAGE';
 export const GO_BACK_FEED_PAGE = 'write/GO_BACK_FEED_PAGE';
+export const RESET_WRITE_PAGE = 'write/RESET_WRITE_PAGE';
 
 function* goBackFeedPage() {
   const history = yield getContext('history');
@@ -46,6 +47,9 @@ const write = (state = initialSate, action) => {
         break;
       case PREV_WRITE_PAGE:
         draft.pageIndex -= 1;
+        break;
+      case RESET_WRITE_PAGE:
+        draft.pageIndex = 1;
         break;
       default:
         break;

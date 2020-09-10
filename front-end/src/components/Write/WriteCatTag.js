@@ -50,7 +50,9 @@ const WriteCatTag = ({ cats, check, onClickCheck, onFinishAddFeed, addFeedLoadin
                     <span className="img-box">
                       <img
                         src={`${
-                          process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL
+                          process.env.NODE_ENV === 'development'
+                            ? process.env.REACT_APP_BASE_URL
+                            : ''
                         }${cat.profileImgUrl}`}
                         alt={cat.name}
                       />

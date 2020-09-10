@@ -54,10 +54,13 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 
+  a {
+    margin-top: 20px;
+  }
+
   button {
     width: 315px;
     height: 55px;
-    margin-top: 20px;
     border-radius: 14px;
     color: ${pallete.primary[1]};
 

@@ -28,6 +28,10 @@ export const CardImage = styled.div`
   }
 
   .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 100vw;
     height: auto;
   }
@@ -67,8 +71,8 @@ export const CardImage = styled.div`
     align-items: center;
 
     img {
-      width: auto;
-      height: ${({ value }) => `${value}px`};
+      width: ${({ value }) => `${value}px`};
+      height: auto;
     }
   }
 `;
@@ -94,9 +98,9 @@ const CardImageWrapprer = ({ feed }) => {
         {feed.images.map((image) => (
           <div key={image.id} className="img-box">
             <img
-              src={`${process.env.NODE_ENV === 'development' && process.env.REACT_APP_BASE_URL}${
-                image.url
-              }`}
+              src={`${
+                process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
+              }${image.url}`}
               alt={image}
             />
           </div>

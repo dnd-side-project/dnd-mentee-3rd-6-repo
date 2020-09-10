@@ -108,4 +108,4 @@ FeedHead.prototype = {
   onClickFeedTag: PropTypes.func.isRequired,
 };
 
-export default FeedHead;
+export default React.memo(FeedHead);

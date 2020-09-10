@@ -1,39 +1,52 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FeedCardList from '../../components/Feed/FeedCardList';
-import { LIKE_FEED_REQUEST, UNLIKE_FEED_REQUEST, GET_COMMENT_REQUEST } from '../../modules/feed';
+import {
+  LIKE_FEED_REQUEST,
+  UNLIKE_FEED_REQUEST,
+  GET_COMMENT_REQUEST,
+  getFeedListCreateAction,
+} from '../../modules/feed';
+import { ACCESS_TOKEN, LOAD_USER_INFO_REQUEST } from '../../modules/user';
 
 const FeedCardListContainer = () => {
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const dispatch = useDispatch();
 
-  const { accessToken } = useSelector((state) => state.user.userInfo);
-  const { Feeds, filterIndex, tagIndex, sortIndex, getFeedListLoading } = useSelector(
-    (state) => state.feed,
-  );
-  const { contents, isLast } = Feeds;
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  const {
+    Feeds: { contents, isLast },
+    filterIndex,
+    tagIndex,
+    sortIndex,
+    getFeedListLoading,
+  } = useSelector((state) => state.feed);
+
+  const { userInfo } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (accessToken && !userInfo.id) {
+      dispatch({
+        type: LOAD_USER_INFO_REQUEST,
+        data: accessToken,
+      });
+    }
+  }, [accessToken, dispatch, userInfo]);
 
   useEffect(() => {
     const onScroll = () => {
-      // 화면 끝에서 데이터 불러오기
       if (
         window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 100
+        document.documentElement.scrollHeight - 300
       ) {
-        !getFeedListLoading && setPageNumber((prevNumber) => prevNumber + 1);
-
         // 피드 불러오기가 로딩하고 있을 떈 호출 안한다.
         if (!isLast && !getFeedListLoading) {
-          dispatch({
-            type: `feed/GET_FEED_LIST_${filterIndex}_REQUEST`,
-            data: {
-              filterId: filterIndex,
-              tagId: filterIndex === 1 ? tagIndex : null,
-              sortId: filterIndex === 2 ? sortIndex : null,
-              pageNumber,
-            },
-          });
+          dispatch(
+            getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, pageNumber),
+          );
+
+          setPageNumber((prevNumber) => prevNumber + 1);
         }
       }
     };
@@ -43,7 +56,16 @@ const FeedCardListContainer = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [dispatch, filterIndex, getFeedListLoading, isLast, pageNumber, sortIndex, tagIndex]);
+  }, [
+    accessToken,
+    dispatch,
+    filterIndex,
+    getFeedListLoading,
+    isLast,
+    pageNumber,
+    sortIndex,
+    tagIndex,
+  ]);
 
   const onClickLike = useCallback(
     (id) => () => {
