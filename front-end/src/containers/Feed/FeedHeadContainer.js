@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import FeedHead from '../../components/Feed/FeedHead';
+import FeedHead from '../../components/Feed/Feedhead';
 import {
   GO_BACK_LOG_IN_PAGE,
   GET_FEED_TAG_REQUEST,
