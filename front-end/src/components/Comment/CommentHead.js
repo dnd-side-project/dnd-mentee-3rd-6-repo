@@ -40,4 +40,4 @@ CommentHead.prototype = {
   timeDesc: PropTypes.string.isRequired,
 };
 
-export default CommentHead;
+export default React.memo(CommentHead);

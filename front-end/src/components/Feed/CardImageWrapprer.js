@@ -116,4 +116,4 @@ CardImageWrapprer.prototype = {
   }).isRequired,
 };
 
-export default CardImageWrapprer;
+export default React.memo(CardImageWrapprer);

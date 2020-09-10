@@ -185,8 +185,8 @@ export const CardTitle = styled.div`
       justify-content: center;
       align-items: center;
 
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: ${pallete.gray[3]};
 
@@ -382,7 +382,19 @@ export const CommentHeader = styled.header`
 `;
 
 export const CommentItem = styled.li`
+  @keyframes showCommnet {
+    0% {
+      background: ${pallete.gray[2]};
+    }
+    100% {
+      background: ${pallete.primary[3]};
+    }
+  }
+
+  animation: showCommnet 0.5s ease-in-out forwards;
+
   display: flex;
+  border-top: 1px solid ${pallete.gray[3]};
 
   .comment-reple {
     margin-top: 23px;
@@ -397,7 +409,6 @@ export const CommentItem = styled.li`
 
     height: 131px;
     width: 100%;
-    border-top: 1px solid ${pallete.gray[3]};
 
     dt {
       display: flex;
@@ -567,10 +578,13 @@ export const MoreGroup = styled.div`
 
     color: ${pallete.gray[4]};
 
-    font-size: 24px;
+    font-size: 28px;
+    transition: color 0.25s, transform 0.25s;
 
     &:active {
       color: ${pallete.secondary[2]};
+      transform: scale(0.8);
+      transition: color 0.125s, transform 0.125s;
     }
   }
 
@@ -578,8 +592,8 @@ export const MoreGroup = styled.div`
     position: absolute;
     top: 30px;
     right: -10px;
-    width: 109px;
-    height: 84px;
+    width: auto;
+    height: auto;
 
     display: flex;
     justify-content: center;
@@ -612,7 +626,7 @@ export const MoreGroup = styled.div`
         justify-content: center;
         align-items: center;
 
-        width: 100%;
+        width: 109px;
         height: 42px;
 
         font-style: normal;
@@ -640,10 +654,6 @@ export const MoreGroup = styled.div`
             transform: scale(0.95);
             transition: all 0.125s;
           }
-        }
-
-        &:last-child {
-          border-top: 1px solid ${pallete.gray[3]};
         }
       }
     }
@@ -749,15 +759,14 @@ export const ReplyBox = styled.div`
   }
 `;
 
-export const LastFeed = styled.h1`
+export const LastFeed = styled.p`
   font-style: normal;
   font-weight: bold;
-  font-size: 22px;
-  line-height: 30px;
-
+  font-size: 18px;
+  line-height: 25px;
   text-align: center;
 
-  color: ${pallete.primary[1]};
+  color: ${pallete.gray[3]};
 
   margin-top: 30px;
   margin-bottom: 13vh;

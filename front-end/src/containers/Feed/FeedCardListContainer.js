@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FeedCardList from '../../components/Feed/FeedCardList';
 import {
@@ -8,10 +8,9 @@ import {
   getFeedListCreateAction,
 } from '../../modules/feed';
 import { ACCESS_TOKEN, LOAD_USER_INFO_REQUEST } from '../../modules/user';
+import { LastFeed } from '../../components/Feed/styles';
 
 const FeedCardListContainer = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-
   const dispatch = useDispatch();
 
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -20,10 +19,18 @@ const FeedCardListContainer = () => {
     filterIndex,
     tagIndex,
     sortIndex,
+    pageNumber,
     getFeedListLoading,
+    scrollLocation,
   } = useSelector((state) => state.feed);
 
   const { userInfo } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (pageNumber !== 4) {
+      window.scrollTo(0, scrollLocation);
+    }
+  }, [getFeedListLoading, pageNumber, scrollLocation]);
 
   useEffect(() => {
     if (accessToken && !userInfo.id) {
@@ -37,16 +44,22 @@ const FeedCardListContainer = () => {
   useEffect(() => {
     const onScroll = () => {
       if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 300
+        window.scrollY + document.documentElement.clientHeight ===
+        document.documentElement.scrollHeight
       ) {
         // 피드 불러오기가 로딩하고 있을 떈 호출 안한다.
         if (!isLast && !getFeedListLoading) {
+          const scroll = window.scrollY;
           dispatch(
-            getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, pageNumber),
+            getFeedListCreateAction(
+              accessToken,
+              filterIndex,
+              tagIndex,
+              sortIndex,
+              pageNumber,
+              scroll,
+            ),
           );
-
-          setPageNumber((prevNumber) => prevNumber + 1);
         }
       }
     };
@@ -100,6 +113,7 @@ const FeedCardListContainer = () => {
         data: {
           feedId: id,
           accessToken,
+          scrollLocation: window.scrollY,
         },
       });
     },
@@ -113,7 +127,7 @@ const FeedCardListContainer = () => {
   }
 
   if (getFeedListLoading) {
-    return <h1>로딩 중</h1>;
+    return <LastFeed>로딩 중</LastFeed>;
   }
 
   return (

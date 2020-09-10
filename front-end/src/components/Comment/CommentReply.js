@@ -14,9 +14,12 @@ const CommentReply = ({
   moreReplyId,
   onClickMoreReply,
   onClickRemoveReply,
+  userId,
+  replyScrollRef,
+  commentHeightId,
 }) => {
   return (
-    <CommentItem reple>
+    <CommentItem reple ref={commentId === commentHeightId ? replyScrollRef : null}>
       <span className="comment-reple">
         <RepleIcon />
       </span>
@@ -39,19 +42,22 @@ const CommentReply = ({
           <MoreGroup reply={reply.id} more={moreReplyId}>
             <button type="button" onClick={onClickMoreReply(reply.id)}>
               <MoreOutlined />
-              {reply.id === moreReplyId && (
-                <span className="more-modal">
-                  <ul>
+            </button>
+            {reply.id === moreReplyId && (
+              <span className="more-modal">
+                <ul>
+                  {userId === reply.author.id ? (
                     <li>
                       <button type="button" onClick={onClickRemoveReply(commentId)}>
                         댓글 삭제
                       </button>
                     </li>
+                  ) : (
                     <li>신고하기</li>
-                  </ul>
-                </span>
-              )}
-            </button>
+                  )}
+                </ul>
+              </span>
+            )}
           </MoreGroup>
         </dt>
         <dd>
@@ -94,6 +100,8 @@ CommentReply.prototype = {
   moreReplyId: PropTypes.number.isRequired,
   onClickMoreReply: PropTypes.func.isRequired,
   onClickRemoveReply: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
+  replyScrollRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
-export default CommentReply;
+export default React.memo(CommentReply);
