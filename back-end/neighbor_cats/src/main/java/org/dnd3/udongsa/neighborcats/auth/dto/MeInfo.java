@@ -13,9 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
-public class SignResDto {
+public class MeInfo {
 
-  private String accessToken = "";
   private Long id = 0L;
   private String name = "";
   private String email = "";
