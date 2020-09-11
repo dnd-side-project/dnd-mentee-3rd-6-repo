@@ -8,15 +8,9 @@ import { ACCESS_TOKEN } from '../../modules/user';
 const FeedHeadContainer = () => {
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  const {
-    feedTags,
-    filterTypes,
-    sortTypes,
-    filterIndex,
-    tagIndex,
-    sortIndex,
-    getFeedTagDone,
-  } = useSelector((state) => state.feed);
+  const { feedTags, filterTypes, sortTypes, filterIndex, tagIndex, sortIndex } = useSelector(
+    (state) => state.feed,
+  );
   const { loadUserInfoError } = useSelector((state) => state.user);
 
   const [checkFilterType, setCheckFilterType] = useState(filterIndex || 1);
@@ -90,21 +84,21 @@ const FeedHeadContainer = () => {
     [checkFeedTag, checkFilterType, checkSortType, dispatch, sortIndex, tagIndex],
   );
 
-  if (!getFeedTagDone) {
-    return null;
-  }
-
   return (
-    <FeedHead
-      filterTypes={filterTypes}
-      feedTags={feedTags}
-      sortTypes={sortTypes}
-      checkFilterType={checkFilterType}
-      checkFeedTag={checkFeedTag}
-      checkSortType={checkSortType}
-      onClickFilter={onClickFilter}
-      onClickFeedTag={onClickFeedTag}
-    />
+    <>
+      {feedTags && (
+        <FeedHead
+          feedTags={feedTags}
+          filterTypes={filterTypes}
+          sortTypes={sortTypes}
+          checkFilterType={checkFilterType}
+          checkFeedTag={checkFeedTag}
+          checkSortType={checkSortType}
+          onClickFilter={onClickFilter}
+          onClickFeedTag={onClickFeedTag}
+        />
+      )}
+    </>
   );
 };
 

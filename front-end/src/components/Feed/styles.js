@@ -5,7 +5,7 @@ export const FeedWrapper = styled.main`
   position: relative;
 
   width: 100vw;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 51px);
 
   margin-top: 50px;
 
@@ -264,7 +264,7 @@ export const CardTitle = styled.div`
 export const CardIcon = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding: 0 16px;
 
   margin-top: 5px;
@@ -277,16 +277,10 @@ export const CardIcon = styled.div`
 
     .icon--item {
       display: flex;
-
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 16px;
-
-      color: ${pallete.primary[1]};
+      align-items: flex-start;
 
       button {
-        margin-right: 4px;
+        margin-right: 6px;
         padding: 0;
 
         border: none;
@@ -295,8 +289,22 @@ export const CardIcon = styled.div`
         background: ${pallete.primary[3]};
       }
 
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+
       &:last-child {
-        margin-left: 16px;
+        margin-left: 21px;
+      }
+
+      & span:last-child {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 16px;
+
+        color: ${pallete.primary[1]};
       }
     }
   }
@@ -692,7 +700,7 @@ export const CommentInput = styled.div`
 
   background: ${pallete.gray[2]};
 
-  span {
+  & .img {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -722,6 +730,14 @@ export const CommentInput = styled.div`
 
     background: ${pallete.primary[3]};
     padding: 10px;
+    padding-right: 9vw;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: ${pallete.primary[1]};
 
     &::placeholder {
       font-style: normal;
@@ -731,6 +747,28 @@ export const CommentInput = styled.div`
 
       color: ${pallete.gray[3]};
     }
+  }
+
+  & .send {
+    position: absolute;
+    top: 23px;
+    right: 6vw;
+
+    border: none;
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: ${pallete.secondary[2]};
+
+    color: ${pallete.primary[3]};
   }
 `;
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -57,7 +57,7 @@ export const CardImage = styled.div`
 
     color: ${pallete.primary[3]};
 
-    z-index: 999;
+    z-index: 10;
   }
 
   & .img-box {
@@ -77,15 +77,59 @@ export const CardImage = styled.div`
   }
 `;
 
+const LoadImage = styled.div`
+  @keyframes loadImg {
+    0% {
+      background-position: left;
+    }
+    50% {
+      background-position: right;
+    }
+    100% {
+      background-position: left;
+    }
+  }
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: ${({ value }) => `${value}px`};
+
+  ${({ checked, checkLoadId }) => {
+    return checked !== checkLoadId
+      ? css`
+          background: linear-gradient(90deg, #f0f0f0, #fafafa, #fff);
+          background-size: 400% 400%;
+          display: block;
+
+          z-index: 999;
+
+          animation: loadImg 3s ease-out infinite;
+        `
+      : css`
+          display: none;
+        `;
+  }}
+`;
+
 const CardImageWrapprer = ({ feed }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [checkLoadId, setCheckLoadId] = useState(null);
   const heightValue = window.innerWidth;
+
+  const onLoadImage = useCallback(
+    (index) => () => {
+      setCheckLoadId(() => index);
+    },
+    [],
+  );
 
   return (
     <CardImage value={heightValue}>
       <span className="feed-card__img-index">
         {currentSlide + 1}/{feed.images.length}
       </span>
+      <LoadImage value={heightValue} checked={feed.id} checkLoadId={checkLoadId} />
       <Slider
         dots={false}
         infinite={false}
@@ -102,6 +146,7 @@ const CardImageWrapprer = ({ feed }) => {
                 process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
               }${image.url}`}
               alt={image}
+              onLoad={onLoadImage(feed.id)}
             />
           </div>
         ))}
@@ -112,8 +157,11 @@ const CardImageWrapprer = ({ feed }) => {
 
 CardImageWrapprer.prototype = {
   feed: PropTypes.shape({
+    id: PropTypes.number,
     images: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
+  onLoadImage: PropTypes.func.isRequired,
+  checkLoadId: PropTypes.bool.isRequired,
 };
 
 export default React.memo(CardImageWrapprer);
