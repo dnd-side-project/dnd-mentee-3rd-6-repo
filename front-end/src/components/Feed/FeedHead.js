@@ -84,19 +84,6 @@ const FeedHead = ({
   );
 };
 
-FilterType.prototype = {
-  filterType: PropTypes.object.isRequired,
-  checkFilterType: PropTypes.number.isRequired,
-  onClickFilter: PropTypes.func.isRequired,
-};
-
-FeedTag.prototype = {
-  feedTag: PropTypes.object.isRequired,
-  checkFeedTag: PropTypes.number.isRequired,
-  checkSortType: PropTypes.number.isRequired,
-  onClickFeedTag: PropTypes.func.isRequired,
-};
-
 FeedHead.prototype = {
   filterTypes: PropTypes.arrayOf(PropTypes.object),
   feedTags: PropTypes.arrayOf(PropTypes.object),

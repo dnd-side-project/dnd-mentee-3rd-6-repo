@@ -1016,6 +1016,7 @@ const feed = (state = initialSate, action) => {
       case CURRENT_FEED_PAGE:
         draft.pageIndex = action.data.pageIndex;
         draft.filterIndex = action.data.filterIndex;
+        draft.feedId = null;
         draft.tagIndex = action.data?.tagIndex ? action.data.tagIndex : 1;
         draft.sortIndex = action.data?.sortIndex ? action.data.sortIndex : 1;
         break;

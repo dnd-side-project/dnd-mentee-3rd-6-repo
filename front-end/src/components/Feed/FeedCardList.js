@@ -91,7 +91,6 @@ const FeedCardList = ({
             onClickLike={onClickLike}
             onClickUnlike={onClickUnlike}
             onClickComment={onClickComment}
-            // eslint-disable-next-line no-return-assign
           />
         ))}
       </CardList>
@@ -123,6 +122,11 @@ FeedCardList.prototype = {
   // onClickShowText: PropTypes.func.isRequired,
   getLoading: PropTypes.bool.isRequired,
   isLast: PropTypes.bool.isRequired,
+  onScrollFeed: PropTypes.func.isRequired,
+};
+
+FeedCardList.defaultProps = {
+  contents: [],
 };
 
 export default React.memo(FeedCardList);
