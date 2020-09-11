@@ -156,13 +156,14 @@ export const ImageBox = styled.li`
     display: flex;
     justify-content: center;
     align-items: center;
+    background: ${pallete.primary[2]};
 
     img {
       position: absolute;
       top: 0;
       width: auto;
       height: 80px;
-      background: ${pallete.primary[3]};
+      background: ${pallete.primary[2]};
     }
   }
 

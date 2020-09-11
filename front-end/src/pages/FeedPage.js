@@ -35,19 +35,15 @@ const FeedPage = () => {
       {pageIndex === 4 ? (
         <>
           <CommentWrapper>
-            <div>
-              <CommentHeadContainer />
-              <CommentListContainer />
-            </div>
+            <CommentHeadContainer />
+            <CommentListContainer />
           </CommentWrapper>
           <CommentFormContainer />
         </>
       ) : (
-        <FeedWrapper>
-          <div className="feed-content">
-            <FeedHeadContainer />
-            <FeedCardListContainer />
-          </div>
+        <FeedWrapper page={pageIndex}>
+          <FeedHeadContainer />
+          <FeedCardListContainer />
         </FeedWrapper>
       )}
     </AppLayout>

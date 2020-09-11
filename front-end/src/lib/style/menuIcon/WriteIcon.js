@@ -11,7 +11,7 @@ const WriteIcon = ({ pathname }) => {
         width="16"
         height="16"
         rx="3"
-        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[3]}
+        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[4]}
         strokeWidth="2"
         strokeLinejoin="round"
       />
@@ -20,7 +20,7 @@ const WriteIcon = ({ pathname }) => {
         y1="9"
         x2="15"
         y2="9"
-        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[3]}
+        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[4]}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -30,7 +30,7 @@ const WriteIcon = ({ pathname }) => {
         y1="5"
         x2="11"
         y2="13"
-        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[3]}
+        stroke={pathname === '/feed' ? pallete.primary[2] : pallete.gray[4]}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
