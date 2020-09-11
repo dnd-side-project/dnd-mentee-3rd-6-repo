@@ -17,6 +17,7 @@ const FeedHeadContainer = () => {
     sortIndex,
     getFeedTagDone,
   } = useSelector((state) => state.feed);
+  const { loadUserInfoError } = useSelector((state) => state.user);
 
   const [checkFilterType, setCheckFilterType] = useState(filterIndex || 1);
   const [checkFeedTag, setCheckFeedTag] = useState(tagIndex || 1);
@@ -24,12 +25,13 @@ const FeedHeadContainer = () => {
 
   /* 유저 정보 있는지 확인 하기 */
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && !loadUserInfoError) {
       !feedTags &&
         dispatch({
           type: GET_FEED_TAG_REQUEST,
         });
     } else {
+      localStorage.setItem(ACCESS_TOKEN, '');
       dispatch({
         type: GO_BACK_LOG_IN_PAGE,
       });
