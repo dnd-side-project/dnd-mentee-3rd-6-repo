@@ -2,19 +2,13 @@ import React, { useEffect, useCallback, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import FeedHead from '../../components/Feed/FeedHead';
-import {
-  GO_BACK_LOG_IN_PAGE,
-  GET_FEED_TAG_REQUEST,
-  GET_FEED_LIST_1_REQUEST,
-  getFeedListCreateAction,
-} from '../../modules/feed';
+import { GO_BACK_LOG_IN_PAGE, GET_FEED_TAG_REQUEST, CURRENT_FEED_PAGE } from '../../modules/feed';
 import { ACCESS_TOKEN } from '../../modules/user';
 
 const FeedHeadContainer = () => {
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
   const {
-    Feeds,
     feedTags,
     filterTypes,
     sortTypes,
@@ -43,46 +37,55 @@ const FeedHeadContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* 피드 태그 가져오고 피드(우리 동네) 리스트 호출 */
-  useEffect(() => {
-    feedTags &&
-      !Feeds.contents &&
-      dispatch({
-        type: GET_FEED_LIST_1_REQUEST,
-        data: {
-          filterId: checkFilterType,
-          tagId: checkFeedTag,
-          accessToken,
-        },
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feedTags]);
-
   /* 필터 타입 별 피드 리스트 호출 */
   const onClickFilter = useCallback(
     (index) => () => {
       if (index !== checkFilterType) {
+        dispatch({
+          type: CURRENT_FEED_PAGE,
+          data: {
+            pageIndex: index,
+            filterIndex: index,
+            tagIndex,
+            sortIndex,
+          },
+        });
         setCheckFilterType(index);
-        dispatch(getFeedListCreateAction(accessToken, index, checkFeedTag, checkSortType));
       }
     },
-    [accessToken, checkFeedTag, checkFilterType, checkSortType, dispatch],
+    [checkFilterType, dispatch, sortIndex, tagIndex],
   );
 
   /* 피드 태그 별 피드 리스트 호출 */
   const onClickFeedTag = useCallback(
     (index) => () => {
       if (checkFilterType === 1) {
-        setCheckFeedTag(index);
         index !== checkFeedTag &&
-          dispatch(getFeedListCreateAction(accessToken, checkFilterType, index));
+          dispatch({
+            type: CURRENT_FEED_PAGE,
+            data: {
+              pageIndex: checkFilterType,
+              filterIndex: checkFilterType,
+              tagIndex: index,
+              sortIndex,
+            },
+          });
+        setCheckFeedTag(index);
       } else {
-        setCheckSortType(index);
         index !== checkSortType &&
-          dispatch(getFeedListCreateAction(accessToken, checkFilterType, null, index));
+          dispatch({
+            type: CURRENT_FEED_PAGE,
+            data: {
+              pageIndex: checkFilterType,
+              filterIndex: checkFilterType,
+              tagIndex,
+              sortIndex: index,
+            },
+          });
+        setCheckSortType(index);
       }
     },
-    [accessToken, checkFeedTag, checkFilterType, checkSortType, dispatch],
+    [checkFeedTag, checkFilterType, checkSortType, dispatch, sortIndex, tagIndex],
   );
 
   if (!getFeedTagDone) {

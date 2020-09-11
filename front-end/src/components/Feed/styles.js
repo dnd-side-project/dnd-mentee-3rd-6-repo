@@ -2,24 +2,40 @@ import styled, { css } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
 export const FeedWrapper = styled.main`
+  position: relative;
+
   width: 100vw;
+  height: calc(100vh - 50px);
 
   margin-top: 50px;
 
   transform: translateX(-16px);
 
-  .feed-content {
+  .scroll {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+
+    margin: 0 auto;
+
+    margin-top: ${({ page }) => (page === 3 ? '40px' : '96px')};
     overflow-x: hidden;
+    overflow-y: scroll;
   }
 `;
 
 export const Header = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  width: 100%;
 
   .feed-head__title {
     display: flex;
@@ -146,16 +162,12 @@ export const TagButton = styled.button`
   }}
 `;
 
-export const CardList = styled.section`
-  margin-top: 21px;
+export const CardList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    margin-top: 15px;
-  }
+  padding-top: 15px;
 `;
 
 export const CardItem = styled.li`
@@ -586,6 +598,12 @@ export const MoreGroup = styled.div`
       transform: scale(0.8);
       transition: color 0.125s, transform 0.125s;
     }
+
+    & span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   & .more-modal {
@@ -768,6 +786,19 @@ export const LastFeed = styled.p`
 
   color: ${pallete.gray[3]};
 
-  margin-top: 30px;
-  margin-bottom: 13vh;
+  margin-top: 10px;
+  margin-bottom: 25vh;
+`;
+
+export const LoadingFeed = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${pallete.gray[3]};
+
+  font-size: 5vh;
+
+  padding-top: ${({ last }) => (last ? '10px' : '200px')};
+  margin-bottom: 25vh;
 `;

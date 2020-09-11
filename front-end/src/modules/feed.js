@@ -15,14 +15,15 @@ export const initialSate = {
   ],
   sortTypes: [
     { id: 1, name: '인기글' },
-    { id: 2, name: '전체글' },
+    { id: 2, name: '최신글' },
   ],
   feedTags: null,
   Feeds: {},
   FeedById: {},
-  pageNumber: 1,
+  feedId: null,
   commentId: null,
   scrollLocation: 0,
+  getLoading: false,
   getFeedTagLoading: false, // 피드 태그 불러오기
   getFeedTagDone: false,
   getFeedTagError: null,
@@ -206,26 +207,13 @@ const getFeedList1API = ({ accessToken, filterId, tagId, pageNumber }) => {
 function* getFeedList1(action) {
   try {
     const result = yield call(getFeedList1API, action.data);
-    action.data.pageNumber
-      ? yield put({
-          type: GET_FEED_LIST_1_SUCCESS,
-          data: {
-            contents: result.data.contents,
-            isLast: result.data.isLast,
-            pageNumber: action.data.pageNumber,
-            scrollLocation: action.data.scrollLocation,
-          },
-        })
-      : yield put({
-          type: GET_FEED_LIST_1_SUCCESS,
-          data: result.data,
-        });
     yield put({
-      type: CURRENT_FEED_PAGE,
+      type: GET_FEED_LIST_1_SUCCESS,
       data: {
-        pageIndex: action.data.filterId,
-        filterIndex: action.data.filterId,
-        tagIndex: action.data.tagId,
+        contents: result.data.contents,
+        isLast: result.data.isLast,
+        pageNumber: action.data.pageNumber,
+        scrollLocation: action.data.scrollLocation,
       },
     });
   } catch (error) {
@@ -255,28 +243,13 @@ const getFeedList2API = ({ accessToken, filterId, sortId, pageNumber }) => {
 function* getFeedList2(action) {
   try {
     const result = yield call(getFeedList2API, action.data);
-
-    action.data.pageNumber
-      ? yield put({
-          type: GET_FEED_LIST_2_SUCCESS,
-          data: {
-            contents: result.data.contents,
-            isLast: result.data.isLast,
-            pageNumber: action.data.pageNumber,
-            scrollLocation: action.data.scrollLocation,
-          },
-        })
-      : yield put({
-          type: GET_FEED_LIST_2_SUCCESS,
-          data: result.data,
-        });
-
     yield put({
-      type: CURRENT_FEED_PAGE,
+      type: GET_FEED_LIST_2_SUCCESS,
       data: {
-        pageIndex: action.data.filterId,
-        filterIndex: action.data.filterId,
-        sortIndex: action.data.sortId,
+        contents: result.data.contents,
+        isLast: result.data.isLast,
+        pageNumber: action.data.pageNumber,
+        scrollLocation: action.data.scrollLocation,
       },
     });
   } catch (error) {
@@ -304,27 +277,13 @@ const getFeedList3API = ({ accessToken, filterId, pageNumber }) => {
 function* getFeedList3(action) {
   try {
     const result = yield call(getFeedList3API, action.data);
-
-    action.data.pageNumber
-      ? yield put({
-          type: GET_FEED_LIST_3_SUCCESS,
-          data: {
-            contents: result.data.contents,
-            isLast: result.data.isLast,
-            pageNumber: action.data.pageNumber,
-            scrollLocation: action.data.scrollLocation,
-          },
-        })
-      : yield put({
-          type: GET_FEED_LIST_3_SUCCESS,
-          data: result.data,
-        });
-
     yield put({
-      type: CURRENT_FEED_PAGE,
+      type: GET_FEED_LIST_3_SUCCESS,
       data: {
-        pageIndex: action.data.filterId,
-        filterIndex: action.data.filterId,
+        contents: result.data.contents,
+        isLast: result.data.isLast,
+        pageNumber: action.data.pageNumber,
+        scrollLocation: action.data.scrollLocation,
       },
     });
   } catch (error) {
@@ -747,74 +706,77 @@ const feed = (state = initialSate, action) => {
         break;
       /* 피드 리스트(우리 동네) 가져오기 */
       case GET_FEED_LIST_1_REQUEST:
-        draft.getFeedListLoading = !action.data.pageNumber;
+        draft.getFeedListLoading = action.data.pageNumber === 0;
+        draft.getLoading = true;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_1_SUCCESS: {
-        if (action.data.pageNumber) {
+        if (action.data.pageNumber !== 0) {
           action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
-          draft.pageNumber += 1;
         } else {
           draft.Feeds = action.data;
-          draft.pageNumber = 1;
         }
         draft.Feeds.isLast = action.data.isLast;
         draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListDone = true;
         break;
       }
       case GET_FEED_LIST_1_FAILURE:
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListError = action.error;
         break;
       /* 피드 리스트(전체) 가져오기 */
       case GET_FEED_LIST_2_REQUEST:
-        draft.getFeedListLoading = !action.data.pageNumber;
+        draft.getFeedListLoading = action.data.pageNumber === 0;
+        draft.getLoading = true;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_2_SUCCESS: {
-        if (action.data.pageNumber) {
+        if (action.data.pageNumber !== 0) {
           action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
-          draft.pageNumber += 1;
         } else {
           draft.Feeds = action.data;
-          draft.pageNumber = 1;
         }
         draft.Feeds.isLast = action.data.isLast;
         draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListDone = true;
         break;
       }
       case GET_FEED_LIST_2_FAILURE:
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListError = action.error;
         break;
       /* 피드 리스트(내 친구) 가져오기 */
       case GET_FEED_LIST_3_REQUEST:
-        draft.getFeedListLoading = !action.data.pageNumber;
+        draft.getFeedListLoading = action.data.pageNumber === 0;
+        draft.getLoading = true;
         draft.getFeedListDone = false;
         draft.getFeedListError = null;
         break;
       case GET_FEED_LIST_3_SUCCESS: {
-        if (action.data.pageNumber) {
+        if (action.data.pageNumber !== 0) {
           action.data.contents.forEach((v) => draft.Feeds.contents.push(v));
-          draft.pageNumber += 1;
         } else {
           draft.Feeds = action.data;
-          draft.pageNumber = 1;
         }
         draft.Feeds.isLast = action.data.isLast;
         draft.scrollLocation = action.data.scrollLocation;
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListDone = true;
         break;
       }
       case GET_FEED_LIST_3_FAILURE:
         draft.getFeedListLoading = false;
+        draft.getLoading = false;
         draft.getFeedListError = action.error;
         break;
       /* 댓글 화면 불러오기 */
@@ -825,6 +787,7 @@ const feed = (state = initialSate, action) => {
         break;
       case GET_COMMENT_SUCCESS:
         draft.FeedById = action.data.FeedById;
+        draft.feedId = action.data.feedId;
         draft.scrollLocation = action.data.scrollLocation;
         draft.pageIndex = 4;
         draft.getCommentLoading = false;
