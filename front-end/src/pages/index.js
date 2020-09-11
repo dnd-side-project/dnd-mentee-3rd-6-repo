@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { useDispatch } from 'react-redux';
 import { pallete } from '../lib/style/pallete';
 import Logo from '../lib/style/Logo';
+import { ACCESS_TOKEN, GO_TO_FEED } from '../modules/user';
 
 const HomeLayout = styled.div`
   display: flex;
@@ -86,6 +88,18 @@ const ButtonWrapper = styled.div`
 `;
 
 const Home = () => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch({
+        type: GO_TO_FEED,
+      });
+    }
+  }, [accessToken, dispatch]);
+
   return (
     <HomeLayout>
       <HomeHeader>
