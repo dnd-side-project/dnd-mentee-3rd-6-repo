@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -22,19 +22,17 @@ const FeedCardListContainer = () => {
     tagIndex,
     sortIndex,
     getFeedListLoading,
+    getCommentLoading,
     getLoading,
     scrollLocation,
   } = useSelector((state) => state.feed);
 
   const [scroll, setScroll] = useState(scrollLocation || 0);
   const [page, setPage] = useState(0);
-  const [scrollValid, setScrollValid] = useState(true);
+  const [scrollValid, setScrollValid] = useState(false);
 
   const { userInfo } = useSelector((state) => state.user);
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
-
-  const refs = useRef();
-  // feedRef.current = [];
 
   useEffect(() => {
     if (accessToken && !userInfo.id) {
@@ -54,17 +52,12 @@ const FeedCardListContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterIndex]);
 
-  // useEffect(() => {
-  //   !contents &&
-  //     dispatch(getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, 0, scroll));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   useEffect(() => {
     if (filterIndex || tagIndex || sortIndex) {
       setPage(() => 0);
 
-      dispatch(getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, 0, scroll));
+      !feedId &&
+        dispatch(getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, 0, scroll));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterIndex, sortIndex, tagIndex]);
@@ -87,7 +80,7 @@ const FeedCardListContainer = () => {
 
     setScroll(() => scrollTop);
 
-    if (scrollHeight - scrollTop === clientHeight) {
+    if (scrollHeight - scrollTop < clientHeight + 200) {
       setScrollValid((prev) => !prev);
       setPage((prev) => prev + 1);
     }
@@ -135,6 +128,14 @@ const FeedCardListContainer = () => {
 
   // const onClickShowText = useCallback(() => {}, []);
 
+  if (getCommentLoading) {
+    return (
+      <LoadingFeed>
+        <LoadingOutlined />
+      </LoadingFeed>
+    );
+  }
+
   if (getFeedListLoading) {
     return (
       <LoadingFeed>
@@ -145,18 +146,15 @@ const FeedCardListContainer = () => {
 
   return (
     <>
-      {contents && (
-        <FeedCardList
-          contents={contents}
-          onClickLike={onClickLike}
-          onClickUnlike={onClickUnlike}
-          onClickComment={onClickComment}
-          getLoading={getLoading}
-          isLast={isLast}
-          onScrollFeed={onScrollFeed}
-          refs={refs}
-        />
-      )}
+      <FeedCardList
+        contents={contents}
+        onClickLike={onClickLike}
+        onClickUnlike={onClickUnlike}
+        onClickComment={onClickComment}
+        getLoading={getLoading}
+        isLast={isLast}
+        onScrollFeed={onScrollFeed}
+      />
     </>
   );
 };

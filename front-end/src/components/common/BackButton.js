@@ -26,7 +26,10 @@ const GoBackButton = styled.button`
 const BackButton = ({ history, page }) => {
   // 회원가입 1, 피드 2, 글쓰기 3,
   const dispatch = useDispatch();
-  const { pageIndex: registerIndex, isServant } = useSelector((state) => state.auth);
+  const {
+    pageIndex: registerIndex,
+    authInfo: { isServant },
+  } = useSelector((state) => state.auth);
   const { filterIndex: feedIndex } = useSelector((state) => state.feed);
   const { pageIndex: writeIndex } = useSelector((state) => state.write);
 
@@ -40,7 +43,7 @@ const BackButton = ({ history, page }) => {
         type: NOT_SERVANT_PREV_PAGE,
       });
     }
-    dispatch({
+    return dispatch({
       type: PREV_PAGE,
     });
   }, [dispatch, history, isServant, registerIndex]);

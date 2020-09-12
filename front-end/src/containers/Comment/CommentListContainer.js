@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import CommentList from '../../components/Comment/CommentList';
 import {
   LIKE_COMMENT_REQUEST,
@@ -11,7 +12,6 @@ import {
   REMOVE_REPLY_REQUEST,
 } from '../../modules/feed';
 import { ACCESS_TOKEN } from '../../modules/user';
-import { LastFeed } from '../../components/Feed/styles';
 
 const CommentListContainer = () => {
   const [moreId, setMoreId] = useState(null);
@@ -25,7 +25,6 @@ const CommentListContainer = () => {
 
   const {
     FeedById: { comments, id: feedId },
-    getCommentLoading,
     addCommentDone,
     addReplyCommentDone,
   } = useSelector((state) => state.feed);
@@ -159,10 +158,6 @@ const CommentListContainer = () => {
     },
     [accessToken, dispatch, moreReplyId],
   );
-
-  if (getCommentLoading) {
-    return <LastFeed>로딩 중</LastFeed>;
-  }
 
   return (
     <CommentList

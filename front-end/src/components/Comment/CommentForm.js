@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
 import PropTypes from 'prop-types';
+import { ArrowUpOutlined } from '@ant-design/icons';
 
 import { CommentInput, ReplyBox } from '../Feed/styles';
 import CancelIcon from '../../lib/style/button/CancelIcon';
@@ -32,7 +33,7 @@ const CommentForm = ({
       )}
 
       <CommentInput>
-        <span>
+        <span className="img">
           <img
             src={`${
               process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
@@ -42,11 +43,15 @@ const CommentForm = ({
         </span>
         <input
           type="text"
-          value={commentText}
           placeholder="댓글을 입력해 주세요"
+          value={commentText}
           onChange={onChangeCommentText}
           ref={commentRef}
+          required
         />
+        <button type="submit" className="send">
+          <ArrowUpOutlined />
+        </button>
       </CommentInput>
     </Form>
   );
