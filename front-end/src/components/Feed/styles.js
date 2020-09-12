@@ -825,7 +825,7 @@ export const LastFeed = styled.p`
   color: ${pallete.gray[3]};
 
   margin-top: 10px;
-  margin-bottom: 25vh;
+  margin-bottom: 24vh;
 `;
 
 export const LoadingFeed = styled.p`

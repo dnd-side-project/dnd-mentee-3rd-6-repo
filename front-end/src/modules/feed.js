@@ -261,27 +261,27 @@ function* getFeedList2(action) {
   }
 }
 
-const getFeedList3API = ({ accessToken, filterId, pageNumber }) => {
-  const headers = { Authorization: `Bearer ${accessToken}` };
-  const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
+// const getFeedList3API = ({ accessToken, filterId, pageNumber }) => {
+//   const headers = { Authorization: `Bearer ${accessToken}` };
+//   const filterTypeList = ['HOMETOWN', 'ALL', 'FRIEND'];
 
-  const params = {
-    filterType: filterTypeList[filterId - 1],
-    pageNumber: pageNumber || 0,
-    pageSize: 10,
-  };
+//   const params = {
+//     filterType: filterTypeList[filterId - 1],
+//     pageNumber: pageNumber || 0,
+//     pageSize: 10,
+//   };
 
-  return axios.get('/feeds', { params, headers });
-};
+//   return axios.get('/feeds', { params, headers });
+// };
 
 function* getFeedList3(action) {
   try {
-    const result = yield call(getFeedList3API, action.data);
+    // const result = yield call(getFeedList3API, action.data);
     yield put({
       type: GET_FEED_LIST_3_SUCCESS,
       data: {
-        contents: result.data.contents,
-        isLast: result.data.isLast,
+        contents: [],
+        isLast: true,
         pageNumber: action.data.pageNumber,
         scrollLocation: action.data.scrollLocation,
       },
@@ -1023,6 +1023,7 @@ const feed = (state = initialSate, action) => {
       /* 이전 페이지 이동 */
       case PREV_FEED_PAGE:
         draft.pageIndex = action.data;
+        draft.FeedById = [];
         break;
       default:
         break;

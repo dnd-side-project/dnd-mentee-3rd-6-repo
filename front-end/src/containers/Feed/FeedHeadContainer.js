@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FeedHead from '../../components/Feed/FeedHead';
 import { GO_BACK_LOG_IN_PAGE, GET_FEED_TAG_REQUEST, CURRENT_FEED_PAGE } from '../../modules/feed';
-import { ACCESS_TOKEN } from '../../modules/user';
+import { ACCESS_TOKEN, LOG_OUT } from '../../modules/user';
 
 const FeedHeadContainer = () => {
   const dispatch = useDispatch();
@@ -25,13 +25,15 @@ const FeedHeadContainer = () => {
           type: GET_FEED_TAG_REQUEST,
         });
     } else {
-      localStorage.setItem(ACCESS_TOKEN, '');
+      dispatch({
+        type: LOG_OUT,
+      });
       dispatch({
         type: GO_BACK_LOG_IN_PAGE,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadUserInfoError]);
 
   /* 필터 타입 별 피드 리스트 호출 */
   const onClickFilter = useCallback(
@@ -46,7 +48,7 @@ const FeedHeadContainer = () => {
             sortIndex,
           },
         });
-        setCheckFilterType(index);
+        setCheckFilterType(() => index);
       }
     },
     [checkFilterType, dispatch, sortIndex, tagIndex],
@@ -66,7 +68,7 @@ const FeedHeadContainer = () => {
               sortIndex,
             },
           });
-        setCheckFeedTag(index);
+        setCheckFeedTag(() => index);
       } else {
         index !== checkSortType &&
           dispatch({
@@ -78,7 +80,7 @@ const FeedHeadContainer = () => {
               sortIndex: index,
             },
           });
-        setCheckSortType(index);
+        setCheckSortType(() => index);
       }
     },
     [checkFeedTag, checkFilterType, checkSortType, dispatch, sortIndex, tagIndex],
