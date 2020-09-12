@@ -9,7 +9,7 @@ import { pallete } from '../../lib/style/pallete';
 
 export const CardImage = styled.div`
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: ${({ value }) => `${value}px`};
 
   display: flex;
@@ -17,6 +17,7 @@ export const CardImage = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  justify-content: center;
 
   margin-top: 12px;
 
@@ -24,7 +25,7 @@ export const CardImage = styled.div`
 
   .slick-list {
     width: 100vw;
-    height: auto;
+    height: ${({ value }) => `${value}px`};
   }
 
   .slick-slide {
@@ -32,8 +33,10 @@ export const CardImage = styled.div`
     justify-content: center;
     align-items: center;
 
+    overflow: hidden;
+
     width: 100vw;
-    height: auto;
+    height: ${({ value }) => `${value}px`};
   }
 
   .feed-card__img-index {
@@ -62,17 +65,11 @@ export const CardImage = styled.div`
 
   & .img-box {
     width: 100vw;
-    height: auto;
+    height: ${({ value }) => `${value}px`};
 
-    overflow: hidden;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      width: ${({ value }) => `${value}px`};
-      height: auto;
+    .feed-img {
+      width: auto;
+      height: 100%;
     }
   }
 `;
@@ -142,6 +139,7 @@ const CardImageWrapprer = ({ feed }) => {
         {feed.images.map((image) => (
           <div key={image.id} className="img-box">
             <img
+              className="feed-img"
               src={`${
                 process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : ''
               }${image.url}`}

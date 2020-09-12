@@ -11,31 +11,33 @@ export const Wrapper = styled.div`
 `;
 
 export const SliderWrapper = styled.div`
-  width: 218px;
-  height: 270px;
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
-  border-radius: 14px;
+  width: 240px;
+  height: 297px;
 
   .slick-list {
-    width: 218px;
-    height: 270px;
+    width: 240px;
+    height: 297px;
   }
 
   .slick-slide {
-    width: 218px;
-    height: 270px;
+    width: 240px;
+    height: 297px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
   }
 `;
 
 export const ImageBox = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 
-  width: 218px;
-  height: 270px;
-
-  overflow: hidden;
+  width: 240px;
+  height: 297px;
 
   ${({ choice }) => {
     return choice
@@ -91,8 +93,6 @@ export const Title = styled.h1`
   line-height: 27px;
   text-align: center;
 
-  margin-bottom: 30px;
-
   color: ${pallete.primary[1]};
 `;
 
@@ -142,14 +142,19 @@ export const DotsIndicator = styled.div`
             background: ${pallete.secondary[2]};
           }
           .dot2 {
+            width: 8px;
+            height: 8px;
+
             transition: all 0.25s;
             background: ${pallete.gray[3]};
           }
         `
       : css`
           .dot1 {
-            transition: all 0.2s;
+            width: 8px;
+            height: 8px;
 
+            transition: all 0.2s;
             background: ${pallete.gray[3]};
           }
           .dot2 {
