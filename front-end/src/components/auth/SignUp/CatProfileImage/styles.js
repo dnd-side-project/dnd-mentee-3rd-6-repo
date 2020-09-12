@@ -257,6 +257,9 @@ export const CatKindModal = styled.div`
       width: 288px;
       height: 52px;
 
+      border-bottom-right-radius: 14px;
+      border-bottom-left-radius: 14px;
+
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
