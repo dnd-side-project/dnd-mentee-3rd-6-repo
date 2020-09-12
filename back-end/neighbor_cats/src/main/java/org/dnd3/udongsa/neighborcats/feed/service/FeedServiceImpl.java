@@ -152,7 +152,7 @@ public class FeedServiceImpl implements FeedService {
     String email = securityService.getLoggedUserEmail();
     Servant servant = servantService.findServantByEmail(email);
     if(servant.getId() == author.getId()) return;
-    for(Role role : author.getRoles()){
+    for(Role role : servant.getRoles()){
       if(role.getName() == ERole.ROLE_ADMIN) return;
     }
     throw new CustomException(HttpStatus.FORBIDDEN, "작성/수정 권한이 없습니다.", "작성자 이메일: {}, 요청자 이메일: {}", author.getEmail(), servant.getEmail());      

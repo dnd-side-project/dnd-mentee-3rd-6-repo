@@ -22,3 +22,7 @@
 - [Project Github Wiki](https://github.com/dnd-mentee-3rd/dnd-mentee-3rd-6-repo/wiki): 팀 소개, D&D 과제 제출
 - [전체 문서](https://www.notion.so/3d5aad638b2b475e9b248e113865659f?v=5c4b7c8283014cddbf68337a141e5fc5): 기획서, 컨벤션, 회의록 등
 - [기획서](https://www.notion.so/598df359226f4a4a851ad1614875eb98): 서비스 기획서
+
+## 3. 서비스
+- https://woodongjip.com
+- 추후 안드로이드 앱 스토어, 애플 스토어에 출시 예정입니다.
