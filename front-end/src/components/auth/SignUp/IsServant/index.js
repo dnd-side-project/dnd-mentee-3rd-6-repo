@@ -36,10 +36,10 @@ const IsServantForm = ({ name, isServant, setIsServant, onSubmitSignUp }) => {
               }}
             >
               <ImageBox choice={isServant}>
-                <img className="dot1-img" src="/images/isServant/1.svg" alt="집사" />
+                <img className="dot1-img" src="/images/isServant/1.png" alt="집사" />
               </ImageBox>
               <ImageBox choice={isServant}>
-                <img className="dot2-img" src="/images/isServant/2.svg" alt="랜선집사" />
+                <img className="dot2-img" src="/images/isServant/2.png" alt="랜선집사" />
               </ImageBox>
             </Slider>
           </SliderWrapper>

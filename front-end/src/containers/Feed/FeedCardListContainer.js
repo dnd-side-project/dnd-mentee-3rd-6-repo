@@ -35,7 +35,7 @@ const FeedCardListContainer = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    if (accessToken && !userInfo.id) {
+    if (accessToken && !userInfo?.id) {
       dispatch({
         type: LOAD_USER_INFO_REQUEST,
         data: accessToken,
@@ -65,7 +65,7 @@ const FeedCardListContainer = () => {
   useEffect(() => {
     if (scrollValid) {
       setScrollValid((prev) => !prev);
-
+      console.log('aa');
       if (!isLast && !getFeedListLoading) {
         dispatch(
           getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, page, scroll),
@@ -75,16 +75,21 @@ const FeedCardListContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const onScrollFeed = useCallback((e) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+  const onScrollFeed = useCallback(
+    (e) => {
+      const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
 
-    setScroll(() => scrollTop);
+      setScroll(() => scrollTop);
 
-    if (scrollHeight - scrollTop < clientHeight + 200) {
-      setScrollValid((prev) => !prev);
-      setPage((prev) => prev + 1);
-    }
-  }, []);
+      if (!isLast && !getFeedListLoading) {
+        if (scrollHeight - scrollTop === clientHeight) {
+          setScrollValid((prev) => !prev);
+          setPage((prev) => prev + 1);
+        }
+      }
+    },
+    [getFeedListLoading, isLast],
+  );
 
   const onClickLike = useCallback(
     (id) => () => {

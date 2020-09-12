@@ -46,21 +46,85 @@ const WriteContainer = () => {
   //   videoInputRef.current.click();
   // }, []);
 
+  const resizeImage = (image, fileType) => {
+    const canvas = document.createElement('canvas');
+    const maxSize = 400;
+    let { width } = image;
+    let { height } = image;
+
+    if (width > height) {
+      // 가로가 긴 경우
+      if (width > maxSize) {
+        height *= maxSize / width;
+        width = maxSize;
+      }
+    } else {
+      // 세로가 길 경우
+      // eslint-disable-next-line no-lonely-if
+      if (height > maxSize) {
+        width *= maxSize / height;
+        height = maxSize;
+      }
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+    return canvas.toDataURL(fileType.type);
+  };
+
+  const dataURLToBlob = (dataURL) => {
+    const BASE64_MARKER = ';base64,';
+
+    if (dataURL.indexOf(BASE64_MARKER) === -1) {
+      const parts = dataURL.split(',');
+      const contentType = parts[0].split(':')[1];
+      const raw = parts[1];
+
+      return new Blob([raw], {
+        type: contentType,
+      });
+    }
+
+    const parts = dataURL.split(BASE64_MARKER);
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+    let i = 0;
+    while (i < rawLength) {
+      uInt8Array[i] = raw.charCodeAt(i);
+      i++;
+    }
+
+    return new Blob([uInt8Array], {
+      type: contentType,
+    });
+  };
+
   const onChangeImage = useCallback((e) => {
     [].forEach.call(e.target.files, (f) => {
       const reader = new FileReader();
 
-      reader.onload = () => {
-        setFiles(
-          produce((draft) => {
-            draft.file.unshift({ id: nextId.current, f });
-            draft.previewPath.unshift({ id: nextId.current, url: reader.result });
-          }),
-        );
-      };
+      reader.onload = (event) => {
+        const image = new Image();
 
-      reader.onloadend = () => {
-        nextId.current += 1;
+        image.src = event.target.result;
+
+        image.onload = async () => {
+          const prevImgResult = await resizeImage(image, f);
+          const fileResult = await dataURLToBlob(prevImgResult);
+
+          await setFiles(
+            produce((draft) => {
+              draft.file.unshift({ id: nextId.current, f: fileResult });
+              draft.previewPath.unshift({ id: nextId.current, url: prevImgResult });
+            }),
+          );
+
+          nextId.current += 1;
+        };
       };
 
       reader.readAsDataURL(f);
