@@ -78,7 +78,7 @@ const Menu = styled.ul`
 
       svg {
         width: auto;
-        height: 35px;
+        height: 40px;
       }
     }
   }
@@ -146,4 +146,4 @@ Applayout.prototype = {
   pathname: PropTypes.string.isRequired,
 };
 
-export default withRouter(Applayout);
+export default withRouter(React.memo(Applayout));

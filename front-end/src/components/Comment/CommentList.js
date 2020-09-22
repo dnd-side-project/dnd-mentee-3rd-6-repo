@@ -152,9 +152,8 @@ const CommentList = ({
   );
 };
 
-CommentItemId.prototype = {
-  children: PropTypes.element.isRequired,
-  comment: PropTypes.shape({
+CommentList.prototype = {
+  comments: PropTypes.shape({
     id: PropTypes.number,
     content: PropTypes.string,
     numberOfLikes: PropTypes.number,
@@ -165,24 +164,6 @@ CommentItemId.prototype = {
     author: PropTypes.object,
     replies: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
-  onClickLikeComment: PropTypes.func.isRequired,
-  onClickUnlikeComment: PropTypes.func.isRequired,
-  onClickReply: PropTypes.func.isRequired,
-  onClickLikeReply: PropTypes.func.isRequired,
-  onClickUnlikeReply: PropTypes.func.isRequired,
-  moreId: PropTypes.number.isRequired,
-  onClickMore: PropTypes.func.isRequired,
-  moreReplyId: PropTypes.number.isRequired,
-  onClickMoreReply: PropTypes.func.isRequired,
-  onClickRemoveComment: PropTypes.func.isRequired,
-  onClickRemoveReply: PropTypes.func.isRequired,
-  userId: PropTypes.number.isRequired,
-  replyScrollRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  commentHeightId: PropTypes.number.isRequired,
-};
-
-CommentList.prototype = {
-  comments: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClickLikeComment: PropTypes.func.isRequired,
   onClickUnlikeComment: PropTypes.func.isRequired,
   onClickReply: PropTypes.func.isRequired,

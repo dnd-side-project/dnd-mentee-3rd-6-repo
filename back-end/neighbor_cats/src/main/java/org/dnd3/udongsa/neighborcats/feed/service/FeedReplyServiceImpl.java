@@ -75,6 +75,7 @@ public class FeedReplyServiceImpl implements FeedReplyService {
   @Transactional
   public void deleteByComment(FeedComment comment) {
     List<FeedReply> replies = repo.findAllByFeedComment(comment);
+    replies.stream().forEach(reply->feedReplyLikeService.deleteByReply(reply));
     repo.deleteAll(replies);
   }
 

@@ -120,8 +120,8 @@ export const InfoMap = createGlobalStyle`
         p {
             font-style: normal;
             font-weight: bold;
-            font-size: 10px;
-            line-height: 14px;
+            font-size: 12px;
+            line-height: 15px;
 
             color:${pallete.primary[3]};
         }
