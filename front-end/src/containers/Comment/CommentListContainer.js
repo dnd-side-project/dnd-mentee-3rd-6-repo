@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import CommentList from '../../components/Comment/CommentList';
 import {
   LIKE_COMMENT_REQUEST,
@@ -15,6 +16,7 @@ import { ACCESS_TOKEN } from '../../modules/user';
 const CommentListContainer = () => {
   const [moreId, setMoreId] = useState(null);
   const [moreReplyId, setMoreReplyId] = useState(null);
+  const [commentHeightId, setCommentHeightId] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -23,11 +25,33 @@ const CommentListContainer = () => {
 
   const {
     FeedById: { comments, id: feedId },
-    getCommentLoading,
+    addCommentDone,
+    addReplyCommentDone,
   } = useSelector((state) => state.feed);
+
+  const commentScrollRef = useRef();
+  const replyScrollRef = useRef();
+
+  useEffect(() => {
+    if (addReplyCommentDone) {
+      const scrollHeight = replyScrollRef.current?.getBoundingClientRect();
+      const scrolledTopLength = window.pageYOffset;
+
+      const totalscrollHeight = scrollHeight?.top + scrolledTopLength - 300;
+      window.scrollTo(0, totalscrollHeight);
+    }
+  }, [addReplyCommentDone]);
+
+  useEffect(() => {
+    if (addCommentDone) {
+      const scrollHeight = commentScrollRef.current?.scrollHeight;
+      window.scrollTo(0, scrollHeight);
+    }
+  }, [addCommentDone]);
 
   const onClickReply = useCallback(
     (index) => () => {
+      setCommentHeightId(() => index);
       dispatch({
         type: ON_REPLY,
         data: index,
@@ -135,10 +159,6 @@ const CommentListContainer = () => {
     [accessToken, dispatch, moreReplyId],
   );
 
-  if (getCommentLoading) {
-    return <h1>로딩 중</h1>;
-  }
-
   return (
     <CommentList
       comments={comments}
@@ -154,6 +174,9 @@ const CommentListContainer = () => {
       onClickRemoveComment={onClickRemoveComment}
       onClickRemoveReply={onClickRemoveReply}
       userId={userId}
+      commentScrollRef={commentScrollRef}
+      replyScrollRef={replyScrollRef}
+      commentHeightId={commentHeightId}
     />
   );
 };

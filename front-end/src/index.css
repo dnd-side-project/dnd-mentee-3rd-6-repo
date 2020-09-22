@@ -38,3 +38,7 @@ a {
 *::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
+
+input {
+  caret-color: #ffbe65;
+}

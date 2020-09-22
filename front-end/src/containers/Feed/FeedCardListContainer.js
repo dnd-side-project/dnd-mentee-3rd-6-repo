@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { LoadingOutlined } from '@ant-design/icons';
+
 import FeedCardList from '../../components/Feed/FeedCardList';
 import {
   LIKE_FEED_REQUEST,
@@ -8,25 +10,32 @@ import {
   getFeedListCreateAction,
 } from '../../modules/feed';
 import { ACCESS_TOKEN, LOAD_USER_INFO_REQUEST } from '../../modules/user';
+import { LoadingFeed } from '../../components/Feed/styles';
 
 const FeedCardListContainer = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-
   const dispatch = useDispatch();
 
-  const accessToken = localStorage.getItem(ACCESS_TOKEN);
   const {
     Feeds: { contents, isLast },
+    feedId,
     filterIndex,
     tagIndex,
     sortIndex,
     getFeedListLoading,
+    getCommentLoading,
+    getLoading,
+    scrollLocation,
   } = useSelector((state) => state.feed);
 
+  const [scroll, setScroll] = useState(scrollLocation || 0);
+  const [page, setPage] = useState(0);
+  const [scrollValid, setScrollValid] = useState(false);
+
   const { userInfo } = useSelector((state) => state.user);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    if (accessToken && !userInfo.id) {
+    if (accessToken && !userInfo?.id) {
       dispatch({
         type: LOAD_USER_INFO_REQUEST,
         data: accessToken,
@@ -35,37 +44,52 @@ const FeedCardListContainer = () => {
   }, [accessToken, dispatch, userInfo]);
 
   useEffect(() => {
-    const onScroll = () => {
-      if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 300
-      ) {
-        // 피드 불러오기가 로딩하고 있을 떈 호출 안한다.
-        if (!isLast && !getFeedListLoading) {
-          dispatch(
-            getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, pageNumber),
-          );
+    const section = document.querySelector('.scroll');
 
-          setPageNumber((prevNumber) => prevNumber + 1);
+    if (filterIndex !== 4 && contents) {
+      section.scrollTo(0, scrollLocation);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterIndex]);
+
+  useEffect(() => {
+    if (filterIndex || tagIndex || sortIndex) {
+      setPage(() => 0);
+
+      !feedId &&
+        dispatch(getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, 0, scroll));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterIndex, sortIndex, tagIndex]);
+
+  useEffect(() => {
+    if (scrollValid) {
+      setScrollValid((prev) => !prev);
+      console.log('aa');
+      if (!isLast && !getFeedListLoading) {
+        dispatch(
+          getFeedListCreateAction(accessToken, filterIndex, tagIndex, sortIndex, page, scroll),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const onScrollFeed = useCallback(
+    (e) => {
+      const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+
+      setScroll(() => scrollTop);
+
+      if (!isLast && !getFeedListLoading) {
+        if (scrollHeight - scrollTop === clientHeight) {
+          setScrollValid((prev) => !prev);
+          setPage((prev) => prev + 1);
         }
       }
-    };
-
-    window.addEventListener('scroll', onScroll);
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, [
-    accessToken,
-    dispatch,
-    filterIndex,
-    getFeedListLoading,
-    isLast,
-    pageNumber,
-    sortIndex,
-    tagIndex,
-  ]);
+    },
+    [getFeedListLoading, isLast],
+  );
 
   const onClickLike = useCallback(
     (id) => () => {
@@ -100,30 +124,43 @@ const FeedCardListContainer = () => {
         data: {
           feedId: id,
           accessToken,
+          scrollLocation: scroll,
         },
       });
     },
-    [accessToken, dispatch],
+    [accessToken, dispatch, scroll],
   );
 
   // const onClickShowText = useCallback(() => {}, []);
 
-  if (!contents) {
-    return null;
+  if (getCommentLoading) {
+    return (
+      <LoadingFeed>
+        <LoadingOutlined />
+      </LoadingFeed>
+    );
   }
 
   if (getFeedListLoading) {
-    return <h1>로딩 중</h1>;
+    return (
+      <LoadingFeed>
+        <LoadingOutlined />
+      </LoadingFeed>
+    );
   }
 
   return (
-    <FeedCardList
-      contents={contents}
-      onClickLike={onClickLike}
-      onClickUnlike={onClickUnlike}
-      onClickComment={onClickComment}
-      isLast={isLast}
-    />
+    <>
+      <FeedCardList
+        contents={contents}
+        onClickLike={onClickLike}
+        onClickUnlike={onClickUnlike}
+        onClickComment={onClickComment}
+        getLoading={getLoading}
+        isLast={isLast}
+        onScrollFeed={onScrollFeed}
+      />
+    </>
   );
 };
 

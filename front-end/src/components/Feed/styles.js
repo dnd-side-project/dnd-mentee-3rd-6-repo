@@ -2,24 +2,40 @@ import styled, { css } from 'styled-components';
 import { pallete } from '../../lib/style/pallete';
 
 export const FeedWrapper = styled.main`
+  position: relative;
+
   width: 100vw;
+  height: calc(100vh - 51px);
 
   margin-top: 50px;
 
   transform: translateX(-16px);
 
-  .feed-content {
+  .scroll {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+
+    margin: 0 auto;
+
+    margin-top: ${({ page }) => (page === 3 ? '40px' : '96px')};
     overflow-x: hidden;
+    overflow-y: scroll;
   }
 `;
 
 export const Header = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  width: 100%;
 
   .feed-head__title {
     display: flex;
@@ -146,16 +162,12 @@ export const TagButton = styled.button`
   }}
 `;
 
-export const CardList = styled.section`
-  margin-top: 21px;
+export const CardList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    margin-top: 15px;
-  }
+  padding-top: 15px;
 `;
 
 export const CardItem = styled.li`
@@ -185,8 +197,8 @@ export const CardTitle = styled.div`
       justify-content: center;
       align-items: center;
 
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: ${pallete.gray[3]};
 
@@ -252,7 +264,7 @@ export const CardTitle = styled.div`
 export const CardIcon = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding: 0 16px;
 
   margin-top: 5px;
@@ -265,16 +277,10 @@ export const CardIcon = styled.div`
 
     .icon--item {
       display: flex;
-
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 16px;
-
-      color: ${pallete.primary[1]};
+      align-items: flex-start;
 
       button {
-        margin-right: 4px;
+        margin-right: 6px;
         padding: 0;
 
         border: none;
@@ -283,8 +289,22 @@ export const CardIcon = styled.div`
         background: ${pallete.primary[3]};
       }
 
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+
       &:last-child {
-        margin-left: 16px;
+        margin-left: 21px;
+      }
+
+      & span:last-child {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 16px;
+
+        color: ${pallete.primary[1]};
       }
     }
   }
@@ -382,7 +402,19 @@ export const CommentHeader = styled.header`
 `;
 
 export const CommentItem = styled.li`
+  @keyframes showCommnet {
+    0% {
+      background: ${pallete.gray[2]};
+    }
+    100% {
+      background: ${pallete.primary[3]};
+    }
+  }
+
+  animation: showCommnet 0.5s ease-in-out forwards;
+
   display: flex;
+  border-top: 1px solid ${pallete.gray[3]};
 
   .comment-reple {
     margin-top: 23px;
@@ -397,7 +429,6 @@ export const CommentItem = styled.li`
 
     height: 131px;
     width: 100%;
-    border-top: 1px solid ${pallete.gray[3]};
 
     dt {
       display: flex;
@@ -567,10 +598,19 @@ export const MoreGroup = styled.div`
 
     color: ${pallete.gray[4]};
 
-    font-size: 24px;
+    font-size: 28px;
+    transition: color 0.25s, transform 0.25s;
 
     &:active {
       color: ${pallete.secondary[2]};
+      transform: scale(0.8);
+      transition: color 0.125s, transform 0.125s;
+    }
+
+    & span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
@@ -578,8 +618,8 @@ export const MoreGroup = styled.div`
     position: absolute;
     top: 30px;
     right: -10px;
-    width: 109px;
-    height: 84px;
+    width: auto;
+    height: auto;
 
     display: flex;
     justify-content: center;
@@ -612,7 +652,7 @@ export const MoreGroup = styled.div`
         justify-content: center;
         align-items: center;
 
-        width: 100%;
+        width: 109px;
         height: 42px;
 
         font-style: normal;
@@ -641,10 +681,6 @@ export const MoreGroup = styled.div`
             transition: all 0.125s;
           }
         }
-
-        &:last-child {
-          border-top: 1px solid ${pallete.gray[3]};
-        }
       }
     }
   }
@@ -664,7 +700,7 @@ export const CommentInput = styled.div`
 
   background: ${pallete.gray[2]};
 
-  span {
+  & .img {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -694,6 +730,14 @@ export const CommentInput = styled.div`
 
     background: ${pallete.primary[3]};
     padding: 10px;
+    padding-right: 9vw;
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+
+    color: ${pallete.primary[1]};
 
     &::placeholder {
       font-style: normal;
@@ -703,6 +747,28 @@ export const CommentInput = styled.div`
 
       color: ${pallete.gray[3]};
     }
+  }
+
+  & .send {
+    position: absolute;
+    top: 23px;
+    right: 6vw;
+
+    border: none;
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: ${pallete.secondary[2]};
+
+    color: ${pallete.primary[3]};
   }
 `;
 
@@ -749,16 +815,28 @@ export const ReplyBox = styled.div`
   }
 `;
 
-export const LastFeed = styled.h1`
+export const LastFeed = styled.p`
   font-style: normal;
   font-weight: bold;
-  font-size: 22px;
-  line-height: 30px;
-
+  font-size: 18px;
+  line-height: 25px;
   text-align: center;
 
-  color: ${pallete.primary[1]};
+  color: ${pallete.gray[3]};
 
-  margin-top: 30px;
-  margin-bottom: 13vh;
+  margin-top: 10px;
+  margin-bottom: 24vh;
+`;
+
+export const LoadingFeed = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${pallete.gray[3]};
+
+  font-size: 5vh;
+
+  padding-top: ${({ last }) => (last ? '10px' : '200px')};
+  margin-bottom: 25vh;
 `;

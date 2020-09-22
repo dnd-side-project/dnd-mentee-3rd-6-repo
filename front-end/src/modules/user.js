@@ -159,7 +159,7 @@ const user = (state = initialSate, action) => {
         break;
       /* 로그아웃 */
       case LOG_OUT:
-        localStorage.setItem(ACCESS_TOKEN, null);
+        localStorage.setItem(ACCESS_TOKEN, '');
         draft.userInfo = null;
         draft.logOutLoading = false;
         draft.logOutDone = true;

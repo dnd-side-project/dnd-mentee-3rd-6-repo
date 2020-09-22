@@ -26,7 +26,6 @@ const ServantInfoAddressFormContainer = () => {
   useEffect(() => {
     const script = document.createElement('script');
     if (myMap === null) {
-      console.log('1. 지도 생성');
       script.type = 'text/javascript';
       script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_JS_APP_KEY}&libraries=services&autoload=false`;
       document.head.appendChild(script);
@@ -62,12 +61,12 @@ const ServantInfoAddressFormContainer = () => {
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude } = position.coords;
           const { longitude } = position.coords;
-          console.log('2. GPS 가져오기');
+
           dispatch({
             type: CURRENT_GPS_SUCCESS,
             data: {
-              geoLat: latitude,
-              geoLon: longitude,
+              geoLat: latitude.toFixed(4),
+              geoLon: longitude.toFixed(4),
             },
           });
         });
@@ -86,8 +85,6 @@ const ServantInfoAddressFormContainer = () => {
   /* 마커 표시 */
   useEffect(() => {
     if (myMap !== null && geoLat && geoLon) {
-      console.log('3. 마커 등록');
-
       // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
       const locPosition = new kakao.maps.LatLng(geoLat, geoLon);
       const mapPosition = new kakao.maps.LatLng(geoLat - 0.01, geoLon - 0.0001);
@@ -133,7 +130,6 @@ const ServantInfoAddressFormContainer = () => {
   /* 행정동 찾기 */
   useEffect(() => {
     if (currentGPSDone) {
-      console.log('4. 행정동 찾기');
       dispatch({
         type: REGION_CODE_REQUEST,
         data: {

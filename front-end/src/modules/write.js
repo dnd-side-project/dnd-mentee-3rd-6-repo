@@ -50,6 +50,12 @@ const write = (state = initialSate, action) => {
         break;
       case RESET_WRITE_PAGE:
         draft.pageIndex = 1;
+        draft.imgFiles = null;
+        draft.path = null;
+        draft.tagId = null;
+        draft.catIds = null;
+        draft.content = '';
+        draft.prevClick = null;
         break;
       default:
         break;

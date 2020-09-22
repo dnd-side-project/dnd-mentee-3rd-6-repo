@@ -108,7 +108,7 @@ const Write = ({
           {click ? null : (
             <Tolltip focus={focus}>
               <p>
-                <span>냥이를 자랑해주라냥</span>
+                <span>냥이를 자랑해 주라냥~</span>
                 <FootIcon />
               </p>
               <span className="arrow" />
@@ -154,4 +154,4 @@ Write.prototype = {
   click: PropTypes.bool.isRequired,
 };
 
-export default Write;
+export default React.memo(Write);
