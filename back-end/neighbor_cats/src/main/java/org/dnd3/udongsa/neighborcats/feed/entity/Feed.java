@@ -40,10 +40,16 @@ public class Feed {
     private LocalDateTime updatedAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
-    List<FeedLike> likes = new ArrayList<>();
+    private final List<FeedLike> likes = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
-    List<FeedComment> comments = new ArrayList<>();
+    private final List<FeedComment> comments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedImg> images = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedTag> tags= new ArrayList<>();
 
     protected static Feed of(String content, Servant author){
         Feed feed = new Feed();

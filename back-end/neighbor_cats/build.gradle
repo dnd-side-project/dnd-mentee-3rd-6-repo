@@ -47,9 +47,8 @@ dependencies {
 	// 파일 저장 관리 유틸
 	implementation 'commons-io:commons-io:2.7'
 	implementation 'org.apache.commons:commons-lang3:3.11'
-  asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.4.RELEASE'
-
-
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.4.RELEASE'
+	testImplementation "org.assertj:assertj-core:3.17.2"
 }
 
 test {
@@ -59,8 +58,8 @@ test {
 
 asciidoctor {
 	inputs.dir snippetsDir
-  sourceDir 'src/doc/asciidoc'
-  attributes \
+	sourceDir 'src/doc/asciidoc'
+	attributes \
     'snippets': file('build/generated-snippets')
 	dependsOn test
 }

@@ -50,7 +50,7 @@ public class Servant {
 	@NotBlank
 	@Size(max = 120)
 	private String password;
-	
+
   @Size(max = 20)
   @Column(unique = true)
 	private String nickname;
