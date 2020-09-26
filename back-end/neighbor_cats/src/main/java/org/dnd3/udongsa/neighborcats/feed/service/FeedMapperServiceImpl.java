@@ -26,11 +26,12 @@ public class FeedMapperServiceImpl implements FeedMapperService {
   private final SecurityContextService securityService;
   private final TimeDescService timeDescService;
   private final FeedCommentService commentService;
+  private final ServantMapper servantMapper;
 
   @Override
   public FeedDto toDto(Feed feed, boolean withComments) {
     List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
-    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
+    AuthorDto authorDto = servantMapper.mapForAuthor(feed.getAuthor());
     Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
     long numberOfLikes = feed.getLikes().size();
     int numberOfComments = feed.getComments().size();
@@ -40,7 +41,7 @@ public class FeedMapperServiceImpl implements FeedMapperService {
     if (withComments) {
       comments = commentService.getAllByFeed(feed);
     }
-    FeedDto feedDto = buildDto( feed,
+    return buildDto( feed,
                                 imgDtos,
                                 authorDto,
                                 isLike,
@@ -49,7 +50,6 @@ public class FeedMapperServiceImpl implements FeedMapperService {
                                 createdDateTime,
                                 timeDesc,
                                 comments);
-    return feedDto;
   }
 
   @Override

@@ -49,6 +49,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.11'
 	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.4.RELEASE'
 	testImplementation "org.assertj:assertj-core:3.17.2"
+	implementation 'org.modelmapper:modelmapper:2.3.8'
 }
 
 test {

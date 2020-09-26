@@ -8,6 +8,10 @@
 Doc Writer <hopefulyun@gmail.com> +
 {docdatetime}
 
+== 집사 Servant
+=== 마이프로필
+operation::ServantDoc/getMe[snippets='http-request,response-body,response-fields']
+
 == Authentication
 === 로그인
 operation::AuthDoc/signIn[snippets='http-request,request-body,request-fields,response-body,response-fields']

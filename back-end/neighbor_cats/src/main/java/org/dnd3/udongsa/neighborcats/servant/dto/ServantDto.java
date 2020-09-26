@@ -1,10 +1,11 @@
-package org.dnd3.udongsa.neighborcats.auth.dto;
+package org.dnd3.udongsa.neighborcats.servant.dto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
 import org.dnd3.udongsa.neighborcats.role.Role;
 
@@ -18,9 +19,9 @@ public class ServantDto {
   private Long id;
   private String name;
   private String email;
-  private String nickName;
+  @JsonAlias("nickName")
+  private String nickname;
   private String addressName;
-  private String phoneNumber;
   private String profileImgUrl;
   private Boolean isServant;
   private Set<Role> roles = new HashSet<>();
