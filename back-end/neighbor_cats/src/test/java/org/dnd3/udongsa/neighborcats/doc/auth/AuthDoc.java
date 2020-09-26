@@ -1,5 +1,5 @@
 // package org.dnd3.udongsa.neighborcats.doc.auth;
-
+//
 // import static org.dnd3.udongsa.neighborcats.doc.ApiDocUtils.getDocumentRequest;
 // import static org.dnd3.udongsa.neighborcats.doc.ApiDocUtils.getDocumentResponse;
 // import static org.mockito.ArgumentMatchers.any;
@@ -15,13 +15,13 @@
 // import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 // import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 // import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+//
 // import java.util.HashSet;
 // import java.util.Set;
-
+//
 // import com.fasterxml.jackson.core.JsonProcessingException;
 // import com.fasterxml.jackson.databind.ObjectMapper;
-
+//
 // import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 // import org.dnd3.udongsa.neighborcats.auth.dto.MeInfo;
 // import org.dnd3.udongsa.neighborcats.doc.APIDocTest;
@@ -36,20 +36,20 @@
 // import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 // import org.springframework.util.LinkedMultiValueMap;
 // import org.springframework.util.MultiValueMap;
-
+//
 // public class AuthDoc extends APIDocTest {
-
+//
 //   @Test
 //   public void signIn() throws JsonProcessingException, Exception {
 //     // Given
 //     String api = "/api/auth/sign-in";
 //     String userEmail = "admin@test.com";
 //     String password = "1234";
-
+//
 //     SignInReqDto reqDto = new SignInReqDto();
 //     reqDto.setEmail(userEmail);
 //     reqDto.setPassword(password);
-
+//
 //     MeInfo resDto = new MeInfo();
 //     // resDto.setAccessToken("abc1234def");
 //     resDto.setId(1L);
@@ -63,34 +63,34 @@
 //     roles.add(Role.of(ERole.ROLE_USER));
 //     resDto.setRoles(roles);
 //     Mockito.when(super.authService.signIn(any())).thenReturn(resDto);
-
+//
 //     HttpHeaders headers = new HttpHeaders();
 //     headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
+//
 //     // When
 //     ResultActions action = mockMvc.perform(post(api)
 //                                   .content(new ObjectMapper().writeValueAsString(reqDto))
 //                                   .headers(headers));
-
+//
 //     // Then
 //     action
 //     .andExpect(status().isOk())
-//     .andDo(document(documentName, 
+//     .andDo(document(documentName,
 //                     requestHeaders(headerWithName("Content-Type").description("application/json")),
 //                     responseHeaders(headerWithName("Content-Type").description("application/json"))))
-//     .andDo(document(documentName, 
-//                       getDocumentRequest(), 
+//     .andDo(document(documentName,
+//                       getDocumentRequest(),
 //                       getDocumentResponse(),
 //                       requestFields(AuthFieldDesc.getSignInReqDesc()),
 //                       responseFields(AuthFieldDesc.getSignResDesc())));
 //   }
-
+//
 //   // @Test
 //   // @WithMockUser(authorities = {"ROLE_USER"})
 //   // public void me() throws Exception{
 //   //   // Given
 //   //   String api = "/api/auth/me";
-    
+//
 //   //   ServantDto dto = new ServantDto();
 //   //   dto.setId(0L);
 //   //   dto.setName("name");
@@ -112,22 +112,22 @@
 //   //   List<CatDto> cats = new ArrayList<>();
 //   //   cats.add(catDto);
 //   //   dto.setCats(cats);
-
-
+//
+//
 //   //   HttpHeaders headers = new HttpHeaders();
 //   //   headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 //   //   headers.add(HttpHeaders.AUTHORIZATION, "Bearer {accessToken}");
-
+//
 //   //   when(authService.getLoggedServant()).thenReturn(dto);
-
+//
 //   //   // When
 //   //   ResultActions action = mockMvc.perform(get(api).headers(headers));
-
+//
 //   //   // Then
 //   //   action
 //   //   .andDo(print())
 //   //   .andExpect(status().isOk())
-//   //   .andDo(document(documentName, 
+//   //   .andDo(document(documentName,
 //   //     requestHeaders(headerWithName("Content-Type").description("application/json"))
 //   //     ,responseHeaders(headerWithName("Content-Type").description("application/json"))
 //   //   ))
@@ -136,11 +136,11 @@
 //   //     getDocumentResponse(),
 //   //     responseFields(AuthFieldDesc.getMeResDesc())));
 //   // }
-
+//
 //   @Test
 //   public void signUp() throws Exception{
 //     String api = "/api/auth/sign-up";
-    
+//
 //     MockMultipartFile catProfileImg = new MockMultipartFile("catProfileImg", new byte[1]);
 //     MultiValueMap<String, String> reqMap = new LinkedMultiValueMap<>();
 //     reqMap.add("phoneNumber", "01012345678");
@@ -161,7 +161,7 @@
 //     reqMap.add("catBirthday", "2019-01-02");
 //     reqMap.add("catNeutralized", "TRUE");
 //     reqMap.add("catWeight", "3.5");
-
+//
 //     MeInfo resDto = new MeInfo();
 //     resDto.setId(1L);
 //     resDto.setPhoneNumber("01012345678");
@@ -176,17 +176,17 @@
 //     roles.add(Role.of(ERole.ROLE_USER));
 //     resDto.setRoles(roles);
 //     when(authService.signUp(any())).thenReturn(resDto);
-
+//
 //     // When
 //     ResultActions action = mockMvc.perform(MockMvcRequestBuilders.multipart(api)
 //                                     .file(catProfileImg)
 //                                     .params(reqMap)
 //     );
-
+//
 //     // Then
 //     action
 //     .andExpect(status().isCreated())
-//     .andDo(document(documentName, 
+//     .andDo(document(documentName,
 //       requestHeaders(headerWithName("Content-Type").description("multipart/form-data"))
 //       ,responseHeaders(headerWithName("Content-Type").description("application/json"))
 //     ))
@@ -196,7 +196,7 @@
 //       requestParameters(AuthFieldDesc.getSignUpReqDesc()),
 //       requestParts(partWithName("catProfileImg").description("고양이 프로필 이미지 파일")),
 //       responseFields(AuthFieldDesc.getSignResDesc())));
-
+//
 //   }
-
+//
 // }

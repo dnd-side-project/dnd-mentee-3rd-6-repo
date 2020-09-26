@@ -3,7 +3,7 @@ package org.dnd3.udongsa.neighborcats.auth.service;
 import javax.transaction.Transactional;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.MeInfo;
-import org.dnd3.udongsa.neighborcats.auth.dto.ServantDto;
+import org.dnd3.udongsa.neighborcats.servant.dto.ServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignInReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.TokenDto;
@@ -13,7 +13,6 @@ import org.dnd3.udongsa.neighborcats.role.ERole;
 import org.dnd3.udongsa.neighborcats.security.jwt.JwtUtils;
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.dnd3.udongsa.neighborcats.servant.entity.ServantMapper;
 import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,8 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
   private String generateToken(String servantEmail) {
     securityContextService.setAuthentication(servantEmail);
-    String jwt = jwtUtils.generateJwtToken(servantEmail);
-    return jwt;
+    return jwtUtils.generateJwtToken(servantEmail);
   }
 
   @Override
@@ -80,10 +78,9 @@ public class AuthServiceImpl implements AuthService {
       servantDto.getId(), 
       servantDto.getName(), 
       servantDto.getEmail(), 
-      servantDto.getNickName(), 
-      servantDto.getName(), 
-      servantDto.getPhoneNumber(), 
-      servantDto.getProfileImgUrl(), 
+      servantDto.getNickname(),
+      servantDto.getName(),
+      servantDto.getProfileImgUrl(),
       servantDto.getIsServant(),
       servantDto.getRoles(),
       servantDto.getCats());

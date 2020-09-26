@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,7 +33,7 @@ public class FeedReply {
   @JoinColumn
   private FeedComment feedComment;
 
-  @OneToMany(fetch=FetchType.LAZY, mappedBy = "feedReply", cascade = CascadeType.REFRESH)
+  @OneToMany(fetch=FetchType.LAZY, mappedBy = "feedReply")
   private List<FeedReplyLike> likes = new ArrayList<>();
 
   @ManyToOne

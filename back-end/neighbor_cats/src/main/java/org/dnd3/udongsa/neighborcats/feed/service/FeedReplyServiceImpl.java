@@ -31,6 +31,7 @@ public class FeedReplyServiceImpl implements FeedReplyService {
   private final TimeDescService timeService;
   private final FeedCommentDao feedCommentDao;
   private final FeedReplyLikeService feedReplyLikeService;
+  private final ServantMapper servantMapper;
 
   @Override
   @Transactional(readOnly = true)
@@ -47,7 +48,7 @@ public class FeedReplyServiceImpl implements FeedReplyService {
     dto.setLike(isLike(reply.getLikes()));
     dto.setCreatedDateTime(reply.getCreatedDateTime().toString());
     dto.setTimeDesc(timeService.generate(reply.getCreatedDateTime()));
-    AuthorDto authorDto = ServantMapper.map(reply.getAuthor());
+    AuthorDto authorDto = servantMapper.mapForAuthor(reply.getAuthor());
     dto.setAuthor(authorDto);
     return dto;
   }
@@ -56,7 +57,7 @@ public class FeedReplyServiceImpl implements FeedReplyService {
     String email = securityService.getLoggedUserEmail();
     Servant servant = servantService.findServantByEmail(email);
     for (FeedReplyLike like : likes) {
-      if (like.getServant().getId() == servant.getId()) {
+      if (like.getServant().getId().equals(servant.getId())) {
         return true;
       }
     }
@@ -75,7 +76,7 @@ public class FeedReplyServiceImpl implements FeedReplyService {
   @Transactional
   public void deleteByComment(FeedComment comment) {
     List<FeedReply> replies = repo.findAllByFeedComment(comment);
-    replies.stream().forEach(reply->feedReplyLikeService.deleteByReply(reply));
+    replies.forEach(feedReplyLikeService::deleteByReply);
     repo.deleteAll(replies);
   }
 

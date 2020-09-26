@@ -54,14 +54,19 @@ public class FeedServiceImpl implements FeedService {
   private final ServantService servantService;
   private final FeedCatService feedCatService;
   private final KeepService keepService;
+  private final FeedMapperService feedMapperService;
+  private final ServantMapper servantMapper;
 
   @Override
   @Transactional(readOnly = true)
   public PagingDto<FeedDto> findAll(FeedSearchDto searchDto) {
+    // build Pageable
+    validateSearchDto(searchDto);
     Pageable pageable = PageRequest.of(searchDto.getPageNumber(), searchDto.getPageSize(), Direction.DESC, "createdAt");
-    Page<Feed> pageFeeds = null;
+    Page<Feed> pageFeeds;
+    // get feeds
     if(searchDto.getFilterType() == EFilterType.HOMETOWN && Objects.nonNull(searchDto.getTagId())){
-      Address address = servantService.findServantByEmail(securityService.getLoggedUserEmail()).getAddress();
+      Address address = securityService.getLoggedUser().getAddress();
       Tag tag = feedTagService.findTagByTagId(searchDto.getTagId());
       pageFeeds = repo.findAllByTagAndAddress(tag, address, pageable); 
     }else if(searchDto.getFilterType() == EFilterType.ALL && searchDto.getSortType() == ESortType.POPULAR){
@@ -71,12 +76,23 @@ public class FeedServiceImpl implements FeedService {
     }else{
       pageFeeds = repo.findAll(pageable);
     }
-    List<FeedDto> feedDtos = new ArrayList<>();
-    for(Feed feed : pageFeeds.getContent()){
-      feedDtos.add(toDto(feed, false));
-    } 
-    PagingDto<FeedDto> pagingDto = PagingMapper.map(pageFeeds, feedDtos);
-    return pagingDto;
+    // feedList -> feedDtoList
+    List<FeedDto> feedDtoList = feedMapperService.toDto(pageFeeds.getContent(), false);
+    // feedDtoList -> feedDtoList with page
+    return PagingMapper.map(pageFeeds, feedDtoList);
+  }
+
+  private void validateSearchDto(FeedSearchDto searchDto) {
+    // Null 체크
+    Integer pageSize = searchDto.getPageSize();
+    Integer pageNumber = searchDto.getPageNumber();
+    if(Objects.isNull(pageSize) || Objects.isNull(pageNumber)){
+      throw new CustomException(HttpStatus.BAD_REQUEST, "pageSize 또는 PageNumber Null입니다.");
+    }
+    // 숫자 최소값 체크
+    if(pageSize <= 0){
+      throw new CustomException(HttpStatus.BAD_REQUEST, "PageSize는 1 이상이어야 합니다.");
+    }
   }
 
   @Override
@@ -117,7 +133,7 @@ public class FeedServiceImpl implements FeedService {
 
   private FeedDto toDto(Feed feed, boolean withComments){
     List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
-    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
+    AuthorDto authorDto = servantMapper.mapForAuthor(feed.getAuthor());
     Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
     long numberOfLikes = feed.getLikes().size();
     int numberOfComments = feed.getComments().size();
@@ -127,8 +143,7 @@ public class FeedServiceImpl implements FeedService {
     if(withComments){
       comments = commentService.getAllByFeed(feed);
     }
-    FeedDto feedDto = FeedMapper.map(feed, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc, comments);
-    return feedDto;
+    return FeedMapper.map(feed, imgDtos, authorDto, isLike, numberOfLikes, numberOfComments, createdDateTime, timeDesc, comments);
   }
 
   @Override
@@ -151,7 +166,7 @@ public class FeedServiceImpl implements FeedService {
   private void validateAuthor(Servant author) {
     String email = securityService.getLoggedUserEmail();
     Servant servant = servantService.findServantByEmail(email);
-    if(servant.getId() == author.getId()) return;
+    if(servant.getId().equals(author.getId())) return;
     for(Role role : servant.getRoles()){
       if(role.getName() == ERole.ROLE_ADMIN) return;
     }

@@ -33,6 +33,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
   private final TimeDescService timeDescService;
   private final ServantService servantService;
   private final FeedDao feedDao;
+  private final ServantMapper servantMapper;
 
   @Override
   @Transactional(readOnly = true)
@@ -71,10 +72,9 @@ public class FeedCommentServiceImpl implements FeedCommentService {
     boolean isLike = commentLikeService.isLike(securityService.getLoggedUserEmail(), comment);
     String createdDateTime = comment.getCreatedDateTime().toString();
     String timeDesc = timeDescService.generate(comment.getCreatedDateTime());
-    AuthorDto authorDto = ServantMapper.map(comment.getAuthor());
-    FeedCommentDto dto = FeedCommentMapper.map(comment, numberOfLikes, replies, numberOfReplies, isLike,
+    AuthorDto authorDto = servantMapper.mapForAuthor(comment.getAuthor());
+    return FeedCommentMapper.map(comment, numberOfLikes, replies, numberOfReplies, isLike,
         createdDateTime, timeDesc, authorDto);
-    return dto;
   }
 
   @Override

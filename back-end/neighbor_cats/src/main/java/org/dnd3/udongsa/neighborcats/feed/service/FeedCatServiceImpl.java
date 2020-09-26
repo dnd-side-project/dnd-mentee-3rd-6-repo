@@ -22,12 +22,13 @@ public class FeedCatServiceImpl implements FeedCatService {
 
   private final FeedCatRepo repo;
   private final CatService catService;
+  private final CatMapper catMapper;
 
   @Override
   @Transactional(readOnly = true)
   public List<CatDto> findAllByFeed(Feed feed) {
     List<Cat> cats = repo.findCatsByFeed(feed);
-    return cats.stream().map(CatMapper::map).collect(Collectors.toList());
+    return cats.stream().map(catMapper::map).collect(Collectors.toList());
   }
 
   @Override
@@ -71,7 +72,7 @@ public class FeedCatServiceImpl implements FeedCatService {
   public boolean doesHaveCat(Servant servant, List<Long> catIds) {
     List<Cat> cats = catService.findAllByIds(catIds);
     for(Cat cat : cats){
-      if(cat.getServant().getId() != servant.getId()){
+      if(!cat.getServant().getId().equals(servant.getId())){
         return false;
       }
     }
