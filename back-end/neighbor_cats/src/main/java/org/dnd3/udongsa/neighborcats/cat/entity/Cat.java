@@ -61,14 +61,15 @@ public class Cat {
 
     protected static Cat of(String name, String features, CatKind catKind, EGender gender, LocalDate birthday, ENeutralized neutralized, Double weight, Servant servant){
       Cat cat = new Cat();
+      cat.id = 0L;
       cat.name = name;
       cat.features = features;
-      cat.kind = catKind;
       cat.gender = gender;
       cat.birthday = birthday;
       cat.neutralized = neutralized;
       cat.weight = weight;
       cat.servant = servant;
+      cat.kind = catKind;
       return cat;
     }
 

@@ -2,7 +2,7 @@ package org.dnd3.udongsa.neighborcats.feed.entity;
 
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.dnd3.udongsa.neighborcats.servant.entity.ServantTestUtils;
+import org.dnd3.udongsa.neighborcats.servant.entity.ServantTestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,8 @@ import java.util.List;
 public class FeedTestBuilder {
 
   public static Feed build(String content){
-    Servant author = ServantTestUtils.generateDefault();
-    Feed feed = Feed.of(content, author);
-    return feed;
+    Servant author = ServantTestBuilder.build("집사1");
+    return Feed.of(content, author);
   }
 
   public static List<Feed> buildFeeds(String content){

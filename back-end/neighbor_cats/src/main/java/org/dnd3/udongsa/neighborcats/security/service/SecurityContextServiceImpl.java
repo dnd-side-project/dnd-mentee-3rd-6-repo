@@ -44,7 +44,10 @@ public class SecurityContextServiceImpl implements SecurityContextService {
   @Override
   public Servant getLoggedUser() {
     String email = this.getLoggedUserEmail();
-    return servantRepo.findByEmail(email).orElseThrow();
+    return servantRepo.findByEmail(email)
+      .orElseThrow(()->
+        new CustomException(HttpStatus.UNAUTHORIZED,
+          "유저 정보가 없습니다", "email:{}", email));
   }
 
   

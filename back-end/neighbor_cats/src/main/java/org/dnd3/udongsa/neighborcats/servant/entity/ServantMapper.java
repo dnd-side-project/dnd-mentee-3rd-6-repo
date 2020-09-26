@@ -1,23 +1,30 @@
 package org.dnd3.udongsa.neighborcats.servant.entity;
 
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.dnd3.udongsa.neighborcats.address.Address;
-import org.dnd3.udongsa.neighborcats.auth.dto.ServantDto;
+import org.dnd3.udongsa.neighborcats.servant.dto.ServantDto;
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
-import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
+import org.dnd3.udongsa.neighborcats.cat.entity.CatMapper;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFile;
 import org.dnd3.udongsa.neighborcats.imgfile.ImgFileUtils;
 import org.dnd3.udongsa.neighborcats.role.Role;
 import org.dnd3.udongsa.neighborcats.servant.dto.AuthorDto;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
+@Component
+@RequiredArgsConstructor
 public class ServantMapper {
+
+  private final CatMapper catMapper;
   
-  public static Servant map(SignUpReqDto dto, Role role, String encodedPassword, Address address, ImgFile profileImg) {
-    Servant servant = Servant.of(  
-      dto.getName(), 
-      dto.getEmail(), 
-      encodedPassword, 
+  public Servant map(SignUpReqDto dto, Role role, String encodedPassword, Address address, ImgFile profileImg) {
+    return Servant.of(
+      dto.getName(),
+      dto.getEmail(),
+      encodedPassword,
       dto.getPhoneNumber(),
       dto.getIsServant(),
       dto.getNickName(),
@@ -25,29 +32,28 @@ public class ServantMapper {
       address,
       profileImg
     );
-    return servant;
   }
 
-  public static ServantDto map(Servant servant, String profileImgUrl, List<CatDto> cats){
-    ServantDto servantDto = new ServantDto(servant.getId(), 
-      servant.getName(), 
-      servant.getEmail(), 
-      servant.getNickname(), 
-      servant.getAddress().getName(), 
-      servant.getPhoneNumber(), 
-      profileImgUrl, 
-      servant.getIsServant(), 
-      servant.getRoles(), 
-      cats);
-    return servantDto;
+  /**
+   * 고양이들과 프로필 이미지 URL 까지 DTO 로 변환합니다.
+   * @param servant Entity
+   * @return DTO
+   */
+  public ServantDto map(Servant servant){
+    ServantDto dto = new ServantDto();
+    ModelMapper mapper = new ModelMapper();
+    mapper.map(servant, dto);
+    dto.setProfileImgUrl(ImgFileUtils.generateImgFileUrl(servant.getProfileImg()));
+    dto.setCats(servant.getCats().stream().map(catMapper::map).collect(Collectors.toList()));
+    return dto;
   }
 
-  public static AuthorDto map(Servant author) {
+  public AuthorDto mapForAuthor(Servant author) {
     AuthorDto dto = new AuthorDto();
     dto.setId(author.getId());
     dto.setNickName(author.getNickname());
-    dto.setProfileImg(ImgFileUtils.generateImgFileUrl(author.getProfileImg()));
     dto.setAddressName(author.getAddress().getName());
+    dto.setProfileImg(ImgFileUtils.generateImgFileUrl(author.getProfileImg()));
     return dto;
   }
 

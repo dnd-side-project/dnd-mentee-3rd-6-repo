@@ -16,14 +16,11 @@ import org.dnd3.udongsa.neighborcats.feed.entity.EFilterType;
 import org.dnd3.udongsa.neighborcats.feed.entity.Feed;
 import org.dnd3.udongsa.neighborcats.feed.entity.FeedTestBuilder;
 import org.dnd3.udongsa.neighborcats.feed.repository.FeedRepository;
-import org.dnd3.udongsa.neighborcats.keep.KeepService;
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.dnd3.udongsa.neighborcats.servant.entity.ServantTestUtils;
-import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
+import org.dnd3.udongsa.neighborcats.servant.entity.ServantTestBuilder;
 import org.dnd3.udongsa.neighborcats.tag.Tag;
 import org.dnd3.udongsa.neighborcats.tag.TagTestBuilder;
-import org.dnd3.udongsa.neighborcats.util.TimeDescService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,7 +69,7 @@ public class FeedServiceTest {
     search.setPageNumber(0);
     search.setPageSize(10);
 
-    Servant loggedUser = ServantTestUtils.generateDefault();
+    Servant loggedUser = ServantTestBuilder.build("집사1");
     given(securityService.getLoggedUser()).willReturn(loggedUser);
 
     Tag tag = TagTestBuilder.build("일상");

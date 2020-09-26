@@ -7,6 +7,8 @@ import org.dnd3.udongsa.neighborcats.catkind.service.CatKindService;
 import org.dnd3.udongsa.neighborcats.imgfile.controller.BasicImgFileController;
 import org.dnd3.udongsa.neighborcats.imgfile.service.BasicImgFileService;
 import org.dnd3.udongsa.neighborcats.security.jwt.JwtUtils;
+import org.dnd3.udongsa.neighborcats.servant.controller.ServantController;
+import org.dnd3.udongsa.neighborcats.servant.service.ServantService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -20,9 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
 @WebMvcTest(controllers = {
-  AuthController.class,
-  CatKindController.class,
-  BasicImgFileController.class
+        AuthController.class
+        ,CatKindController.class
+        ,BasicImgFileController.class
+        ,ServantController.class
 })
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
@@ -38,6 +41,7 @@ public class APIDocTest {
   @MockBean protected JwtUtils jwtUtils;
   @MockBean protected CatKindService catKindService;
   @MockBean protected BasicImgFileService basicImgFileService;
+  @MockBean protected ServantService servantService;
 
   @Test
   public void init(){}

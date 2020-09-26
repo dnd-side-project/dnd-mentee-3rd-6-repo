@@ -20,7 +20,8 @@ public class CatKind {
 
   public static CatKind of(String name){
     CatKind catKind = new CatKind();
-    catKind.setName(name);
+    catKind.id = 0L;
+    catKind.name = name;
     return catKind;
   }
 

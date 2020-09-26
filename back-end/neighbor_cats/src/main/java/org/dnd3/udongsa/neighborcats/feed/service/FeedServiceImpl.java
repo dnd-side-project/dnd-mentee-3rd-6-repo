@@ -36,13 +36,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +55,7 @@ public class FeedServiceImpl implements FeedService {
   private final FeedCatService feedCatService;
   private final KeepService keepService;
   private final FeedMapperService feedMapperService;
+  private final ServantMapper servantMapper;
 
   @Override
   @Transactional(readOnly = true)
@@ -136,7 +133,7 @@ public class FeedServiceImpl implements FeedService {
 
   private FeedDto toDto(Feed feed, boolean withComments){
     List<ImgFileDto> imgDtos = feedImgService.getAllByFeed(feed);
-    AuthorDto authorDto = ServantMapper.map(feed.getAuthor());
+    AuthorDto authorDto = servantMapper.mapForAuthor(feed.getAuthor());
     Boolean isLike = feedLikeService.isLikeByServant(securityService.getLoggedUser(), feed);
     long numberOfLikes = feed.getLikes().size();
     int numberOfComments = feed.getComments().size();
@@ -169,7 +166,7 @@ public class FeedServiceImpl implements FeedService {
   private void validateAuthor(Servant author) {
     String email = securityService.getLoggedUserEmail();
     Servant servant = servantService.findServantByEmail(email);
-    if(servant.getId() == author.getId()) return;
+    if(servant.getId().equals(author.getId())) return;
     for(Role role : servant.getRoles()){
       if(role.getName() == ERole.ROLE_ADMIN) return;
     }

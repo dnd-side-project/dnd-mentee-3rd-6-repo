@@ -1,17 +1,26 @@
 package org.dnd3.udongsa.neighborcats.cat.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
+import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
+import org.dnd3.udongsa.neighborcats.catkind.CatKind;
+import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
-import org.dnd3.udongsa.neighborcats.catkind.CatKind;
-import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CatMapperTest {
+
+  private CatMapper catMapper;
+
+  @BeforeEach
+  public void setup(){
+    this.catMapper = new CatMapper();
+  }
 
   @Test
   public void Given_SignUpReqDto_When_Mapping_Then_Returned_Cat(){
@@ -48,7 +57,23 @@ public class CatMapperTest {
     assertEquals(kind.getName(), cat.getKind().getName());
     assertEquals(dto.getCatNeutralized(), cat.getNeutralized());
     assertEquals(servant, cat.getServant());
+  }
 
+  @Test
+  public void Given_Cat_When_Map_Return_CatDto(){
+    // Given
+    Cat cat = CatTestBuilder.build("냥이테스트", null);
+    // When
+    CatDto catDto = catMapper.map(cat);
+    // Then
+    assertThat(catDto.getName()).isEqualTo(cat.getName());
+    assertThat(catDto.getId()).isEqualTo(cat.getId());
+    assertThat(catDto.getFeatures()).isEqualTo(cat.getFeatures());
+    assertThat(catDto.getKind()).isEqualTo(cat.getKind());
+    assertThat(catDto.getBirthday()).isEqualTo(cat.getBirthday());
+    assertThat(catDto.getNeutralized()).isEqualTo(cat.getNeutralized());
+    assertThat(catDto.getWeight()).isEqualTo(cat.getWeight());
+    assertThat(catDto.getProfileImgUrl()).contains("0");
   }
   
 }
