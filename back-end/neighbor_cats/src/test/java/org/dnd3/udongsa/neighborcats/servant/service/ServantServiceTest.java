@@ -1,7 +1,8 @@
 package org.dnd3.udongsa.neighborcats.servant.service;
 
-import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;
-import org.dnd3.udongsa.neighborcats.cat.entity.Cat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
 import org.dnd3.udongsa.neighborcats.security.service.SecurityContextService;
 import org.dnd3.udongsa.neighborcats.servant.dto.ServantDto;
 import org.dnd3.udongsa.neighborcats.servant.entity.Servant;
@@ -14,11 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ServantServiceTest {

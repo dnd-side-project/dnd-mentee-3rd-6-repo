@@ -2,14 +2,14 @@ package org.dnd3.udongsa.neighborcats.feed.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dnd3.udongsa.neighborcats.exception.CustomException;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedDto;
+import org.dnd3.udongsa.neighborcats.feed.dto.FeedSaveDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.FeedSearchDto;
 import org.dnd3.udongsa.neighborcats.feed.dto.PagingDto;
 import org.dnd3.udongsa.neighborcats.feed.entity.EFilterType;
@@ -33,7 +33,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -102,9 +104,7 @@ public class FeedServiceTest {
     searchDto.setPageNumber(null);
 
     // When
-    Throwable thrown = catchThrowable(() -> {
-      this.feedService.findAll(searchDto);
-    });
+    Throwable thrown = catchThrowable(() -> this.feedService.findAll(searchDto));
 
     // Then
     assertThat(thrown).isInstanceOf(CustomException.class)
@@ -125,6 +125,27 @@ public class FeedServiceTest {
     // Then
     assertThat(thrown).isInstanceOf(CustomException.class)
                       .hasMessage("PageSize는 1 이상이어야 합니다.");
+  }
+
+  public void Save_Test(){
+    // given
+    FeedSaveDto saveDto = new FeedSaveDto();
+    saveDto.setCatIds(new ArrayList<>());
+    saveDto.setContent("본문");
+    saveDto.setTagId(1L);
+    List<MultipartFile> imgFiles = new ArrayList<>();
+    imgFiles.add(new MockMultipartFile("파일1", new byte[0]));
+    saveDto.setImgFiles(imgFiles);
+
+    Servant author = ServantTestBuilder.build("유저1");
+    given(securityService.getLoggedUser()).willReturn(author);
+
+    // when
+    FeedDto result = feedService.save(saveDto);
+
+    // then
+    assertThat(result.getContent()).isEqualTo(saveDto.getContent());
+    assertThat(result.getImages()).hasSize(1);
   }
 
 
