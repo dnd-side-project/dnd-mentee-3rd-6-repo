@@ -2,7 +2,6 @@ package org.dnd3.udongsa.neighborcats.cat.entity;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 import org.dnd3.udongsa.neighborcats.auth.dto.SignUpReqDto;
 import org.dnd3.udongsa.neighborcats.cat.dto.CatDto;

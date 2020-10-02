@@ -98,12 +98,12 @@ public class FeedServiceImpl implements FeedService {
   @Override
   @Transactional
   public FeedDto save(FeedSaveDto saveDto) {
-    Servant author = servantService.findServantByEmail(securityService.getLoggedUserEmail());
+    Servant author = securityService.getLoggedUser();
     Feed feed = FeedMapper.map(saveDto, author);
-    repo.save(feed);
     if(Objects.isNull(saveDto.getImgFiles()) || saveDto.getImgFiles().size() == 0){
       throw new CustomException(HttpStatus.BAD_REQUEST, "이미지를 한 개 이상 업로드해야 합니다.");
     }
+    repo.save(feed);
     feedImgService.save(saveDto.getImgFiles(), feed);
     if(Objects.nonNull(saveDto.getTagId())){
       feedTagService.save(saveDto.getTagId(), feed);
