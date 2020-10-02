@@ -38,6 +38,7 @@ public class ImgFile {
 
     public static ImgFile of(String filePath, String fileName, String ext){
         ImgFile imgFile = new ImgFile();
+        imgFile.id = 0L;
         imgFile.filePath = filePath;
         imgFile.fileName = fileName;
         imgFile.ext = ext;

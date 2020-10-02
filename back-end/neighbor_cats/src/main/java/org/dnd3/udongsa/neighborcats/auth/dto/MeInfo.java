@@ -20,7 +20,6 @@ public class MeInfo {
   private String email = "";
   private String nickName = "";
   private String addressName = "";
-  private String phoneNumber = "";
   private String profileImgUrl = "";
   private Boolean isServant = false;
   private Set<Role> roles = new HashSet<>(); 

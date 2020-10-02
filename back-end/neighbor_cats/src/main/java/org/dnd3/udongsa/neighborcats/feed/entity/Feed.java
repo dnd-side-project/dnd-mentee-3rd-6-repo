@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -40,11 +39,17 @@ public class Feed {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "feed")
-    List<FeedLike> likes = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedLike> likes = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "feed")
-    List<FeedComment> comments = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedComment> comments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedImg> images = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feed")
+    private final List<FeedTag> tags= new ArrayList<>();
 
     protected static Feed of(String content, Servant author){
         Feed feed = new Feed();

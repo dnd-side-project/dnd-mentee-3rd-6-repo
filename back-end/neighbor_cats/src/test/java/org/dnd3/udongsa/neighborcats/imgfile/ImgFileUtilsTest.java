@@ -1,5 +1,6 @@
 package org.dnd3.udongsa.neighborcats.imgfile;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class ImgFileUtilsTest {
   public void GivenImgFileNoneIDImgFileWhenGenerateThenReturnedEmptyString(){
     ImgFile imgFile = ImgFile.of("filePath", "fileName", "ext");
     String imgFileUrl = ImgFileUtils.generateImgFileUrl(imgFile);
-    assertEquals("", imgFileUrl);
+    assertThat(imgFileUrl).isEqualTo("/api/imgfiles/0");
   }
   
 }

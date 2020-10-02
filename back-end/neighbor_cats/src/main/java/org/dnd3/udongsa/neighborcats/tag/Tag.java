@@ -17,5 +17,12 @@ public class Tag {
   private Long id;
 
   private String name;
+
+  protected static Tag of(String name){
+    Tag tag = new Tag();
+    tag.id = 0L;
+    tag.name = name;
+    return tag;
+  }
   
 }

@@ -29,6 +29,7 @@ public class CatServiceImpl implements CatService {
   private final ImgFileService imgFileService;
   private final CatRepository catRepo;
   private final CatKindRepository catKindRepo;
+  private final CatMapper catMapper;
 
   @Override
   public String uploadCatProfileImg(Cat cat, MultipartFile catProfileImg) {
@@ -60,10 +61,7 @@ public class CatServiceImpl implements CatService {
   @Override
   public List<CatDto> findByServant(Servant servant) {
     List<Cat> cats = catRepo.findByServant(servant);
-    return cats.stream().map((cat)->{
-      String profileImgUrl = ImgFileUtils.generateImgFileUrl(cat.getProfileImg());
-      return CatMapper.map(cat, profileImgUrl);
-    }).collect(Collectors.toList());
+    return cats.stream().map(catMapper::map).collect(Collectors.toList());
   }
 
   @Override
