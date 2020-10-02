@@ -1,7 +1,6 @@
 package org.dnd3.udongsa.neighborcats.feed.repository;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 public class FeedRepoTest {
 

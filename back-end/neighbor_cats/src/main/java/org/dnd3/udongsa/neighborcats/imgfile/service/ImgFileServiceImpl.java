@@ -35,7 +35,7 @@ public class ImgFileServiceImpl implements ImgFileService {
     String fileName = generateRandomFileName();
     String filePath = saveImgFile(getBytes(multipartFile), fileName);
     ImgFile imgFile = ImgFile.of(filePath, fileName, IMG_FILE_EXT);
-    repo.save(imgFile);
+    imgFile = repo.save(imgFile);
     return imgFile;
   }
 
